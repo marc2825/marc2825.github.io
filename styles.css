@@ -243,6 +243,22 @@ h3 {
   margin: 0;
 }
 
+.news-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.news-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--space-3);
+}
+
+.news-date,
+.news-event {
+  margin: 0;
+}
+
 .editable-block:empty::before,
 .editable-line:empty::before,
 .editable-list:empty::before,
@@ -261,6 +277,12 @@ h3 {
 
   .project-screenshot {
     min-height: 160px;
+  }
+}
+
+@media (max-width: 700px) {
+  .news-item {
+    grid-template-columns: 1fr;
   }
 }
 

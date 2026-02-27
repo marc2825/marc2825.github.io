@@ -73,6 +73,19 @@
             </li>
             <li>
               <button
+                id="tab-news"
+                class="tab-button"
+                type="button"
+                role="tab"
+                aria-controls="panel-news"
+                aria-selected="false"
+                data-panel="news"
+              >
+                News
+              </button>
+            </li>
+            <li>
+              <button
                 id="tab-publications"
                 class="tab-button"
                 type="button"
@@ -220,6 +233,33 @@
             <ul class="editable-list" data-placeholder="イベント名や発表タイトルを追加"></ul>
           </article>
         </div>
+      </section>
+
+      <section
+        id="panel-news"
+        class="panel"
+        role="tabpanel"
+        aria-labelledby="tab-news"
+        data-panel="news"
+        hidden
+      >
+        <h2>News</h2>
+        <article class="card">
+          <div class="news-list">
+            <div class="news-item">
+              <p class="editable-line news-date" data-placeholder="年/月"></p>
+              <p class="editable-line news-event" data-placeholder="出来事"></p>
+            </div>
+            <div class="news-item">
+              <p class="editable-line news-date" data-placeholder="年/月"></p>
+              <p class="editable-line news-event" data-placeholder="出来事"></p>
+            </div>
+            <div class="news-item">
+              <p class="editable-line news-date" data-placeholder="年/月"></p>
+              <p class="editable-line news-event" data-placeholder="出来事"></p>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section
