@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">ポートフォリオ</title>
+  <meta name="description" content="学術ポートフォリオ" data-i18n-content="meta.description" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" id="navLogo">Portfolio</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about"        data-i18n="nav.about">自己紹介</a></li>
+        <li><a href="#research"     data-i18n="nav.research">研究</a></li>
+        <li><a href="#publications" data-i18n="nav.publications">出版・発表</a></li>
+        <li><a href="#projects"     data-i18n="nav.projects">プロジェクト</a></li>
+        <li><a href="#articles"     data-i18n="nav.articles">記事</a></li>
+        <li><a href="#skills"       data-i18n="nav.skills">スキル</a></li>
+        <li><a href="#education"    data-i18n="nav.education">経歴</a></li>
+        <li><a href="#news"         data-i18n="nav.news">お知らせ</a></li>
+        <li><a href="#contact"      data-i18n="nav.contact">連絡先</a></li>
+      </ul>
+      <div class="nav-right">
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="ライトモードに切り替え">
+          <!-- Moon: shown in dark mode -->
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75 9.75 9.75 0 0 1 8.25 6c0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 12c0 5.385 4.365 9.75 9.75 9.75 4.371 0 8.083-2.88 9.002-6.998Z"/>
+          </svg>
+          <!-- Sun: shown in light mode -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none">
+            <path d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          </svg>
+        </button>
+        <!-- Language switch -->
+        <div class="lang-switch" role="group">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep">|</span>
+          <button class="lang-btn active" data-lang="ja">JP</button>
+        </div>
+        <!-- Mobile hamburger -->
+        <button class="nav-toggle" id="navToggle" aria-label="メニューを開く">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-label reveal" data-i18n="hero.label">大学院研究者</p>
+      <h1 class="hero-name reveal" id="heroName">Your Name</h1>
+      <p class="hero-affiliation reveal" id="heroAffiliation"></p>
+      <p class="hero-bio reveal" id="heroBio"></p>
+      <div class="hero-cta reveal">
+        <a href="#research" class="btn btn-primary" data-i18n="hero.cta1">研究を見る</a>
+        <a href="#contact"  class="btn btn-ghost"   data-i18n="hero.cta2">連絡する</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span data-i18n="hero.scroll">スクロール</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">01</span>
+        <h2 class="section-title" data-i18n="about.title">自己紹介</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-photo reveal">
+          <div class="photo-frame">
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="38" r="22" fill="currentColor" opacity="0.3"/>
+                <ellipse cx="50" cy="90" rx="36" ry="24" fill="currentColor" opacity="0.3"/>
+              </svg>
+            </div>
+          </div>
+          <div class="about-links reveal" id="aboutLinks"></div>
+        </div>
+        <div class="about-text">
+          <div class="about-block reveal">
+            <h3 class="about-block-title" data-i18n="about.intro.title">自己紹介</h3>
+            <p id="aboutIntro" class="about-p"></p>
+          </div>
+          <div class="about-block reveal">
+            <h3 class="about-block-title" data-i18n="about.history.title">経歴</h3>
+            <p id="aboutHistory" class="about-p"></p>
+          </div>
+          <div class="about-block reveal">
+            <h3 class="about-block-title" data-i18n="about.affiliation.title">所属</h3>
+            <p id="aboutAffiliation" class="about-p"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="research" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">02</span>
+        <h2 class="section-title" data-i18n="research.title">研究</h2>
+      </div>
+      <p class="section-lead reveal" id="researchLead"></p>
+      <div class="research-grid" id="researchGrid"></div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">03</span>
+        <h2 class="section-title" data-i18n="pub.title">出版・発表</h2>
+      </div>
+      <div class="pub-tabs reveal">
+        <button class="pub-tab active" data-tab="papers" data-i18n="pub.tab.papers">論文</button>
+        <button class="pub-tab" data-tab="talks" data-i18n="pub.tab.talks">登壇</button>
+      </div>
+      <div class="pub-filters reveal" id="pubFilters">
+        <button class="pub-filter active" data-filter="all"        data-i18n="pub.filter.all">すべて</button>
+        <button class="pub-filter"        data-filter="journal"    data-i18n="pub.filter.journal">ジャーナル</button>
+        <button class="pub-filter"        data-filter="conference" data-i18n="pub.filter.conference">会議</button>
+        <button class="pub-filter"        data-filter="preprint"   data-i18n="pub.filter.preprint">プレプリント</button>
+      </div>
+      <ol class="pub-list" id="pubList" reversed></ol>
+      <ul class="talks-list" id="talksList" hidden></ul>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">04</span>
+        <h2 class="section-title" data-i18n="projects.title">プロジェクト</h2>
+      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section id="articles" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">05</span>
+        <h2 class="section-title" data-i18n="articles.title">記事</h2>
+      </div>
+      <ul class="articles-list" id="articlesList"></ul>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">06</span>
+        <h2 class="section-title" data-i18n="skills.title">スキル</h2>
+      </div>
+      <div class="skills-grid" id="skillsGrid"></div>
+    </div>
+  </section>
+
+  <!-- Education & Experience -->
+  <section id="education" class="section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">07</span>
+        <h2 class="section-title" data-i18n="edu.title">学歴・職歴</h2>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- News -->
+  <section id="news" class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">08</span>
+        <h2 class="section-title" data-i18n="news.title">お知らせ</h2>
+      </div>
+      <ul class="news-list" id="newsList"></ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container contact-container">
+      <div class="section-header reveal">
+        <span class="section-number">09</span>
+        <h2 class="section-title" data-i18n="contact.title">連絡先</h2>
+      </div>
+      <p class="section-lead reveal" id="contactText"></p>
+      <div class="contact-info reveal">
+        <a href="#" class="contact-email" id="contactEmail"></a>
+      </div>
+      <div class="contact-social reveal" id="contactSocial"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <p id="footerName"></p>
+      <p class="footer-copy">&copy; <span id="footerYear"></span></p>
+    </div>
+  </footer>
+
+  <!-- data.js must be loaded before script.js -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
