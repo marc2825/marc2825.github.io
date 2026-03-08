@@ -5,13 +5,18 @@
 
 /* ── Portfolio content ───────────────────────────────────── */
 const DATA = {
+  /* ── WIP flag ─────────────────────────────────── */
+  wip: true,
+
   /* ── Meta ─────────────────────────────────────── */
-  name:          "Your Name",
-  nameJa:        "名前",
-  affiliation:   "Department of [Field] · University Name",
-  affiliationJa: "[分野]専攻 · 大学名",
-  bio:           "Exploring the intersection of [field A] and [field B] to understand [broader question].",
-  bioJa:         "[分野A]と[分野B]の交差点を探り、[より広い問い]を解明することを目指しています。",
+  name:          "Masahiro Kono (Marc)",
+  nameJa:        "河野 将大",
+  heroLabel:     "Master's student",
+  heroLabelJa:   "修士課程学生",
+  affiliation:   "Department of Computer Science, Graduate School of Information Science and Technology · The University of Tokyo",
+  affiliationJa: "情報理工学系研究科 コンピュータ科学専攻 · 東京大学 大学院",
+  bio:           "I am particularly interested in <strong>creativity support tools and optimization techniques</strong> in the fields of <strong>2D and 3DCG</strong>, as well as <strong>NPR (Non-Photorealistic Rendering)</strong>.",
+  bioJa:         "<strong>2D・3DCG</strong>分野における<strong>制作支援や最適化</strong>、ならびに<strong>NPR（Non-Photorealistic Rendering）</strong>表現に特に関心があります。",
 
   /* ── Links ────────────────────────────────────── */
   links: {
@@ -72,7 +77,8 @@ const DATA = {
       venue:   "Journal of Important Research, Vol. 12, No. 3, 2025",
       venueJa: "重要研究ジャーナル, Vol. 12, No. 3, 2025",
       year:    2025,
-      type:    "journal",
+      type:        "journal",
+      firstAuthor: true,
       links:   [{ label: "PDF", href: "#" }, { label: "DOI", href: "#" }, { label: "Code", href: "#" }],
     },
     {
@@ -82,7 +88,8 @@ const DATA = {
       venue:   "Proceedings of the Conference on Relevant Topics (CONF 2024)",
       venueJa: "関連トピック会議論文集 (CONF 2024)",
       year:    2024,
-      type:    "conference",
+      type:        "conference",
+      firstAuthor: true,
       links:   [{ label: "PDF", href: "#" }, { label: "Slides", href: "#" }],
     },
     {
@@ -92,7 +99,8 @@ const DATA = {
       venue:   "arXiv:2024.XXXXX",
       venueJa: "arXiv:2024.XXXXX",
       year:    2024,
-      type:    "preprint",
+      type:        "preprint",
+      firstAuthor: false,
       links:   [{ label: "arXiv", href: "#" }],
     },
   ],
@@ -275,7 +283,7 @@ const I18N = {
     "nav.news":                "News",
     "nav.contact":             "Contact",
     "hero.label":              "Graduate Researcher",
-    "hero.cta1":               "View Research",
+    "hero.cta1":               "View Research Projects",
     "hero.cta2":               "Get in Touch",
     "hero.scroll":             "Scroll",
     "about.title":             "About",
@@ -290,12 +298,17 @@ const I18N = {
     "pub.filter.journal":      "Journal",
     "pub.filter.conference":   "Conference",
     "pub.filter.preprint":     "Preprint",
+    "pub.filter.firstAuthor":  "First Author Only",
     "projects.title":          "Projects",
     "articles.title":          "Articles",
     "skills.title":            "Skills",
     "edu.title":               "Education & Experience",
     "news.title":              "News",
+    "news.fab":                "News",
     "contact.title":           "Contact",
+    "section.more":            "View All →",
+    "subpage.back":            "← Back to Portfolio",
+    "wip.text":                "🚧 This site is currently under construction",
   },
   ja: {
     "meta.title":              "ポートフォリオ",
@@ -310,7 +323,7 @@ const I18N = {
     "nav.news":                "お知らせ",
     "nav.contact":             "連絡先",
     "hero.label":              "大学院研究者",
-    "hero.cta1":               "研究を見る",
+    "hero.cta1":               "研究プロジェクトを見る",
     "hero.cta2":               "連絡する",
     "hero.scroll":             "スクロール",
     "about.title":             "自己紹介",
@@ -325,11 +338,16 @@ const I18N = {
     "pub.filter.journal":      "ジャーナル",
     "pub.filter.conference":   "会議",
     "pub.filter.preprint":     "プレプリント",
+    "pub.filter.firstAuthor":  "筆頭著者のみ",
     "projects.title":          "プロジェクト",
     "articles.title":          "記事",
     "skills.title":            "スキル",
     "edu.title":               "学歴・職歴",
     "news.title":              "お知らせ",
+    "news.fab":                "お知らせ",
     "contact.title":           "連絡先",
+    "section.more":            "すべて見る →",
+    "subpage.back":            "← ポートフォリオに戻る",
+    "wip.text":                "🚧 このサイトは現在制作中です",
   },
 };

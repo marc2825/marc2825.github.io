@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>研究 — Portfolio</title>
+  <meta name="description" content="Research themes" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="wip-banner" id="wipBanner" hidden>
+    <span data-i18n="wip.text">🚧 このサイトは現在制作中です</span>
+  </div>
+
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo nav-back" data-i18n="subpage.back">← ポートフォリオに戻る</a>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="テーマ切り替え">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75 9.75 9.75 0 0 1 8.25 6c0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 12c0 5.385 4.365 9.75 9.75 9.75 4.371 0 8.083-2.88 9.002-6.998Z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none">
+            <path d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          </svg>
+        </button>
+        <div class="lang-switch" role="group">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <span class="lang-sep">|</span>
+          <button class="lang-btn active" data-lang="ja">JP</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section subpage-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-number">04</span>
+        <h2 class="section-title" data-i18n="research.title">研究</h2>
+      </div>
+      <p class="section-lead reveal" id="researchLead"></p>
+      <div class="research-grid" id="researchGrid"></div>
+    </div>
+  </section>
+
+  <footer id="footer">
+    <div class="container">
+      <p id="footerName"></p>
+      <p class="footer-copy">&copy; <span id="footerYear"></span></p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="core.js"></script>
+  <script src="page.js"></script>
+  <script>initSubPage("research");</script>
+</body>
+</html>
