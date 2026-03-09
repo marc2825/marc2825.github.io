@@ -7,6 +7,19 @@ function initSubPage(section) {
   initTheme();
   renderWipBanner();
 
+  if (section === "publications") {
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get("filter");
+    const firstAuthor = params.get("firstAuthor");
+
+    if (["all", "fullpaper", "poster", "demo"].includes(filter)) {
+      activePubFilter = filter;
+    }
+    if (firstAuthor != null) {
+      firstAuthorOnly = !["0", "false", "off"].includes(firstAuthor.toLowerCase());
+    }
+  }
+
   /* Theme toggle */
   const themeBtn = document.getElementById("themeToggle");
   if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
@@ -54,6 +67,7 @@ function initSubPage(section) {
   renderSubPage(section);
   applyI18n();
   reobserve();
+  loadDynamicData();
 
   if (section === "publications") setPubTab("papers");
 }

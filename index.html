@@ -106,6 +106,7 @@
             <h3 class="about-block-title" data-i18n="about.affiliation.title">所属</h3>
             <p id="aboutAffiliation" class="about-p"></p>
           </div>
+          <div class="about-facts reveal" id="aboutFacts" hidden></div>
         </div>
       </div>
     </div>
@@ -118,7 +119,10 @@
         <span class="section-number">02</span>
         <h2 class="section-title" data-i18n="edu.title">学歴・職歴</h2>
       </div>
+      <p class="edu-subtitle reveal" data-i18n="edu.section.education">学歴</p>
       <div class="timeline" id="timeline"></div>
+      <p class="edu-subtitle reveal" data-i18n="edu.section.experience">職歴（インターン等含む）</p>
+      <div class="experience-list" id="experienceList"></div>
     </div>
   </section>
 
@@ -138,7 +142,7 @@
     <div class="container">
       <div class="section-header reveal">
         <span class="section-number">04</span>
-        <h2 class="section-title" data-i18n="research.title">研究</h2>
+        <h2 class="section-title" data-i18n="research.title">研究プロジェクト</h2>
       </div>
       <p class="section-lead reveal" id="researchLead"></p>
       <div class="research-grid" id="researchGrid"></div>
@@ -153,24 +157,26 @@
     <div class="container">
       <div class="section-header reveal">
         <span class="section-number">05</span>
-        <h2 class="section-title" data-i18n="pub.title">出版・発表</h2>
+        <h2 class="section-title" data-i18n="pub.title">論文・出版・発表</h2>
       </div>
+      <!--
       <div class="pub-tabs reveal">
         <button class="pub-tab active" data-tab="papers" data-i18n="pub.tab.papers">論文</button>
         <button class="pub-tab" data-tab="talks" data-i18n="pub.tab.talks">登壇</button>
       </div>
+      -->
       <div class="pub-filters reveal" id="pubFilters">
-        <button class="pub-filter active" data-filter="all"        data-i18n="pub.filter.all">すべて</button>
-        <button class="pub-filter"        data-filter="journal"    data-i18n="pub.filter.journal">ジャーナル</button>
-        <button class="pub-filter"        data-filter="conference" data-i18n="pub.filter.conference">会議</button>
-        <button class="pub-filter"        data-filter="preprint"   data-i18n="pub.filter.preprint">プレプリント</button>
+        <button class="pub-filter"        data-filter="all"        data-i18n="pub.filter.all">すべて</button>
+        <button class="pub-filter active" data-filter="fullpaper"  data-i18n="pub.filter.fullpaper">フルペーパー</button>
+        <button class="pub-filter"        data-filter="poster"     data-i18n="pub.filter.poster">ポスター</button>
+        <button class="pub-filter"        data-filter="demo"       data-i18n="pub.filter.demo">デモ発表</button>
         <span class="pub-filter-sep"></span>
-        <button class="pub-filter-toggle" id="firstAuthorToggle"   data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
+        <button class="pub-filter-toggle active" id="firstAuthorToggle" data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
       </div>
       <ol class="pub-list" id="pubList" reversed></ol>
-      <ul class="talks-list" id="talksList" hidden></ul>
+      <!-- <ul class="talks-list" id="talksList" hidden></ul> -->
       <div class="section-more reveal">
-        <a href="pages/publications.html" class="section-more-link" data-i18n="section.more">すべて見る →</a>
+        <a href="pages/publications.html?filter=all&firstAuthor=0" class="section-more-link" data-i18n="section.more">すべて見る →</a>
       </div>
     </div>
   </section>
@@ -180,7 +186,7 @@
     <div class="container">
       <div class="section-header reveal">
         <span class="section-number">06</span>
-        <h2 class="section-title" data-i18n="projects.title">プロジェクト</h2>
+        <h2 class="section-title" data-i18n="projects.title">プロジェクト（その他）</h2>
       </div>
       <div class="projects-grid" id="projectsGrid"></div>
       <div class="section-more reveal">

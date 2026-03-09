@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>出版・発表 — Portfolio</title>
-  <meta name="description" content="Publications and talks" />
+  <title>論文・出版・発表 — Portfolio</title>
+  <meta name="description" content="Papers, publications, and presentations" />
   <link rel="stylesheet" href="../css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,22 +41,24 @@
     <div class="container">
       <div class="section-header reveal">
         <span class="section-number">05</span>
-        <h2 class="section-title" data-i18n="pub.title">出版・発表</h2>
+        <h2 class="section-title" data-i18n="pub.title">論文・出版・発表</h2>
       </div>
+      <!--
       <div class="pub-tabs reveal">
         <button class="pub-tab active" data-tab="papers" data-i18n="pub.tab.papers">論文</button>
         <button class="pub-tab" data-tab="talks" data-i18n="pub.tab.talks">登壇</button>
       </div>
+      -->
       <div class="pub-filters reveal" id="pubFilters">
-        <button class="pub-filter active" data-filter="all"        data-i18n="pub.filter.all">すべて</button>
-        <button class="pub-filter"        data-filter="journal"    data-i18n="pub.filter.journal">ジャーナル</button>
-        <button class="pub-filter"        data-filter="conference" data-i18n="pub.filter.conference">会議</button>
-        <button class="pub-filter"        data-filter="preprint"   data-i18n="pub.filter.preprint">プレプリント</button>
+        <button class="pub-filter"        data-filter="all"        data-i18n="pub.filter.all">すべて</button>
+        <button class="pub-filter active" data-filter="fullpaper"  data-i18n="pub.filter.fullpaper">フルペーパー</button>
+        <button class="pub-filter"        data-filter="poster"     data-i18n="pub.filter.poster">ポスター</button>
+        <button class="pub-filter"        data-filter="demo"       data-i18n="pub.filter.demo">デモ発表</button>
         <span class="pub-filter-sep"></span>
-        <button class="pub-filter-toggle" id="firstAuthorToggle"   data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
+        <button class="pub-filter-toggle active" id="firstAuthorToggle" data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
       </div>
       <ol class="pub-list" id="pubList" reversed></ol>
-      <ul class="talks-list" id="talksList" hidden></ul>
+      <!-- <ul class="talks-list" id="talksList" hidden></ul> -->
     </div>
   </section>
 

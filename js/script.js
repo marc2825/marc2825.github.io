@@ -17,6 +17,7 @@ function renderAll() {
   renderArticles(p.articles  || undefined);
   renderSkills();
   renderTimeline();
+  renderExperience();
   renderNews();                              /* modal list — always all */
   renderNewsSection(p.news   || undefined);  /* in-page section */
   renderContact();
@@ -128,4 +129,5 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeNewsMod
 initTheme();
 renderWipBanner();
 renderAll();
+loadDynamicData();
 setPubTab("papers");
