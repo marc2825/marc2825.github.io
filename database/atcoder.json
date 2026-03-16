@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-09T07:38:02Z",
+  "updatedAt": "2026-03-16T02:09:30.863Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
@@ -12,7 +12,7 @@
       "username": "marc2825",
       "currentRating": 1968,
       "highestRating": 1968,
-      "lastRatedContest": "2026-02-23T19:00:00+09:00",
+      "lastRatedContest": "2026-03-14T19:00:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json?contestType=heuristic"
     },
     "codeforces": {
@@ -22,7 +22,7 @@
       "rank": "international master",
       "maxRank": "international master",
       "lastRatedContest": "Codeforces Round 1085 (Div. 1 + Div. 2)",
-      "lastRatedContestTime": "2026-03-08T17:35:00Z",
+      "lastRatedContestTime": "2026-03-08T17:35:00.000Z",
       "source": "https://codeforces.com/api/user.info?handles=marc2825",
       "historySource": "https://codeforces.com/api/user.rating?handle=marc2825"
     }
