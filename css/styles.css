@@ -316,6 +316,22 @@ button { font-family: inherit; }
 .btn-primary:hover { opacity: 0.82; transform: translateY(-2px); }
 .btn-ghost { border: 1px solid var(--border); color: var(--text); background: transparent; }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+#heroGithubLink {
+  background: #24292f;
+  border: 1px solid #24292f;
+  color: #f6f8fa;
+}
+#heroGithubLink:hover {
+  background: #0d1117;
+  border-color: #0d1117;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+[data-theme="light"] #heroGithubLink {
+  background: #24292f;
+  border-color: #24292f;
+  color: #f6f8fa;
+}
 .hero-scroll-hint {
   position: absolute;
   bottom: 2.5rem; left: 50%;

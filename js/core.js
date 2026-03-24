@@ -128,20 +128,23 @@ function renderHero() {
   const name        = document.getElementById("heroName");
   const affiliation = document.getElementById("heroAffiliation");
   const bio         = document.getElementById("heroBio");
+  const githubLink  = document.getElementById("heroGithubLink");
   if (label)       label.textContent       = d(DATA.heroLabel, DATA.heroLabelJP);
   if (name)        name.textContent        = d(DATA.name, DATA.nameJP);
   if (affiliation) affiliation.textContent = d(DATA.affiliation, DATA.affiliationJP);
   if (bio)         bio.innerHTML           = d(DATA.bio, DATA.bioJP);
+  if (githubLink) {
+    githubLink.hidden = !DATA.links?.github;
+    if (DATA.links?.github) githubLink.href = resolveUrl(DATA.links.github);
+  }
 }
 
 function renderAbout() {
   const intro       = document.getElementById("aboutIntro");
-  const history     = document.getElementById("aboutHistory");
   const affiliation = document.getElementById("aboutAffiliation");
   const facts       = document.getElementById("aboutFacts");
   const links       = document.getElementById("aboutLinks");
   if (intro)       intro.textContent       = d(DATA.about.intro, DATA.about.introJP);
-  if (history)     history.textContent     = d(DATA.about.history, DATA.about.historyJP);
   if (affiliation) affiliation.textContent = d(DATA.about.affiliation, DATA.about.affiliationJP);
   if (facts) {
     const items = Array.isArray(DATA.about.profile) ? DATA.about.profile : [];

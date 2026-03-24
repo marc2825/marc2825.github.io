@@ -107,20 +107,20 @@ const DATA = {
         labelJP: "趣味",
         values: [
           {
-            title: "3D Character Modeling",
-            titleJP: "3Dキャラクターモデル制作",
-            desc: "Building full-scratch humanoid models in Blender for VRChat and NPR-oriented experimentation.",
-            descJP: "BlenderでVRChat向けの人型モデルをフルスクラッチ制作し、NPR表現も試行錯誤中です。",
+            title: "3D Modeling",
+            titleJP: "3Dモデリング",
+            desc: WIP_EN,
+            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作など",
           },
           {
             title: "Competitive Programming",
             titleJP: "競技プログラミング",
-            desc: "I have participated in programming contests continuously for several years, reaching milestones such as AtCoder Yellow (1-dan).",
+            desc: WIP_EN,
             descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（初段）などを達成しています。",
           },
           {
             title: "Anime / Game Culture",
-            titleJP: "アニメ・ゲーム",
+            titleJP: "アニメ・ゲーム・ボカロ",
             desc: WIP_EN,
             descJP: WIP_JP,
           },
@@ -167,7 +167,7 @@ const DATA = {
       title:    "Graduate School of Information Science and Technology, The University of Tokyo",
       titleJP:  "東京大学大学院 情報理工学系研究科 コンピュータ科学専攻",
       sub:      "M.S. Student in Computer Science",
-      subJP:    "修士課程（コンピュータ科学）",
+      subJP:    "修士課程（情報理工学）",
       desc:     "Researching creativity support tools, optimization in CG, and NPR-related topics in the Igarashi Lab.",
       descJP:   "五十嵐研究室にて、クリエイター向け制作支援ツール、CG分野の最適化、NPR関連技術などを研究中。",
       link:     "https://www-ui.is.s.u-tokyo.ac.jp/",
@@ -195,8 +195,8 @@ const DATA = {
       descJP:   WIP_JP + "基本平均点 87点（GPA: ）",
     },
     {
-      period:   "2014 – 2020",
-      periodJP: "2014年 – 2020年",
+      period:   "",
+      periodJP: "",
       title:    "Kaisei Junior and Senior High School",
       titleJP:  "開成中学校・高等学校",
       sub:      "Tokyo, Japan",
@@ -337,6 +337,13 @@ const DATA = {
           level: 93,
         },
         {
+          name: "Unity",
+          nameJP: "Unity",
+          detail: WIP_EMPTY,
+          detailJP: WIP_EMPTY,
+          level: 43,
+        },
+        {
           name: "Substance Painter",
           nameJP: "Substance Painter",
           detail: WIP_EMPTY,
@@ -356,13 +363,6 @@ const DATA = {
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 31,
-        },
-        {
-          name: "Unity",
-          nameJP: "Unity",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 33,
         },
         {
           name: "Unreal Engine 5",
@@ -698,7 +698,7 @@ const DATA = {
 
   /* ── Contact ──────────────────────────────────── */
   contactText:   "I am open to research collaborations, internships, and conversations.",
-  contactTextJP: "共同研究・インターン・ご連絡等を歓迎しています。",
+  contactTextJP: "共同研究・インターン・ご連絡等を歓迎しております。",
 };
 
 /* ── UI translations ──────────────────────────────────────── */
