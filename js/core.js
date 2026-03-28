@@ -73,6 +73,8 @@ function getLinkIcon(type) {
       return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M7 12h10M9 18h6"/><path d="M8.5 6 6 18M15.5 6 18 18"/></svg>`;
     case "scholar":
       return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 1 9l4 2.18V17h2v-4.82L12 14l9-5-9-6zM5 13.18V17c0 2.21 3.13 4 7 4s7-1.79 7-4v-3.82L12 16l-7-2.82z"/></svg>`;
+    case "sketchfab":
+      return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3 5 7v10l7 4 7-4V7l-7-4Z"/><path d="m5 7 7 4 7-4M12 11v10"/></svg>`;
     case "file":
       return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 10v6m0 0-3-3m3 3 3-3M3 15v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4M3 15l2-8h14l2 8"/></svg>`;
     default:
@@ -89,6 +91,7 @@ function getProfileLinks(flagKey) {
     DATA.links.cv       ? { type: "file",    label: "CV",              labelJP: "CV",              href: DATA.links.cv }       : null,
     DATA.links.scholar  ? { type: "scholar", label: "Scholar",         labelJP: "Scholar",         href: DATA.links.scholar }  : null,
     DATA.links.github   ? { type: "github",  label: "GitHub",          labelJP: "GitHub",          href: DATA.links.github }   : null,
+    DATA.links.sketchfab? { type: "sketchfab", label: "Sketchfab",     labelJP: "Sketchfab",       href: DATA.links.sketchfab }: null,
     DATA.links.twitter  ? { type: "web",     label: "Twitter",         labelJP: "Twitter",         href: DATA.links.twitter }  : null,
     DATA.links.linkedin ? { type: "web",     label: "LinkedIn",        labelJP: "LinkedIn",        href: DATA.links.linkedin } : null,
   ].filter(Boolean);
@@ -485,7 +488,7 @@ function renderContact() {
   if (socialEl) {
     const socialLinks = getProfileLinks("showInContact");
     socialEl.innerHTML = socialLinks.map(item => `
-      <a href="${resolveUrl(item.href)}" class="social-pill">${d(item.label, item.labelJP ?? item.label)}</a>
+      <${item.disabled ? "span" : "a"}${item.disabled ? "" : ` href="${resolveUrl(item.href)}"`} class="social-pill${item.disabled ? " is-disabled" : ""}"${item.disabled ? ` aria-disabled="true"` : ""}>${d(item.label, item.labelJP ?? item.label)}</${item.disabled ? "span" : "a"}>
     `).join("");
   }
 }

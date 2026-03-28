@@ -940,6 +940,11 @@ button { font-family: inherit; }
   border-radius: 20px; padding: 0.38rem 1rem; transition: color 0.2s, border-color 0.2s;
 }
 .social-pill:hover { color: var(--accent); border-color: var(--accent); }
+.social-pill.is-disabled {
+  opacity: 0.55;
+  cursor: default;
+  pointer-events: none;
+}
 
 /* =========================================================
    Footer

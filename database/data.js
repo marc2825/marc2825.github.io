@@ -51,18 +51,18 @@ const DATA = {
       "marckono2825@gmail.com",
       "marckono2825@g.ecc.u-tokyo.ac.jp",
     ],
-    cv:       "",
+    cv:       "assets/MasahiroKono_CV.pdf",
     scholar:  "https://scholar.google.co.jp/citations?user=D-nvVksAAAAJ&hl=ja&oi=sra",
     github:   "https://github.com/marc2825",
+    sketchfab:"https://sketchfab.com/marc2825",
     // twitter:  "",
     // linkedin: "",
     items: [
       {
         type: "file",
-        label: `CV ${WIP_EN}`,
-        labelJP: `CV${WIP_JP}`,
-        href: "",
-        disabled: true,
+        label: "CV",
+        labelJP: "CV",
+        href: "assets/MasahiroKono_CV.pdf",
         showInAbout: true,
         showInContact: false,
       },
@@ -79,6 +79,14 @@ const DATA = {
         label: "GitHub",
         labelJP: "GitHub",
         href: "https://github.com/marc2825",
+        showInAbout: true,
+        showInContact: true,
+      },
+      {
+        type: "sketchfab",
+        label: "Sketchfab",
+        labelJP: "Sketchfab",
+        href: "https://sketchfab.com/marc2825",
         showInAbout: true,
         showInContact: true,
       },
@@ -110,7 +118,7 @@ const DATA = {
             title: "3D Modeling",
             titleJP: "3Dモデリング",
             desc: WIP_EN,
-            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作など",
+            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております。",
           },
           {
             title: "Competitive Programming",
@@ -182,7 +190,7 @@ const DATA = {
       sub:      "B.S. in Information Science",
       subJP:    "学士（理学・情報科学）",
       desc:     WIP_EN,
-      descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。（GPA: ）",
+      descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。（GPA: 3.43/4.30）",
     },
     {
       period:   "2021 – 2022",
@@ -192,7 +200,7 @@ const DATA = {
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
       desc:     WIP_EN,
-      descJP:   WIP_JP + "基本平均点 87点（GPA: ）",
+      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点）",
     },
     {
       period:   "",
@@ -283,8 +291,8 @@ const DATA = {
       ],
     },
     {
-      category:   "Competitive Programming",
-      categoryJP: "競技プログラミング",
+      category:   "Competitive Programming / CTF",
+      categoryJP: "競技プログラミング / CTF",
       items: [
         {
           name: "AtCoder Algorithm 2178",
@@ -322,6 +330,13 @@ const DATA = {
           detail: "ACM-ICPC internal qualifier: 4th place (2024)<br>Student Top Programmer Championship finalist (2024)",
           detailJP: "ACM-ICPC 学内予選 4位（2024年）<br>最強プログラマー学生選手権 本戦出場（2024年）",
           level: 78,
+        },
+        {
+          name: "CTF",
+          nameJP: "CTF",
+          detail: "Currently studying practical security through AlpacaHack and other past challenge sets.",
+          detailJP: "AlpacaHack などの過去問を通じて、実践的なセキュリティを勉強中です。",
+          level: 36,
         },
       ],
     },
@@ -614,7 +629,7 @@ const DATA = {
       imageAlt: "Participants in the ScrapReCover workshop and user study",
       imageAltJP: "ScrapReCoverのワークショップ・ユーザスタディの様子",
       links:   [
-        { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/ScrapReCover/" },
+        { label: "Project Page", labelJP: "プロジェクトページを見る", href: "https://marc2825.github.io/ScrapReCover/" },
         { label: "Science Park", labelJP: "サイエンスパーク", href: "https://www.sciencepark.jp/" },
       ],
     },
@@ -626,7 +641,6 @@ const DATA = {
       desc:    "A full-scratch humanoid avatar created in Blender for VRChat and related real-time use. I handled the entire pipeline, including modeling, UV unwrapping, texturing, rigging, skinning, and shape keys. The project also became a personal testbed for NPR-style anime expression and small workflow improvements through Python add-ons.",
       descJP:  "VRChatなどでの利用を想定してBlenderでフルスクラッチ制作した人型アバターです。モデリング、UV展開、テクスチャ、リギング、スキニング、シェイプキー設定などの一連の工程を経験しました。加えて、2Dアニメ的な見え方を目指すNPR表現の試行錯誤も行っている段階です。",
       stack:   [],
-      href:    "assets/projects/vrchat-avatar/front_ori3d.png",
       gallery: [
         {
           label: "Front View",
@@ -644,8 +658,7 @@ const DATA = {
         },
       ],
       links:   [
-        { label: "Front View", labelJP: "正面", href: "assets/projects/vrchat-avatar/front_ori3d.png" },
-        { label: "Side View",  labelJP: "側面", href: "assets/projects/vrchat-avatar/side_ori3d.png" },
+        { label: "Sketchfab", labelJP: "Sketchfabで見る", href: "https://skfb.ly/pHVBN" },
       ],
     },
     {
@@ -657,9 +670,6 @@ const DATA = {
       descJP:  "前年度まで形骸化していた東大アニメ研の会報活動を刷新しました。全体の編集やデザインの主導、記事募集・一部記事の執筆を担当し、表紙イラスト制作や当日の頒布は他の部員と役割分担しながら、100ページ程度の冊子として完成させました。コミックマーケット101で約150部を頒布（完売）し、サークルの新たな活動基盤として根付きました。協力してくださった皆さん、ありがとうございました。",
       stack:   [],
       href:    "assets/projects/ut-anime-club-bulletin/ssa_c101_abst.pdf",
-      detailHref: "assets/projects/ut-anime-club-bulletin/ssa_c101_abst.pdf",
-      detailLabel: "Open Abstract PDF",
-      detailLabelJP: "会報（抜粋）を見る",
       gallery: [
         {
           label: "Cover",
@@ -675,6 +685,9 @@ const DATA = {
           alt: "Sample spread from the UT Anime Club bulletin",
           altJP: "東大アニメ研会報の誌面サンプル",
         },
+      ],
+      links:   [
+        { label: "Open Abstract PDF", labelJP: "会報（抜粋）を見る", href: "assets/projects/ut-anime-club-bulletin/ssa_c101_abst.pdf" },
       ],
     },
     { /* CPU実験　などなど 時間あるときに*/
