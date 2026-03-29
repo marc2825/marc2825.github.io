@@ -286,11 +286,15 @@ button { font-family: inherit; }
   margin-bottom: 1.5rem;
 }
 .hero-affiliation {
+  display: inline-block;
   font-size: 0.9rem;
   color: var(--text-muted);
   letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
+  transition: color 0.2s var(--ease);
 }
+.hero-affiliation:hover,
+.hero-affiliation:focus-visible { color: var(--accent); }
 .hero-bio {
   font-size: 1.05rem;
   color: var(--text-muted);
@@ -438,6 +442,12 @@ button { font-family: inherit; }
   color: var(--accent); margin-bottom: 0.6rem;
 }
 .about-p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.85; }
+.about-link {
+  display: inline-block;
+  transition: color 0.2s var(--ease);
+}
+.about-link:hover,
+.about-link:focus-visible { color: var(--accent); }
 .about-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -597,6 +607,14 @@ button { font-family: inherit; }
 }
 .pub-authors { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.2rem; }
 .pub-venue   { font-size: 0.82rem; font-style: italic; color: var(--text-muted); margin-bottom: 0.6rem; }
+.pub-venue-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s var(--ease);
+}
+.pub-venue-link:hover,
+.pub-venue-link:focus-visible { color: var(--accent); }
 .pub-links   { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 .pub-link {
   font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;

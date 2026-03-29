@@ -241,13 +241,16 @@ function renderPapers(limit = currentPapersLimit) {
     const badgeMap = { fullpaper: "FULL", poster: "POSTER", demo: "DEMO" };
     const classMap = { fullpaper: "badge-fullpaper", poster: "badge-poster", demo: "badge-demo" };
     const linksHtml = (p.links || []).map(l => `<a href="${resolveUrl(l.href)}" class="pub-link">${d(l.label, l.labelJP ?? l.label)}</a>`).join("");
+    const venueHtml = p.venueHref
+      ? `<a href="${resolveUrl(p.venueHref)}" class="pub-venue-link">${d(p.venue, p.venueJP)}</a>`
+      : d(p.venue, p.venueJP);
     return `
       <li class="pub-item reveal" data-type="${p.type}" data-first-author="${p.firstAuthor}">
         <span class="pub-num">${num}</span>
         <div class="pub-body">
           <p class="pub-title">${d(p.title, p.titleJP)}<span class="pub-badge ${classMap[p.type]}">${badgeMap[p.type]}</span></p>
           <p class="pub-authors">${p.authors}</p>
-          <p class="pub-venue">${d(p.venue, p.venueJP)}</p>
+          <p class="pub-venue">${venueHtml}</p>
           <div class="pub-links">${linksHtml}</div>
         </div>
       </li>
@@ -447,7 +450,7 @@ function renderNews() {
   }
   el.innerHTML = DATA.news.map(n => `
     <li class="news-item reveal">
-      <span class="news-date">${d(n.date, n.dateJP)}</span>
+      <span class="news-date">${d(n.date, n.dateJP ?? n.date)}</span>
       <span class="news-text">${d(n.text, n.textJP)}</span>
     </li>
   `).join("");
@@ -462,7 +465,7 @@ function renderNewsSection(limit) {
   if (!items.length) { el.innerHTML = `<li>${comingSoonHtml()}</li>`; return; }
   el.innerHTML = items.map(n => `
     <li class="news-item reveal">
-      <span class="news-date">${d(n.date, n.dateJP)}</span>
+      <span class="news-date">${d(n.date, n.dateJP ?? n.date)}</span>
       <span class="news-text">${d(n.text, n.textJP)}</span>
     </li>
   `).join("");

@@ -26,11 +26,11 @@ const DATA = {
   ─────────────────────────────────────────────────────────── */
 /* TODO: ピン留め機能*/
   preview: {
-    research:  5,   /* research themes */
+    research:  10,   /* research themes */
     papers:    10,   /* papers */
-    projects:  3,   /* projects */
+    projects:  10,   /* projects */
     articles:  -1,  /* articles */
-    news:      -1,  /* news items */
+    news:      10,  /* news items */
   },
   
 
@@ -41,8 +41,8 @@ const DATA = {
   heroLabelJP:   "修士課程学生",
   affiliation:   "Department of Computer Science, Graduate School of Information Science and Technology · The University of Tokyo",
   affiliationJP: "情報理工学系研究科 コンピュータ科学専攻 · 東京大学 大学院",
-  bio:           "I am particularly interested in <strong>creativity support tools and optimization techniques</strong> in the fields of <strong>2D and 3DCG</strong>, as well as <strong>NPR (Non-Photorealistic Rendering)</strong>.",
-  bioJP:         "<strong>2D・3DCG</strong>分野における情報科学技術を通じた<strong>制作支援や最適化</strong>、ならびに<strong>NPR（Non-Photorealistic Rendering）</strong>表現に特に関心があります。",
+  bio:           "My research lies in the design of <strong>creativity support tools</strong> and <strong>optimization methods for 2D and 3D computer graphics</strong>, with a particular interest in <strong>non-photorealistic rendering (NPR), discrete mathematics, DCC tools</strong>.",
+  bioJP:         "<strong>2D・3DCG</strong>分野における情報科学技術を通じた<strong>制作支援や最適化</strong>、ならびに<strong>NPR（Non-Photorealistic Rendering）</strong>表現に特に関心があります。<strong>離散数学</strong>や<strong>DCCツール</strong>も好きです。",
 
   /* ── Links ────────────────────────────────────── */
   links: {
@@ -105,10 +105,8 @@ const DATA = {
   about: {
     intro:          WIP_EN,
     introJP:        WIP_JP,
-    history:        WIP_EN,
-    historyJP:      WIP_JP,
-    affiliation:    WIP_EN,
-    affiliationJP:  WIP_JP,
+    affiliation:    "Department of Computer Science, Graduate School of Information Science and Technology · The University of Tokyo",
+    affiliationJP:  "東京大学 大学院 情報理工学系研究科 コンピュータ科学専攻 修士課程",
     profile: [
       {
         label: "Hobbies",
@@ -117,17 +115,17 @@ const DATA = {
           {
             title: "3D Modeling",
             titleJP: "3Dモデリング",
-            desc: WIP_EN,
+            desc: "I create anime-style humanoid models from scratch in Blender, and also develop add-ons.",
             descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております。",
           },
           {
             title: "Competitive Programming",
             titleJP: "競技プログラミング",
-            desc: WIP_EN,
+            desc: "I have been actively participating in programming contests for several years and have achieved ranks such as AtCoder Yellow and Codeforces International Master.",
             descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（初段）などを達成しています。",
           },
           {
-            title: "Anime / Game Culture",
+            title: "Anime / Game / Vocaloid Culture",
             titleJP: "アニメ・ゲーム・ボカロ",
             desc: WIP_EN,
             descJP: WIP_JP,
@@ -189,7 +187,7 @@ const DATA = {
       titleJP:  "東京大学 理学部 情報科学科",
       sub:      "B.S. in Information Science",
       subJP:    "学士（理学・情報科学）",
-      desc:     WIP_EN,
+      desc:     "Alongside my studies, I enjoyed competitive programming and 3DCG creation with Blender. During my six-month undergraduate thesis, I worked on <a href=\"#research-scraprecover\">ScrapReCover</a> at the Igarashi Lab. (GPA: 3.43/4.30)",
       descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。（GPA: 3.43/4.30）",
     },
     {
@@ -199,7 +197,7 @@ const DATA = {
       titleJP:  "東京大学 理科一類",
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
-      desc:     WIP_EN,
+      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%)",
       descJP:   "GPA: 3.84/4.30（基本平均点 86.68点）",
     },
     {
@@ -222,7 +220,7 @@ const DATA = {
       titleJP:  "RA（技術調査員）, 株式会社オー・エル・エム・デジタル",
       sub:      "R&D Division",
       subJP:    "R&D部門",
-      desc:     "Worked on creator-support tools for animation production at OLM Digital, Inc. as part of the ANIMINS project, reporting progress in weekly meetings and helping conduct field studies and user tests with practitioners. One resulting outcome was <a href=\"#research-gapfill\">GapFill</a>.",
+      desc:     "Proposed and implemented creator support tools for animation production in the ANIMINS project; collaborated with practitioners and conducted field studies and user testing.",
       descJP:   "「ANIMINSプロジェクト」の一環として、AIを活用したアニメ制作支援ツールに関する共同研究に従事し、現場調査や実制作データを通じて連携しました。成果物の一つが <a href=\"#research-gapfill\">GapFill</a> です。",
     },
     {
@@ -232,7 +230,7 @@ const DATA = {
       titleJP:  "TA（ティーチングアシスタント）, 「コンピュータグラフィクス論」",
       sub:      "Faculty of Science, The University of Tokyo",
       subJP:    "東京大学 理学部 情報科学科",
-      desc:     "",
+      desc:     "Supported coursework on computer graphics concepts and implementation.",
       descJP:   "",
     },
     {
@@ -347,7 +345,7 @@ const DATA = {
         {
           name: "Blender",
           nameJP: "Blender",
-          detail: "Full pipeline: modeling, UVs, texturing, rigging, shape keys",
+          detail: "Full pipeline: modeling, UVs, texturing, rigging, shape keys etc.",
           detailJP: "モデリング、UV、テクスチャ、リギング、シェイプキー制作など含む",
           level: 93,
         },
@@ -505,7 +503,7 @@ const DATA = {
       periodJP: 2025,
       title:   "GapFill",
       titleJP: "GapFill",
-      desc:    "A creator-centered support tool for anime colorization that detects tiny unpainted regions, proposes fill colors with a domain-specific deep-learning model, and reduces repetitive operations such as inspection, zooming, and color selection. The system was grounded in field study and validated with 13 professional colorists.",
+      desc:    "Based on a formative study, designed and implemented a support tool for anime colorization that detects tiny unpainted regions, proposes fill colors, and reduces repetitive inspection and correction work; a user study demonstrated its usability and provided insights for the design of future support tools.",
       descJP:  "アニメ彩色における小さな塗り残しを対象とした制作支援ツールです。塗り残しの検出、拡大確認、色選択といった反復作業を減らすことを主目的として、現場調査に基づくUI設計と、アニメ塗りに特化した深層学習による色提案手法を組み合わせました。13名のプロ彩色者によるユーザスタディで有用性を検証し、社会実装へ向けた知見も提供しています。",
       image:   "assets/research/gapfill/GapFill_teaser.png",
       imageAlt: "GapFill teaser image",
@@ -522,7 +520,7 @@ const DATA = {
       periodJP: 2025,
       title:   "ScrapReCover",
       titleJP: "ScrapReCover",
-      desc:    "An interactive optimization system for designing freeform patchwork layouts from fabric scraps. It combines manual editing with simulated-annealing-based automatic suggestions, enabling iterative exploration of layouts that balance material reuse and visual intent. The system was evaluated through a user study and fabrication workshop with 21 participants.",
+      desc:    "An interactive optimization system for designing freeform patchwork layouts from fabric scraps. It combines manual editing with simulated-annealing-based automatic suggestions, enabling iterative exploration of layouts that balance material reuse and visual intent. The system was evaluated through a fabrication workshop with 21 participants.",
       descJP:  "不要な布切れを用いた自由形パッチワークのレイアウト制作を支援するインタラクティブ最適化システムです。直感的なパラメータ操作を含む手動調整や、焼きなまし法に基づく自動提案を組み合わせることで、材料の有効活用と見た目の意図を両立する反復的な試行錯誤を可能にしました。ワークショップでの実制作を通じて実用性を評価済みです。",
       image:   "assets/research/scraprecover/ScrapReCover_teaser.png",
       imageAlt: "ScrapReCover teaser image",
@@ -544,6 +542,7 @@ const DATA = {
       authors: "Masahiro Kono, Akinobu Maejima, Yuki Koyama, Yotam Sechayk, Takeo Igarashi",
       venue:   "CHI '26: ACM Conference on Human Factors in Computing Systems",
       venueJP: "CHI '26: ACM Conference on Human Factors in Computing Systems",
+      venueHref: "https://chi2026.acm.org/",
       year:    2026,
       type:    "fullpaper",
       firstAuthor: true,
@@ -558,6 +557,7 @@ const DATA = {
       authors: "Masahiro Kono, Akinobu Maejima, Yuki Koyama, Yotam Sechayk, Takeo Igarashi",
       venue:   "WISS 2025: The 33rd Workshop on Interactive Systems and Software",
       venueJP: "WISS 2025: 第33回インタラクティブシステムとソフトウェアに関するワークショップ",
+      venueHref: "https://www.wiss.org/WISS2025/",
       year:    2025,
       type:    "demo",
       firstAuthor: true,
@@ -572,6 +572,7 @@ const DATA = {
       authors: "Masahiro Kono, Maria Larsson, I-Chao Shen, Takeo Igarashi",
       venue:   "WISS 2025: The 33rd Workshop on Interactive Systems and Software",
       venueJP: "WISS 2025: 第33回インタラクティブシステムとソフトウェアに関するワークショップ",
+      venueHref: "https://www.wiss.org/WISS2025/",
       year:    2025,
       type:    "demo",
       firstAuthor: true,
@@ -586,6 +587,7 @@ const DATA = {
       authors: "Masahiro Kono, Maria Larsson, I-Chao Shen, Takeo Igarashi",
       venue:   "SCF '25: ACM Symposium on Computational Fabrication",
       venueJP: "SCF '25: ACM Symposium on Computational Fabrication",
+      venueHref: "https://scf.acm.org/2025/",
       year:    2025,
       type:    "fullpaper",
       firstAuthor: true,
@@ -602,6 +604,7 @@ const DATA = {
       authors: "Masahiro Kono, Akinobu Maejima, Yuki Koyama, Takeo Igarashi",
       venue:   "SIGGRAPH 2025 Posters",
       venueJP: "SIGGRAPH 2025 Posters",
+      venueHref: "https://s2025.siggraph.org/",
       year:    2025,
       type:    "poster",
       firstAuthor: true,
@@ -638,7 +641,7 @@ const DATA = {
       periodJP: 2024,
       title:   "Original VRChat Avatar Model",
       titleJP: "VRChat向けオリジナル3Dキャラクターモデル",
-      desc:    "A full-scratch humanoid avatar created in Blender for VRChat and related real-time use. I handled the entire pipeline, including modeling, UV unwrapping, texturing, rigging, skinning, and shape keys. The project also became a personal testbed for NPR-style anime expression and small workflow improvements through Python add-ons.",
+      desc:    "A full-scratch anime-style humanoid avatar created in Blender for VRChat and related real-time use. I handled the entire pipeline, including modeling, UV unwrapping, texturing, rigging, skinning, and shape keys. The project also became a personal testbed for NPR-style anime expression and small workflow improvements through Python add-ons.",
       descJP:  "VRChatなどでの利用を想定してBlenderでフルスクラッチ制作した人型アバターです。モデリング、UV展開、テクスチャ、リギング、スキニング、シェイプキー設定などの一連の工程を経験しました。加えて、2Dアニメ的な見え方を目指すNPR表現の試行錯誤も行っている段階です。",
       stack:   [],
       gallery: [
@@ -666,7 +669,7 @@ const DATA = {
       periodJP: 2022,
       title:   "UT Anime Club Bulletin Revamp",
       titleJP: "東大アニメ研 会報企画・編集",
-      desc:    "Revitalized a nearly dormant bulletin activity in the University of Tokyo Anime Club. I led editorial planning and overall layout design, coordinated article calls with other members, and helped turn the effort into a 100-page booklet. We distributed 200 copies at Comiket 101, establishing it as a sustainable club activity.",
+      desc:    "Revitalized a nearly dormant bulletin activity in the University of Tokyo Anime Club (SSA). I led editorial planning and overall layout design, coordinated article calls with other members, and helped turn the effort into a 100-page booklet. We distributed 200 copies at Comiket 101 (C101), establishing it as a sustainable club activity.",
       descJP:  "前年度まで形骸化していた東大アニメ研の会報活動を刷新しました。全体の編集やデザインの主導、記事募集・一部記事の執筆を担当し、表紙イラスト制作や当日の頒布は他の部員と役割分担しながら、100ページ程度の冊子として完成させました。コミックマーケット101で約150部を頒布（完売）し、サークルの新たな活動基盤として根付きました。協力してくださった皆さん、ありがとうございました。",
       stack:   [],
       href:    "assets/projects/ut-anime-club-bulletin/ssa_c101_abst.pdf",
@@ -706,8 +709,21 @@ const DATA = {
   /* ── Articles ─────────────────────────────────── */
   articles: [],
 
-  /* ── News ─────────────────────────────────────── */
-  news: [],
+  /* ── News ───────────────────────────────────────
+     Add one entry per item in the following format:
+     { date: "2026.03", dateJP: "2026.03", text: "Short news text", textJP: "お知らせ本文" },
+     `dateJP` can be omitted when the same date is used in both languages.
+
+     Ordering rule for news as well:
+     top = newest / bottom = oldest
+  ───────────────────────────────────────────────── */
+  news: [
+    { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
+    { date: "2025.12", text: "Two demo presentations were accepted to <a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>. I will present them in person in Hokkaido, Japan.", textJP: "<a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>に、デモ発表2件が採択されました。日本・北海道にて現地発表を行います。" },
+    { date: "2025.11", text: "One <a href='https://marc2825.github.io/ScrapReCover/'>first-author full paper</a> was accepted to <a href='https://scf.acm.org/2025/'>SCF 2025</a>. I will present it in person in Cambridge, MA, USA.", textJP: "<a href='https://scf.acm.org/2025/'>SCF 2025</a>に、<a href='https://marc2825.github.io/ScrapReCover/'>筆頭著者のフルペーパー1件</a>が採択されました。アメリカ・ボストンにて現地発表を行います。" },
+    { date: "2025.08", text: "One first-author poster was accepted to <a href='https://s2025.siggraph.org/'>SIGGRAPH 2025</a>. I will present it in person in Vancouver, Canada.", textJP: "<a href='https://s2025.siggraph.org/'>SIGGRAPH 2025</a>に、筆頭著者のポスター1件が採択されました。カナダ・バンクーバーにて現地発表を行います。" },
+    { date: "2025.04", text: "I graduated from the Department of Information Science, Faculty of Science, The University of Tokyo, and advanced to the Department of Computer Science, Graduate School of Information Science and Technology, The University of Tokyo.", textJP: "東京大学理学部情報科学科を卒業し、同大学の大学院情報理工学系研究科コンピュータ科学専攻に進学しました。" },
+  ],
 
   /* ── Contact ──────────────────────────────────── */
   contactText:   "I am open to research collaborations, internships, and conversations.",
