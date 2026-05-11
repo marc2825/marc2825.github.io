@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-05-04T02:38:53.145Z",
+  "updatedAt": "2026-05-11T02:53:08.349Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
-      "currentRating": 2176,
-      "highestRating": 2178,
-      "lastRatedContest": "2026-04-05T23:00:00+09:00",
+      "currentRating": 2187,
+      "highestRating": 2187,
+      "lastRatedContest": "2026-05-10T23:00:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json"
     },
     "atcoderHeuristic": {
@@ -17,12 +17,12 @@
     },
     "codeforces": {
       "handle": "marc2825",
-      "currentRating": 2336,
+      "currentRating": 2278,
       "highestRating": 2384,
-      "rank": "international master",
+      "rank": "master",
       "maxRank": "international master",
-      "lastRatedContest": "Nebius Round 2 (Codeforces Round 1088, Div. 1 + Div. 2)",
-      "lastRatedContestTime": "2026-03-28T17:15:00.000Z",
+      "lastRatedContest": "Codeforces Round 1097 (Div. 1,  Based on Zhili Cup 2026)",
+      "lastRatedContestTime": "2026-05-06T08:35:00.000Z",
       "source": "https://codeforces.com/api/user.info?handles=marc2825",
       "historySource": "https://codeforces.com/api/user.rating?handle=marc2825"
     }
