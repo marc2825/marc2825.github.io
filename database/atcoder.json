@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-05-11T02:53:08.349Z",
+  "updatedAt": "2026-05-18T03:27:33.260Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
-      "currentRating": 2187,
-      "highestRating": 2187,
-      "lastRatedContest": "2026-05-10T23:00:00+09:00",
+      "currentRating": 2194,
+      "highestRating": 2194,
+      "lastRatedContest": "2026-05-17T23:30:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json"
     },
     "atcoderHeuristic": {
       "username": "marc2825",
-      "currentRating": 1990,
-      "highestRating": 1990,
-      "lastRatedContest": "2026-04-26T19:00:00+09:00",
+      "currentRating": 2033,
+      "highestRating": 2033,
+      "lastRatedContest": "2026-05-16T19:00:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json?contestType=heuristic"
     },
     "codeforces": {
