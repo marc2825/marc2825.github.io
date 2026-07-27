@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-20T03:33:53.225Z",
+  "updatedAt": "2026-07-27T02:38:43.885Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
@@ -17,12 +17,12 @@
     },
     "codeforces": {
       "handle": "marc2825",
-      "currentRating": 2355,
+      "currentRating": 2363,
       "highestRating": 2384,
       "rank": "international master",
       "maxRank": "international master",
-      "lastRatedContest": "Spectral::Cup 2026 Round 2 (Codeforces Round 1100, Div. 1 + Div. 2)",
-      "lastRatedContestTime": "2026-05-23T17:35:00.000Z",
+      "lastRatedContest": "Codeforces Round 1112 (Div. 1)",
+      "lastRatedContestTime": "2026-07-26T17:05:00.000Z",
       "source": "https://codeforces.com/api/user.info?handles=marc2825",
       "historySource": "https://codeforces.com/api/user.rating?handle=marc2825"
     }
