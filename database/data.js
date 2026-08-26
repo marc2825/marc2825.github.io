@@ -32,6 +32,23 @@ const DATA = {
     articles:  -1,  /* articles */
     news:      10,  /* news items */
   },
+
+  /* ── Analytics ──────────────────────────────────
+     GoatCounter setup:
+     1. Create a GoatCounter site.
+     2. Paste your endpoint below, for example:
+        https://YOURCODE.goatcounter.com/count
+     3. Deploy the site.
+
+     Once configured, GoatCounter will count pageviews and show referrers
+     when the browser sends them.
+  ───────────────────────────────────────────────── */
+  analytics: {
+    goatcounter: {
+      endpoint: "",
+      allowLocal: false,
+    },
+  },
   
 
   /* ── Meta ─────────────────────────────────────── */
@@ -187,8 +204,8 @@ const DATA = {
       titleJP:  "東京大学 理学部 情報科学科",
       sub:      "B.S. in Information Science",
       subJP:    "学士（理学・情報科学）",
-      desc:     "Alongside my studies, I enjoyed competitive programming and 3DCG creation with Blender. During my six-month undergraduate thesis, I worked on <a href=\"#research-scraprecover\">ScrapReCover</a> at the Igarashi Lab. (GPA: 3.43/4.30)",
-      descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。（GPA: 3.43/4.30）",
+      desc:     "Alongside my studies, I enjoyed competitive programming and 3DCG creation with Blender. During my six-month undergraduate thesis, I worked on <a href=\"#research-scraprecover\">ScrapReCover</a> at the Igarashi Lab.",
+      descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。",
     },
     {
       period:   "2021 – 2022",
@@ -293,8 +310,8 @@ const DATA = {
       categoryJP: "競技プログラミング / CTF",
       items: [
         {
-          name: "AtCoder Algorithm 2178",
-          nameJP: "AtCoder（アルゴリズム）2178",
+          name: "AtCoder Algorithm 2204",
+          nameJP: "AtCoder（アルゴリズム）2204",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 91,
@@ -303,24 +320,24 @@ const DATA = {
           tone: "yellow",
         },
         {
-          name: "AtCoder Heuristic 1968",
-          nameJP: "AtCoder（ヒューリスティック）1968",
+          name: "AtCoder Heuristic 2085",
+          nameJP: "AtCoder（ヒューリスティック）2085",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 82,
           href: "https://atcoder.jp/users/marc2825?contestType=heuristic",
           dynamicKey: "atcoder_heuristic",
-          tone: "blue",
+          tone: "yellow",
         },
         {
-          name: "Codeforces 2384",
-          nameJP: "Codeforces 2384",
+          name: "Codeforces 2415",
+          nameJP: "Codeforces 2415",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 92,
           href: "https://codeforces.com/profile/marc2825",
           dynamicKey: "codeforces",
-          tone: "orange",
+          tone: "read",
         },
         {
           name: "Onsite / Major Contest Results",
@@ -333,7 +350,7 @@ const DATA = {
           name: "CTF",
           nameJP: "CTF",
           detail: "Currently studying practical security through AlpacaHack and other past challenge sets.",
-          detailJP: "AlpacaHack などの過去問を通じて、実践的なセキュリティを勉強中です。",
+          detailJP: "CTFのコンテストや AlpacaHack などの過去問を通じて、実践的なセキュリティを勉強中です。",
           level: 36,
         },
       ],
@@ -445,8 +462,8 @@ const DATA = {
         {
           name: "Mathematics Proficiency Test Grade 1",
           nameJP: "数検1級",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
+          detail: "July 2026",
+          detailJP: "2026年7月 取得",
           level: 92,
         },
         {

@@ -336,6 +336,38 @@ button { font-family: inherit; }
   border-color: #24292f;
   color: #f6f8fa;
 }
+#heroAtcoderLink {
+  background: #ddd27a;
+  border: 1px solid #ddd27a;
+  color: #2a2207;
+}
+#heroAtcoderLink:hover {
+  background: #cdbf55;
+  border-color: #cdbf55;
+  color: #1f1905;
+  transform: translateY(-2px);
+}
+[data-theme="light"] #heroAtcoderLink {
+  background: #ddd27a;
+  border-color: #ddd27a;
+  color: #2a2207;
+}
+#heroSketchfabLink {
+  background: #98cb5c;
+  border: 1px solid #98cb5c;
+  color: #132108;
+}
+#heroSketchfabLink:hover {
+  background: #7fb243;
+  border-color: #7fb243;
+  color: #0e1706;
+  transform: translateY(-2px);
+}
+[data-theme="light"] #heroSketchfabLink {
+  background: #98cb5c;
+  border-color: #98cb5c;
+  color: #132108;
+}
 .hero-scroll-hint {
   position: absolute;
   bottom: 2.5rem; left: 50%;

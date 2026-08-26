@@ -12,6 +12,7 @@ let activePubTab    = "papers";
 let activePubFilter = "fullpaper";
 let firstAuthorOnly = true;
 let currentPapersLimit;
+let analyticsInitialized = false;
 
 /* =========================================================
    WIP Banner
@@ -21,6 +22,33 @@ function renderWipBanner() {
   document.documentElement.classList.toggle("has-wip-banner", !!DATA.wip);
   if (!el) return;
   el.hidden = !DATA.wip;
+}
+
+/* =========================================================
+   Analytics
+   ========================================================= */
+function initAnalytics() {
+  if (analyticsInitialized) return;
+  analyticsInitialized = true;
+
+  const goatcounter = DATA.analytics?.goatcounter;
+  const endpoint = goatcounter?.endpoint?.trim();
+  if (!endpoint) return;
+  if (document.querySelector('script[data-analytics-provider="goatcounter"]')) return;
+
+  if (goatcounter.allowLocal) {
+    window.goatcounter = {
+      ...(window.goatcounter || {}),
+      allow_local: true,
+    };
+  }
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://gc.zgo.at/count.js";
+  script.dataset.goatcounter = endpoint;
+  script.dataset.analyticsProvider = "goatcounter";
+  document.head.appendChild(script);
 }
 
 /* =========================================================
@@ -63,6 +91,18 @@ function resolveUrl(href) {
   if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/i.test(href)) return href;
   const prefix = window.location.pathname.includes("/pages/") ? "../" : "";
   return prefix + href.replace(/^\.\//, "");
+}
+
+function getConfiguredProfileLink(type) {
+  if (DATA.links?.[type]) return DATA.links[type];
+  if (!Array.isArray(DATA.links?.items)) return "";
+  const item = DATA.links.items.find(entry =>
+    entry.type === type &&
+    !entry.disabled &&
+    entry.href &&
+    entry.href !== "#"
+  );
+  return item?.href || "";
 }
 
 function getLinkIcon(type) {
@@ -127,18 +167,31 @@ function comingSoonHtml() {
    Render helpers  (null-guarded; accept optional limit)
    ========================================================= */
 function renderHero() {
-  const label       = document.getElementById("heroLabel");
-  const name        = document.getElementById("heroName");
-  const affiliation = document.getElementById("heroAffiliation");
-  const bio         = document.getElementById("heroBio");
-  const githubLink  = document.getElementById("heroGithubLink");
+  const label         = document.getElementById("heroLabel");
+  const name          = document.getElementById("heroName");
+  const affiliation   = document.getElementById("heroAffiliation");
+  const bio           = document.getElementById("heroBio");
+  const githubLink    = document.getElementById("heroGithubLink");
+  const atcoderLink   = document.getElementById("heroAtcoderLink");
+  const sketchfabLink = document.getElementById("heroSketchfabLink");
+  const githubHref    = getConfiguredProfileLink("github");
+  const atcoderHref   = getConfiguredProfileLink("atcoder");
+  const sketchfabHref = getConfiguredProfileLink("sketchfab");
   if (label)       label.textContent       = d(DATA.heroLabel, DATA.heroLabelJP);
   if (name)        name.textContent        = d(DATA.name, DATA.nameJP);
   if (affiliation) affiliation.textContent = d(DATA.affiliation, DATA.affiliationJP);
   if (bio)         bio.innerHTML           = d(DATA.bio, DATA.bioJP);
   if (githubLink) {
-    githubLink.hidden = !DATA.links?.github;
-    if (DATA.links?.github) githubLink.href = resolveUrl(DATA.links.github);
+    githubLink.hidden = !githubHref;
+    if (githubHref) githubLink.href = resolveUrl(githubHref);
+  }
+  if (atcoderLink) {
+    atcoderLink.hidden = !atcoderHref;
+    if (atcoderHref) atcoderLink.href = resolveUrl(atcoderHref);
+  }
+  if (sketchfabLink) {
+    sketchfabLink.hidden = !sketchfabHref;
+    if (sketchfabHref) sketchfabLink.href = resolveUrl(sketchfabHref);
   }
 }
 

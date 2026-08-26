@@ -4,6 +4,7 @@
    ========================================================= */
 
 function initSubPage(section) {
+  initAnalytics();
   initTheme();
   renderWipBanner();
 
