@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-24T01:05:27.016Z",
+  "updatedAt": "2026-08-31T03:30:31.643Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
@@ -10,17 +10,17 @@
     },
     "atcoderHeuristic": {
       "username": "marc2825",
-      "currentRating": 2085,
+      "currentRating": 2080,
       "highestRating": 2087,
-      "lastRatedContest": "2026-08-10T19:00:00+09:00",
+      "lastRatedContest": "2026-08-29T19:00:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json?contestType=heuristic"
     },
     "codeforces": {
       "handle": "marc2825",
-      "currentRating": 2399,
-      "highestRating": 2399,
-      "rank": "international master",
-      "maxRank": "international master",
+      "currentRating": 2415,
+      "highestRating": 2415,
+      "rank": "grandmaster",
+      "maxRank": "grandmaster",
       "lastRatedContest": "Codeforces Round 1116 (Div. 1)",
       "lastRatedContestTime": "2026-08-09T17:05:00.000Z",
       "source": "https://codeforces.com/api/user.info?handles=marc2825",
