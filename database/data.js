@@ -366,19 +366,20 @@ const DATA = {
           tone: "read",
         },
         {
+          name: "Problem Setting",
+          nameJP: "作問",
+          detail: "I create original competitive programming problems and publish them mainly on yukicoder, including <a href='https://yukicoder.me/contests/600'>Contest 504</a> and <a href='https://yukicoder.me/contests/610'>Contest 516</a>.",
+          detailJP: "オリジナル問題を作成し、yukicoderなどで公開しています。例： <a href='https://yukicoder.me/contests/600'>Yukicoder Contest 504</a>・<a href='https://yukicoder.me/contests/610'>Yukicoder Contest 516</a> ",
+          level: 78,
+        },
+        {
           name: "Onsite / Major Contest Results",
           nameJP: "オンサイト・大会実績",
           detail: "ACM-ICPC internal qualifier: 4th place (2024)<br>Student Top Programmer Championship finalist (2024)",
           detailJP: "ACM-ICPC 学内予選 4位（2024年）<br>最強プログラマー学生選手権 本戦出場（2024年）",
-          level: 78,
+          level: 58,
         },
-        {
-          name: "CTF",
-          nameJP: "CTF",
-          detail: "",
-          detailJP: "AlpacaHack の過去問や実験的な個人開発を通じて、実践的なセキュリティを勉強中です。",
-          level: 36,
-        },
+
       ],
     },
     {
@@ -520,6 +521,13 @@ const DATA = {
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 84,
+        },
+        {
+          name: "CTF (security)",
+          nameJP: "CTF （セキュリティの勉強）",
+          detail: "",
+          detailJP: "AlpacaHack の過去問や実験的な個人開発を通じて、実践的なセキュリティを勉強中です。",
+          level: 36,
         },
         {
           name: "Investing",
@@ -775,6 +783,7 @@ const DATA = {
       text: "I joined the R&D division of Sony Group! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
       textJP: "Sony Group の R&D部門 に正式に入社しました。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
     },
+    { date: "2026.09", text: "I gave an <a href='https://visualcomputing.jp/vc2026/program/oral/'>invited talk at Visual Computing 2026 (VC2026)</a> on our <a href='https://marc2825.github.io/GapFill/'>GapFill</a> research.", textJP: "<a href='https://visualcomputing.jp/vc2026/program/oral/'>Visual Computing 2026 (VC2026)</a>にて、<a href='https://marc2825.github.io/GapFill/'>GapFill</a>の招待講演を行いました。" },
     { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
     { date: "2025.12", text: "Two demo presentations were accepted to <a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>. I will present them in person in Hokkaido, Japan.", textJP: "<a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>に、デモ発表2件が採択されました。日本・北海道にて現地発表を行います。" },
     { date: "2025.11", text: "One <a href='https://marc2825.github.io/ScrapReCover/'>first-author full paper</a> was accepted to <a href='https://scf.acm.org/2025/'>SCF 2025</a>. I will present it in person in Cambridge, MA, USA.", textJP: "<a href='https://scf.acm.org/2025/'>SCF 2025</a>に、<a href='https://marc2825.github.io/ScrapReCover/'>筆頭著者のフルペーパー1件</a>が採択されました。アメリカ・ボストンにて現地発表を行います。" },
