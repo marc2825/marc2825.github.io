@@ -133,19 +133,45 @@ const DATA = {
             title: "3D Modeling",
             titleJP: "3Dモデリング",
             desc: "I create anime-style humanoid models from scratch in Blender, and also develop add-ons.",
-            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております。",
+            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております💻️",
           },
           {
             title: "Competitive Programming",
             titleJP: "競技プログラミング",
             desc: "I have been actively participating in programming contests for several years and have achieved ranks such as AtCoder Yellow and Codeforces International Master.",
-            descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（初段）などを達成しています。",
+            descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（初段）などを達成しております💪",
           },
           {
-            title: "Anime / Game / Vocaloid Culture",
-            titleJP: "アニメ・ゲーム・ボカロ",
-            desc: WIP_EN,
-            descJP: WIP_JP,
+            title: "Traveling",
+            titleJP: "旅行",
+            desc: "I especially love traveling to places rich in nature and off the beaten path. Lately, I've been really into exploring remote islands!",
+            descJP: "自然豊かな場所や人里離れた場所に行くのが特に好きです✈️ 最近は離島巡りにハマってます🏝️",
+          },
+          /*
+          {
+            title: "Gaming / Anime / Music / Streams",
+            titleJP: "ゲーム・アニメ・音楽・配信視聴",
+            desc: "I've been into anime and gaming since my school days! I enjoy FPS games (mainly Apex), competitive Pokémon, and VRChat. These days, I watch more streams, esports, and 3D live concerts than anime. I'm also a big fan of Vocaloid, Project SEKAI, Gakumas, and VTuber music, especially Project SEKAI!",
+            descJP: "特に中高時代はアニメやゲームに熱中してました👾 近年よく遊んでるゲームはFPS（主にApex）、ポケモン対戦、VRChatなどです🎮️ 最近はアニメ以外にも配信や競技シーン、3Dライブをよく観ています📺️ 楽曲はボカロ・プロセカ・学マス・Vなどが好みで、特にプロセカは大大大好きです🎶",
+          },
+          */
+          {
+            title: "Video Game",
+            titleJP: "ゲーム",
+            desc: "I've loved gaming since my school days! These days, I mainly play FPS games (especially Apex), competitive Pokémon, and VRChat. 🎮",
+            descJP: "中高時代からゲームが大好きです👾 最近はFPS（主にApex）、ポケモン対戦、VRChatなどでよく遊んでいます🎮️",
+          },
+          {
+            title: "Anime / Streams",
+            titleJP: "アニメ・配信視聴",
+            desc: "I was especially into anime during my junior high and high school years! These days, I also enjoy watching livestreams, esports, and 3D live concerts. 📺",
+            descJP: "特に中高時代は数多くの深夜アニメを楽しんでました！ 最近は配信や競技シーン、3Dライブなどもよく観ています📺️",
+          },
+          {
+            title: "Japanese Internet Music",
+            titleJP: "ネットカルチャー系音楽",
+            desc: "I'm a big fan of Vocaloid, Project SEKAI, Gakumas, and VTuber music. I especially LOVE Project SEKAI! 🎶",
+            descJP: "ボカロ・プロセカ・学マス・Vなどの楽曲が好みで、特にプロセカは大大大好きです🎶",
           },
           {
             title: WIP_EN,
@@ -243,8 +269,8 @@ const DATA = {
     {
       period:   "2025, 2026",
       periodJP: "2025, 2026年",
-      title:    "Teaching Assistant, 'CG Theory'",
-      titleJP:  "TA（ティーチングアシスタント）, 「コンピュータグラフィクス論」",
+      title:    "Teaching Assistant, 'CG Theory' 'Fundamental Experiments in Computer Science' ",
+      titleJP:  "TA（ティーチングアシスタント）, 「コンピュータグラフィクス論」・「情報科学基礎実験」",
       sub:      "Faculty of Science, The University of Tokyo",
       subJP:    "東京大学 理学部 情報科学科",
       desc:     "Supported coursework on computer graphics concepts and implementation.",
@@ -349,8 +375,8 @@ const DATA = {
         {
           name: "CTF",
           nameJP: "CTF",
-          detail: "Currently studying practical security through AlpacaHack and other past challenge sets.",
-          detailJP: "CTFのコンテストや AlpacaHack などの過去問を通じて、実践的なセキュリティを勉強中です。",
+          detail: "",
+          detailJP: "AlpacaHack の過去問や実験的な個人開発を通じて、実践的なセキュリティを勉強中です。",
           level: 36,
         },
       ],
@@ -373,6 +399,7 @@ const DATA = {
           detailJP: WIP_EMPTY,
           level: 43,
         },
+        /*
         {
           name: "Substance Painter",
           nameJP: "Substance Painter",
@@ -380,6 +407,7 @@ const DATA = {
           detailJP: WIP_EMPTY,
           level: 32,
         },
+        */
         {
           name: "MikuMikuDance",
           nameJP: "MikuMikuDance",
@@ -445,11 +473,18 @@ const DATA = {
           level: 96,
         },
         {
+          name: "Mathematics Proficiency Test Grade 1",
+          nameJP: "数検1級",
+          detail: "July 2026",
+          detailJP: "2026年7月 取得",
+          level: 92,
+        },
+        {
           name: "Statistics Test Pre-1",
           nameJP: "統計検定 準1級",
           detail: WIP_EN,
           detailJP: "2025年4月 取得",
-          level: 93,
+          level: 83,
         },
         {
           anchorId: "skill-cert-toefl",
@@ -460,25 +495,18 @@ const DATA = {
           level: 88,
         },
         {
-          name: "Mathematics Proficiency Test Grade 1",
-          nameJP: "数検1級",
-          detail: "July 2026",
-          detailJP: "2026年7月 取得",
-          level: 92,
-        },
-        {
           name: "CG Engineer Expert",
           nameJP: "CGエンジニア検定 エキスパート",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
-          level: 90,
+          level: 80,
         },
         {
           name: "JDLA G Certification",
           nameJP: "G検定",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
-          level: 82,
+          level: 72,
         },
       ],
     },
@@ -487,11 +515,18 @@ const DATA = {
       categoryJP: "その他",
       items: [
         {
-          name: WIP_EN,
-          nameJP: WIP_JP,
+          name: "Novel Writing",
+          nameJP: "小説執筆",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 84,
+        },
+        {
+          name: "Investing",
+          nameJP: "投資",
+          detail: WIP_EMPTY,
+          detailJP: WIP_EMPTY,
+          level: 64,
         },
       ],
     },
@@ -735,6 +770,11 @@ const DATA = {
      top = newest / bottom = oldest
   ───────────────────────────────────────────────── */
   news: [
+    {
+      date: "2027.04 (Incoming)",
+      text: "I joined the R&D division of Sony Group! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
+      textJP: "Sony Group の R&D部門 に正式に入社しました。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
+    },
     { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
     { date: "2025.12", text: "Two demo presentations were accepted to <a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>. I will present them in person in Hokkaido, Japan.", textJP: "<a href='https://www.wiss.org/WISS2025/'>WISS 2025</a>に、デモ発表2件が採択されました。日本・北海道にて現地発表を行います。" },
     { date: "2025.11", text: "One <a href='https://marc2825.github.io/ScrapReCover/'>first-author full paper</a> was accepted to <a href='https://scf.acm.org/2025/'>SCF 2025</a>. I will present it in person in Cambridge, MA, USA.", textJP: "<a href='https://scf.acm.org/2025/'>SCF 2025</a>に、<a href='https://marc2825.github.io/ScrapReCover/'>筆頭著者のフルペーパー1件</a>が採択されました。アメリカ・ボストンにて現地発表を行います。" },
@@ -743,8 +783,8 @@ const DATA = {
   ],
 
   /* ── Contact ──────────────────────────────────── */
-  contactText:   "I am open to research collaborations, internships, and conversations.",
-  contactTextJP: "共同研究・インターン・ご連絡等を歓迎しております。",
+  contactText:   "Collaborations and inquiries are welcome. This is a personal website, independent of my affiliated organizations and their intellectual property.",
+  contactTextJP: "共同研究・ご連絡等を歓迎しております。（本サイトの活動は個人のものであり、所属組織およびその知的財産とは独立しています。）",
 };
 
 /* ── UI translations ──────────────────────────────────────── */
@@ -831,6 +871,6 @@ const I18N = {
     "contact.title":           "連絡先",
     "section.more":            "すべて見る →",
     "subpage.back":            "← ポートフォリオに戻る",
-    "wip.text":                "🚧 このサイトは現在制作中です",
+    "wip.text":                "🚧 このサイトは現在制作中です（就活用のポートフォリオです）",
   },
 };
