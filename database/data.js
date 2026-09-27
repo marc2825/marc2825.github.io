@@ -629,7 +629,7 @@ const DATA = {
     {
       title:   "ScrapReCover：自由形パッチワーク制作のための配置最適化支援システム",
       titleJP: "ScrapReCover：自由形パッチワーク制作のための配置最適化支援システム",
-      authors: "Masahiro Kono, Maria Larsson, I-Chao Shen, Takeo Igarashi",
+      authors: "Masahiro Kono, Maria Larsson, Takeo Igarashi",
       venue:   "WISS 2025: The 33rd Workshop on Interactive Systems and Software",
       venueJP: "WISS 2025: 第33回インタラクティブシステムとソフトウェアに関するワークショップ",
       venueHref: "https://www.wiss.org/WISS2025/",
@@ -644,7 +644,7 @@ const DATA = {
     {
       title:   "ScrapReCover: An Interactive Optimization System for Freeform Patchwork Layouts",
       titleJP: "ScrapReCover: An Interactive Optimization System for Freeform Patchwork Layouts",
-      authors: "Masahiro Kono, Maria Larsson, I-Chao Shen, Takeo Igarashi",
+      authors: "Masahiro Kono, Maria Larsson, Takeo Igarashi",
       venue:   "SCF '25: ACM Symposium on Computational Fabrication",
       venueJP: "SCF '25: ACM Symposium on Computational Fabrication",
       venueHref: "https://scf.acm.org/2025/",
