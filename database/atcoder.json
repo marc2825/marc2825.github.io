@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-05T03:57:38.481Z",
+  "updatedAt": "2026-10-12T04:14:28.061Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
@@ -10,9 +10,9 @@
     },
     "atcoderHeuristic": {
       "username": "marc2825",
-      "currentRating": 2089,
-      "highestRating": 2089,
-      "lastRatedContest": "2026-09-13T23:00:00+09:00",
+      "currentRating": 2121,
+      "highestRating": 2121,
+      "lastRatedContest": "2026-10-05T19:00:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json?contestType=heuristic"
     },
     "codeforces": {
