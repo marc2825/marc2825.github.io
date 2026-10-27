@@ -159,19 +159,19 @@ const DATA = {
             title: "Video Game",
             titleJP: "ゲーム",
             desc: "I've loved gaming since my school days! These days, I mainly play FPS games (especially Apex), competitive Pokémon, and VRChat. 🎮",
-            descJP: "中高時代からゲームが大好きです👾 最近はFPS（主にApex）、ポケモン対戦、VRChatなどでよく遊んでいます🎮️",
+            descJP: "中高時代からゲーム（特に対戦型・戦略ゲーム）が大好きです👾 最近はFPS（主にApex）、ポケモン対戦などでよく遊んでいます🎮️",
           },
           {
             title: "Anime / Streams",
             titleJP: "アニメ・配信視聴",
             desc: "I was especially into anime during my junior high and high school years! These days, I also enjoy watching livestreams, esports, and 3D live concerts. 📺",
-            descJP: "特に中高時代は数多くの深夜アニメを楽しんでました！ 最近は配信や競技シーン、3Dライブなどもよく観ています📺️",
+            descJP: "特に中高時代は、毎クール放送される数多くの深夜アニメを楽しんでおりました。特定の作品に限らず、総体としてのアニメそのものが好きです！ 最近は配信や競技シーン、3Dライブなどもよく観ています📺️",
           },
           {
             title: "Japanese Internet Music",
             titleJP: "ネットカルチャー系音楽",
             desc: "I'm a big fan of Vocaloid, Project SEKAI, Gakumas, and VTuber music. I especially LOVE Project SEKAI! 🎶",
-            descJP: "ボカロ・プロセカ・学マス・Vなどの楽曲が好みで、特にプロセカは大大大好きです🎶",
+            descJP: "ボカロ・プロセカ・学マス・Vなどの楽曲が好みで、特にプロセカは大好きです🎶",
           },
           {
             title: WIP_EN,
@@ -240,16 +240,16 @@ const DATA = {
       titleJP:  "東京大学 理科一類",
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
-      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%)",
-      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点）",
+      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 391.6/550",
+      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 391.6/550",
     },
     {
-      period:   "",
-      periodJP: "",
+      period:   "2014 – 2020",
+      periodJP: "2014年 – 2020年",
       title:    "Kaisei Junior and Senior High School",
       titleJP:  "開成中学校・高等学校",
       sub:      "Tokyo, Japan",
-      subJP:    "",
+      subJP:    "（特に中学の頃は）遊んでばかりでしたが、当時の経験が現在エンタメ業界を志すきっかけにもなっています！",
       desc:     WIP_EMPTY,
       descJP:   WIP_EMPTY,
     },
@@ -308,6 +308,7 @@ const DATA = {
           detailJP: "PyTorch、Blenderアドオン (bpy) など",
           level: 78,
         },
+        /*
         {
           name: "TypeScript / JavaScript",
           nameJP: "TypeScript / JavaScript",
@@ -315,6 +316,7 @@ const DATA = {
           detailJP: "React、Vite",
           level: 56,
         },
+        */
         {
           name: "HTML / CSS",
           nameJP: "HTML / CSS",
@@ -328,6 +330,13 @@ const DATA = {
           detail: "Five-stage pipelined CPU design",
           detailJP: "パイプラインCPUの設計・実装（CPU実験）",
           level: 27,
+        },
+        {
+          name: "Coding Agent",
+          nameJP: "コーディングエージェント",
+          detail: WIP_EMPTY,
+          detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております",
+          level: 79,
         },
       ],
     },
@@ -416,6 +425,7 @@ const DATA = {
           detailJP: WIP_EMPTY, /* Koikatsu, COM3D2*/
           level: 30,
         },
+        /*
         {
           name: "OpenGL / GLSL",
           nameJP: "OpenGL / GLSL",
@@ -423,6 +433,7 @@ const DATA = {
           detailJP: WIP_EMPTY,
           level: 31,
         },
+        */
         {
           name: "Unreal Engine 5",
           nameJP: "Unreal Engine 5",
@@ -519,8 +530,15 @@ const DATA = {
           name: "Novel Writing",
           nameJP: "小説執筆",
           detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
+          detailJP: "pixivで短編小説を定期的に公開しており、安定して3桁のいいねを獲得しております！",
           level: 84,
+        },
+        {
+          name: "AI Image Generation",
+          nameJP: "画像生成AI",
+          detail: WIP_EMPTY,
+          detailJP: "NovelAI や ComfyUI で画像生成の制御性を高めるために試行錯誤中です",
+          level: 74,
         },
         {
           name: "CTF (security)",
@@ -534,7 +552,7 @@ const DATA = {
           nameJP: "投資",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
-          level: 64,
+          level: 54,
         },
       ],
     },
