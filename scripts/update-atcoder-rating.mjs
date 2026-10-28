@@ -1,4 +1,5 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import { isDeepStrictEqual } from "node:util";
 
 const username = "marc2825";
 const codeforcesHandle = "marc2825";
@@ -98,10 +99,22 @@ const payload = {
   },
 };
 
-await writeFile(
-  new URL("../database/atcoder.json", import.meta.url),
-  `${JSON.stringify(payload, null, 2)}\n`
-);
+const outputPath = new URL("../database/atcoder.json", import.meta.url);
+let previousPayload;
+
+try {
+  previousPayload = JSON.parse(await readFile(outputPath, "utf8"));
+} catch (error) {
+  if (error.code !== "ENOENT") {
+    throw error;
+  }
+}
+
+if (isDeepStrictEqual(previousPayload?.platforms, payload.platforms)) {
+  console.log("Ratings unchanged; skipping update.");
+} else {
+  await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`);
+}
 
 console.log(
   [
