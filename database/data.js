@@ -68,10 +68,10 @@ const DATA = {
       "marckono2825@gmail.com",
       "marckono2825@g.ecc.u-tokyo.ac.jp",
     ],
-    cv:       "assets/MasahiroKono_CV.pdf",
+    // cv:       "assets/MasahiroKono_CV.pdf",
     scholar:  "https://scholar.google.co.jp/citations?user=D-nvVksAAAAJ&hl=ja&oi=sra",
     github:   "https://github.com/marc2825",
-    sketchfab:"https://sketchfab.com/marc2825",
+    // sketchfab:"https://sketchfab.com/marc2825",
     // twitter:  "",
     // linkedin: "",
     items: [
@@ -105,7 +105,7 @@ const DATA = {
         labelJP: "Sketchfab",
         href: "https://sketchfab.com/marc2825",
         showInAbout: true,
-        showInContact: true,
+        showInContact: false,
       },
       {
         type: "atcoder",
@@ -240,8 +240,8 @@ const DATA = {
       titleJP:  "東京大学 理科一類",
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
-      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 391.6/550",
-      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 391.6/550",
+      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 381.6/550",
+      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 381.6/550",
     },
     {
       period:   "2014 – 2020",
@@ -249,9 +249,9 @@ const DATA = {
       title:    "Kaisei Junior and Senior High School",
       titleJP:  "開成中学校・高等学校",
       sub:      "Tokyo, Japan",
-      subJP:    "（特に中学の頃は）遊んでばかりでしたが、当時の経験が現在エンタメ業界を志すきっかけにもなっています！",
+      subJP:    "",
       desc:     WIP_EMPTY,
-      descJP:   WIP_EMPTY,
+      descJP:   "（特に中学の頃は）遊んでばかりでしたが、当時の生活が現在エンタメ業界を志すきっかけにもなっています！",
     },
   ],
 
@@ -507,18 +507,11 @@ const DATA = {
           level: 88,
         },
         {
-          name: "CG Engineer Expert",
-          nameJP: "CGエンジニア検定 エキスパート",
+          name: "Others: CG Engineer Expert / JDLA G Certification",
+          nameJP: "その他： CGエンジニア検定 エキスパート / G検定",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
-          level: 80,
-        },
-        {
-          name: "JDLA G Certification",
-          nameJP: "G検定",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 72,
+          level: 60,
         },
       ],
     },
@@ -785,7 +778,7 @@ const DATA = {
   ],
 
   /* ── Articles ─────────────────────────────────── */
-  articles: [],
+  /*articles: [],*/
 
   /* ── News ───────────────────────────────────────
      Add one entry per item in the following format:
@@ -799,7 +792,7 @@ const DATA = {
     {
       date: "2027.04 (Incoming)",
       text: "I joined the R&D division of Sony Group! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
-      textJP: "Sony Group の R&D部門 に正式に入社しました。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
+      textJP: "Sony Group (SGC) の R&D部門 に正式に入社しました。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
     },
     { date: "2026.09", text: "I gave an <a href='https://visualcomputing.jp/vc2026/program/oral/'>invited talk at Visual Computing 2026 (VC2026)</a> on our <a href='https://marc2825.github.io/GapFill/'>GapFill</a> research.", textJP: "<a href='https://visualcomputing.jp/vc2026/program/oral/'>Visual Computing 2026 (VC2026)</a>にて、<a href='https://marc2825.github.io/GapFill/'>GapFill</a>の招待講演を行いました。" },
     { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
