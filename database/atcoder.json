@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-26T03:07:14.365Z",
+  "updatedAt": "2026-11-09T04:34:54.636Z",
   "platforms": {
     "atcoderAlgorithm": {
       "username": "marc2825",
-      "currentRating": 2215,
+      "currentRating": 2182,
       "highestRating": 2215,
-      "lastRatedContest": "2026-09-05T23:00:00+09:00",
+      "lastRatedContest": "2026-11-09T00:30:00+09:00",
       "source": "https://atcoder.jp/users/marc2825/history/json"
     },
     "atcoderHeuristic": {
