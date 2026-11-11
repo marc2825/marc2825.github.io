@@ -63,17 +63,10 @@ const DATA = {
 
   /* ── Links ────────────────────────────────────── */
   links: {
-    email:    "marckono2825@gmail.com",
     emails:   [
       "marckono2825@gmail.com",
       "marckono2825@g.ecc.u-tokyo.ac.jp",
     ],
-    // cv:       "assets/MasahiroKono_CV.pdf",
-    scholar:  "https://scholar.google.co.jp/citations?user=D-nvVksAAAAJ&hl=ja&oi=sra",
-    github:   "https://github.com/marc2825",
-    // sketchfab:"https://sketchfab.com/marc2825",
-    // twitter:  "",
-    // linkedin: "",
     items: [
       {
         type: "file",
@@ -138,8 +131,8 @@ const DATA = {
           {
             title: "Competitive Programming",
             titleJP: "競技プログラミング",
-            desc: "I have been actively participating in programming contests for several years and have achieved ranks such as AtCoder Yellow and Codeforces International Master.",
-            descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（初段）などを達成しております💪",
+            desc: "I have been actively participating in programming contests for several years and have achieved AtCoder Yellow (2 Dan) and Codeforces Grandmaster.",
+            descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（二段）やCodeforces Grandmasterを達成しております💪",
           },
           {
             title: "Traveling",
@@ -240,8 +233,8 @@ const DATA = {
       titleJP:  "東京大学 理科一類",
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
-      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 381.6/550",
-      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 381.6/550",
+      desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 391.6/550",
+      descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 391.6/550",
     },
     {
       period:   "2014 – 2020",
@@ -250,7 +243,7 @@ const DATA = {
       titleJP:  "開成中学校・高等学校",
       sub:      "Tokyo, Japan",
       subJP:    "",
-      desc:     WIP_EMPTY,
+      desc:     "I spent much of my time enjoying games and other hobbies, especially in junior high school. Those experiences helped inspire my interest in working in the entertainment industry.",
       descJP:   "（特に中学の頃は）遊んでばかりでしたが、当時の生活が現在エンタメ業界を志すきっかけにもなっています！",
     },
   ],
@@ -297,7 +290,7 @@ const DATA = {
         {
           name: "C++",
           nameJP: "C++",
-          detail: "Competitive programming, Siv3D、Qt など",
+          detail: "Competitive programming, Siv3D, Qt, and more",
           detailJP: "競技プログラミング、Siv3D、Qt など",
           level: 91,
         },
@@ -334,32 +327,32 @@ const DATA = {
         {
           name: "Coding Agent",
           nameJP: "コーディングエージェント",
-          detail: WIP_EMPTY,
+          detail: "I have primarily developed with Codex and Claude Code since summer 2025.",
           detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております",
           level: 79,
         },
       ],
     },
     {
-      category:   "Competitive Programming / CTF",
-      categoryJP: "競技プログラミング / CTF",
+      category:   "Competitive Programming",
+      categoryJP: "競技プログラミング",
       items: [
         {
-          name: "AtCoder Algorithm 2204",
-          nameJP: "AtCoder（アルゴリズム）2204",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 91,
+          name: "AtCoder Algorithm 2215",
+          nameJP: "AtCoder（アルゴリズム）2215",
+          detail: "Peak rating · Current rating: 2215",
+          detailJP: "最高レート · 現在レート: 2215",
+          level: 92,
           href: "https://atcoder.jp/users/marc2825",
           dynamicKey: "atcoder_algorithm",
           tone: "yellow",
         },
         {
-          name: "AtCoder Heuristic 2085",
-          nameJP: "AtCoder（ヒューリスティック）2085",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 82,
+          name: "AtCoder Heuristic 2121",
+          nameJP: "AtCoder（ヒューリスティック）2121",
+          detail: "Peak rating · Current rating: 2121",
+          detailJP: "最高レート · 現在レート: 2121",
+          level: 88,
           href: "https://atcoder.jp/users/marc2825?contestType=heuristic",
           dynamicKey: "atcoder_heuristic",
           tone: "yellow",
@@ -367,12 +360,12 @@ const DATA = {
         {
           name: "Codeforces 2415",
           nameJP: "Codeforces 2415",
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 92,
+          detail: "Peak rating · Current rating: 2415 · Grandmaster",
+          detailJP: "最高レート · 現在レート: 2415 · Grandmaster",
+          level: 93,
           href: "https://codeforces.com/profile/marc2825",
           dynamicKey: "codeforces",
-          tone: "read",
+          tone: "red",
         },
         {
           name: "Problem Setting",
@@ -480,7 +473,7 @@ const DATA = {
         {
           name: "Applied Information Technology Engineer",
           nameJP: "応用情報技術者",
-          detail: WIP_EN,
+          detail: "June 2023",
           detailJP: "2023年6月 取得",
           level: 96,
         },
@@ -494,13 +487,13 @@ const DATA = {
         {
           name: "Statistics Test Pre-1",
           nameJP: "統計検定 準1級",
-          detail: WIP_EN,
+          detail: "April 2025",
           detailJP: "2025年4月 取得",
           level: 83,
         },
         {
           anchorId: "skill-cert-toefl",
-          name: "TOEFL iBT 93点",
+          name: "TOEFL iBT 93",
           nameJP: "TOEFL iBT 93点",
           detail: "May 2024",
           detailJP: "2024年5月 取得",
@@ -522,21 +515,21 @@ const DATA = {
         {
           name: "Novel Writing",
           nameJP: "小説執筆",
-          detail: WIP_EMPTY,
+          detail: "I regularly publish short stories on pixiv, consistently receiving over 100 likes.",
           detailJP: "pixivで短編小説を定期的に公開しており、安定して3桁のいいねを獲得しております！",
           level: 84,
         },
         {
           name: "AI Image Generation",
           nameJP: "画像生成AI",
-          detail: WIP_EMPTY,
-          detailJP: "NovelAI や ComfyUI で画像生成の制御性を高めるために試行錯誤中です",
+          detail: "I experiment with NovelAI and ComfyUI to improve control over image generation.",
+          detailJP: "NovelAI や ComfyUI で画像生成の制御性を高めるために試行錯誤中です。",
           level: 74,
         },
         {
           name: "CTF (security)",
           nameJP: "CTF （セキュリティの勉強）",
-          detail: "",
+          detail: "I study practical security through past AlpacaHack challenges and experimental personal projects.",
           detailJP: "AlpacaHack の過去問や実験的な個人開発を通じて、実践的なセキュリティを勉強中です。",
           level: 36,
         },
@@ -546,19 +539,6 @@ const DATA = {
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 54,
-        },
-      ],
-    },
-    {
-      category:   WIP_EN,
-      categoryJP: WIP_JP,
-      items: [
-        {
-          name: WIP_EN,
-          nameJP: WIP_JP,
-          detail: WIP_EMPTY,
-          detailJP: WIP_EMPTY,
-          level: 84,
         },
       ],
     },
@@ -576,7 +556,7 @@ const DATA = {
       titleJP: "GapFill",
       desc:    "Based on a formative study, designed and implemented a support tool for anime colorization that detects tiny unpainted regions, proposes fill colors, and reduces repetitive inspection and correction work; a user study demonstrated its usability and provided insights for the design of future support tools.",
       descJP:  "アニメ彩色における小さな塗り残しを対象とした制作支援ツールです。塗り残しの検出、拡大確認、色選択といった反復作業を減らすことを主目的として、現場調査に基づくUI設計と、アニメ塗りに特化した深層学習による色提案手法を組み合わせました。13名のプロ彩色者によるユーザスタディで有用性を検証し、社会実装へ向けた知見も提供しています。",
-      image:   "assets/research/gapfill/GapFill_teaser.png",
+      image:   "assets/research/gapfill/GapFill_teaser.webp",
       imageAlt: "GapFill teaser image",
       imageAltJP: "GapFill teaser画像",
       imageHref: "https://marc2825.github.io/GapFill/",
@@ -593,7 +573,7 @@ const DATA = {
       titleJP: "ScrapReCover",
       desc:    "An interactive optimization system for designing freeform patchwork layouts from fabric scraps. It combines manual editing with simulated-annealing-based automatic suggestions, enabling iterative exploration of layouts that balance material reuse and visual intent. The system was evaluated through a fabrication workshop with 21 participants.",
       descJP:  "不要な布切れを用いた自由形パッチワークのレイアウト制作を支援するインタラクティブ最適化システムです。直感的なパラメータ操作を含む手動調整や、焼きなまし法に基づく自動提案を組み合わせることで、材料の有効活用と見た目の意図を両立する反復的な試行錯誤を可能にしました。ワークショップでの実制作を通じて実用性を評価済みです。",
-      image:   "assets/research/scraprecover/ScrapReCover_teaser.png",
+      image:   "assets/research/scraprecover/ScrapReCover_teaser.webp",
       imageAlt: "ScrapReCover teaser image",
       imageAltJP: "ScrapReCover teaser画像",
       imageHref: "https://marc2825.github.io/ScrapReCover/",
@@ -689,6 +669,15 @@ const DATA = {
 
   talks: [],
 
+  /* 査読経験: 会議・論文誌ごとに追加（新しい年度を上に）。空配列なら非表示。 */
+  reviewing: [
+    {
+      venue:   "Eurographics",
+      venueJP: "Eurographics",
+      year:    2027,
+    },
+  ],
+
   /* ── Projects ─────────────────────────────────── */
   projects: [
     {
@@ -699,7 +688,7 @@ const DATA = {
       desc:    "As part of the ScrapReCover project, I organized and conducted a public patchwork workshop / user study in cooperation with Science Park and Ochanomizu University. Participants brought their own fabric scraps, explored layouts with the system, and some fabricated tote bags based on the resulting designs.",
       descJP:  "ScrapReCoverプロジェクトの一環として、サイエンスパークおよびお茶の水女子大学と連携し、一般向け展示イベント内でパッチワーク制作ワークショップ兼ユーザスタディを企画・実施しました。参加者が持参した端切れを用いてレイアウト設計を行い、希望者にはその結果をもとにトートバッグの実制作まで体験してもらいました。",
       stack:   [],
-      image:   "assets/projects/scraprecover-workshop/UserStudy.png",
+      image:   "assets/projects/scraprecover-workshop/UserStudy.webp",
       imageAlt: "Participants in the ScrapReCover workshop and user study",
       imageAltJP: "ScrapReCoverのワークショップ・ユーザスタディの様子",
       links:   [
@@ -719,14 +708,14 @@ const DATA = {
         {
           label: "Front View",
           labelJP: "正面",
-          src: "assets/projects/vrchat-avatar/front_ori3d.png",
+          src: "assets/projects/vrchat-avatar/front_ori3d.webp",
           alt: "Original VRChat avatar front view",
           altJP: "オリジナル3Dキャラクターモデル 正面",
         },
         {
           label: "Side View",
           labelJP: "側面",
-          src: "assets/projects/vrchat-avatar/side_ori3d.png",
+          src: "assets/projects/vrchat-avatar/side_ori3d.webp",
           alt: "Original VRChat avatar side view",
           altJP: "オリジナル3Dキャラクターモデル 側面",
         },
@@ -741,21 +730,21 @@ const DATA = {
       title:   "UT Anime Club Bulletin Revamp",
       titleJP: "東大アニメ研 会報企画・編集",
       desc:    "Revitalized a nearly dormant bulletin activity in the University of Tokyo Anime Club (SSA). I led editorial planning and overall layout design, coordinated article calls with other members, and helped turn the effort into a 100-page booklet. We distributed 200 copies at Comiket 101 (C101), establishing it as a sustainable club activity.",
-      descJP:  "前年度まで形骸化していた東大アニメ研の会報活動を刷新しました。全体の編集やデザインの主導、記事募集・一部記事の執筆を担当し、表紙イラスト制作や当日の頒布は他の部員と役割分担しながら、100ページ程度の冊子として完成させました。コミックマーケット101で約150部を頒布（完売）し、サークルの新たな活動基盤として根付きました。協力してくださった皆さん、ありがとうございました。",
+      descJP:  "前年度まで形骸化していた東大アニメ研の会報活動を刷新しました。全体の編集やデザインの主導、記事募集・一部記事の執筆を担当し、表紙イラスト制作や当日の頒布は他の部員と役割分担しながら、100ページ程度の冊子として完成させました。コミックマーケット101で200部を頒布（完売）し、サークルの新たな活動基盤として根付きました。協力してくださった皆さん、ありがとうございました。",
       stack:   [],
       href:    "assets/projects/ut-anime-club-bulletin/ssa_c101_abst.pdf",
       gallery: [
         {
           label: "Cover",
           labelJP: "表紙",
-          src: "assets/projects/ut-anime-club-bulletin/ssa_c101_cover.png",
+          src: "assets/projects/ut-anime-club-bulletin/ssa_c101_cover.webp",
           alt: "Cover of the UT Anime Club bulletin",
           altJP: "東大アニメ研会報の表紙",
         },
         {
           label: "Sample",
           labelJP: "誌面サンプル",
-          src: "assets/projects/ut-anime-club-bulletin/ssa_c101_sample.png",
+          src: "assets/projects/ut-anime-club-bulletin/ssa_c101_sample.webp",
           alt: "Sample spread from the UT Anime Club bulletin",
           altJP: "東大アニメ研会報の誌面サンプル",
         },
@@ -778,7 +767,7 @@ const DATA = {
   ],
 
   /* ── Articles ─────────────────────────────────── */
-  /*articles: [],*/
+  articles: [],
 
   /* ── News ───────────────────────────────────────
      Add one entry per item in the following format:
@@ -791,8 +780,9 @@ const DATA = {
   news: [
     {
       date: "2027.04 (Incoming)",
-      text: "I joined the R&D division of Sony Group! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
-      textJP: "Sony Group (SGC) の R&D部門 に正式に入社しました。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
+      dateJP: "2027.04（入社予定）",
+      text: "I will join the R&D division of Sony Group in April 2027! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
+      textJP: "2027年4月にSony Group 株式会社 (SGC) の R&D部門に入社予定です。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
     },
     { date: "2026.09", text: "I gave an <a href='https://visualcomputing.jp/vc2026/program/oral/'>invited talk at Visual Computing 2026 (VC2026)</a> on our <a href='https://marc2825.github.io/GapFill/'>GapFill</a> research.", textJP: "<a href='https://visualcomputing.jp/vc2026/program/oral/'>Visual Computing 2026 (VC2026)</a>にて、<a href='https://marc2825.github.io/GapFill/'>GapFill</a>の招待講演を行いました。" },
     { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
@@ -812,6 +802,16 @@ const I18N = {
   en: {
     "meta.title":              "Masahiro Kono | Portfolio",
     "meta.description":        "Portfolio of Masahiro Kono: creator-centered CG, HCI, and NPR research",
+    "meta.research.title":     "Research — Masahiro Kono | Portfolio",
+    "meta.research.description": "Research projects by Masahiro Kono in CG, HCI, NPR, and creativity support tools.",
+    "meta.publications.title": "Publications — Masahiro Kono | Portfolio",
+    "meta.publications.description": "Papers, publications, presentations, and peer review service by Masahiro Kono.",
+    "meta.projects.title":     "Projects — Masahiro Kono | Portfolio",
+    "meta.projects.description": "Personal projects by Masahiro Kono, including 3D modeling, workshops, and editorial design.",
+    "meta.articles.title":     "Articles — Masahiro Kono | Portfolio",
+    "meta.articles.description": "Articles and writing by Masahiro Kono.",
+    "meta.news.title":         "News — Masahiro Kono | Portfolio",
+    "meta.news.description":   "News about Masahiro Kono's research, presentations, and activities.",
     "nav.about":               "About",
     "nav.research":            "Research",
     "nav.publications":        "Publications",
@@ -821,6 +821,12 @@ const I18N = {
     "nav.education":           "Education",
     "nav.news":                "News",
     "nav.contact":             "Contact",
+    "nav.menu.open":           "Open menu",
+    "nav.menu.close":          "Close menu",
+    "theme.light":             "Switch to light mode",
+    "theme.dark":              "Switch to dark mode",
+    "dialog.close":            "Close",
+    "language.label":          "Language",
     "hero.label":              "Graduate Researcher",
     "hero.cta1":               "View Research Projects",
     "hero.cta2":               "Get in Touch",
@@ -838,6 +844,7 @@ const I18N = {
     "pub.filter.poster":       "Poster",
     "pub.filter.demo":         "Demo",
     "pub.filter.firstAuthor":  "First Author Only",
+    "pub.reviewing":           "Peer Review Service",
     "projects.title":          "Projects (Other)",
     "articles.title":          "Articles",
     "skills.title":            "Skills",
@@ -854,6 +861,16 @@ const I18N = {
   ja: {
     "meta.title":              "河野将大 | ポートフォリオ",
     "meta.description":        "河野将大のポートフォリオ。CG・HCI・NPRの制作支援研究と個人制作",
+    "meta.research.title":     "研究 — 河野将大 | ポートフォリオ",
+    "meta.research.description": "河野将大によるCG・HCI・NPR分野の研究とクリエイター向け制作支援ツールを紹介します。",
+    "meta.publications.title": "論文・出版・発表 — 河野将大 | ポートフォリオ",
+    "meta.publications.description": "河野将大の論文・出版・発表および査読経験を紹介します。",
+    "meta.projects.title":     "プロジェクト — 河野将大 | ポートフォリオ",
+    "meta.projects.description": "河野将大による3Dモデル制作、ワークショップ、会報編集などの個人プロジェクトを紹介します。",
+    "meta.articles.title":     "記事 — 河野将大 | ポートフォリオ",
+    "meta.articles.description": "河野将大による記事・執筆活動を紹介します。",
+    "meta.news.title":         "お知らせ — 河野将大 | ポートフォリオ",
+    "meta.news.description":   "河野将大の研究・発表・活動に関するお知らせです。",
     "nav.about":               "自己紹介",
     "nav.research":            "研究",
     "nav.publications":        "出版・発表",
@@ -863,6 +880,12 @@ const I18N = {
     "nav.education":           "経歴",
     "nav.news":                "お知らせ",
     "nav.contact":             "連絡先",
+    "nav.menu.open":           "メニューを開く",
+    "nav.menu.close":          "メニューを閉じる",
+    "theme.light":             "ライトモードに切り替え",
+    "theme.dark":              "ダークモードに切り替え",
+    "dialog.close":            "閉じる",
+    "language.label":          "言語",
     "hero.label":              "大学院研究者",
     "hero.cta1":               "研究プロジェクトを見る",
     "hero.cta2":               "連絡する",
@@ -880,6 +903,7 @@ const I18N = {
     "pub.filter.poster":       "ポスター",
     "pub.filter.demo":         "デモ発表",
     "pub.filter.firstAuthor":  "筆頭著者のみ",
+    "pub.reviewing":           "査読経験",
     "projects.title":          "プロジェクト（その他）",
     "articles.title":          "記事",
     "skills.title":            "スキル",

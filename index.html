@@ -3,8 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="meta.title">ポートフォリオ</title>
-  <meta name="description" content="学術ポートフォリオ" data-i18n-content="meta.description" />
+  <title data-i18n="meta.title">河野将大 | ポートフォリオ</title>
+  <meta name="description" content="河野将大のポートフォリオ。CG・HCI・NPRの制作支援研究と個人制作" data-i18n-content="meta.description" />
+  <link rel="canonical" href="https://marc2825.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Masahiro Kono | Portfolio" />
+  <meta property="og:locale" content="ja_JP" />
+  <meta property="og:title" content="河野将大 | ポートフォリオ" data-i18n-content="meta.title" />
+  <meta property="og:description" content="河野将大のポートフォリオ。CG・HCI・NPRの制作支援研究と個人制作" data-i18n-content="meta.description" />
+  <meta property="og:url" content="https://marc2825.github.io/" />
+  <meta property="og:image" content="https://marc2825.github.io/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Masahiro Kono — CG, HCI, NPR Research and Creative Projects" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="河野将大 | ポートフォリオ" data-i18n-content="meta.title" />
+  <meta name="twitter:description" content="河野将大のポートフォリオ。CG・HCI・NPRの制作支援研究と個人制作" data-i18n-content="meta.description" />
+  <meta name="twitter:image" content="https://marc2825.github.io/assets/og-image.png" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,13 +60,13 @@
           </svg>
         </button>
         <!-- Language switch -->
-        <div class="lang-switch" role="group">
+        <div class="lang-switch" role="group" aria-label="言語" data-i18n-aria-label="language.label">
           <button class="lang-btn" data-lang="en">EN</button>
           <span class="lang-sep">|</span>
           <button class="lang-btn active" data-lang="ja">JP</button>
         </div>
         <!-- Mobile hamburger -->
-        <button class="nav-toggle" id="navToggle" aria-label="メニューを開く">
+        <button class="nav-toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="navLinks">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -174,6 +191,10 @@
       </div>
       <ol class="pub-list" id="pubList" reversed></ol>
       <!-- <ul class="talks-list" id="talksList" hidden></ul> -->
+      <aside class="pub-reviewing reveal" id="pubReviewing" aria-labelledby="pubReviewingTitle" hidden>
+        <h3 id="pubReviewingTitle" data-i18n="pub.reviewing">査読経験</h3>
+        <ul id="pubReviewingList"></ul>
+      </aside>
       <div class="section-more reveal">
         <a href="pages/publications.html?filter=all&firstAuthor=0" class="section-more-link" data-i18n="section.more">すべて見る →</a>
       </div>
@@ -248,7 +269,7 @@
   </footer>
 
   <!-- News FAB (floating action button) -->
-  <button class="news-fab" id="newsFab">
+  <button class="news-fab" id="newsFab" aria-haspopup="dialog" aria-controls="newsModal">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/>
     </svg>
@@ -256,12 +277,12 @@
   </button>
 
   <!-- News Modal -->
-  <div class="news-modal" id="newsModal">
-    <div class="news-modal-backdrop" id="newsModalBackdrop"></div>
+  <dialog class="news-modal" id="newsModal" aria-labelledby="newsModalTitle">
+    <div class="news-modal-backdrop" id="newsModalBackdrop" aria-hidden="true"></div>
     <div class="news-modal-panel">
       <div class="news-modal-header">
-        <h3 data-i18n="news.title">お知らせ</h3>
-        <button class="news-modal-close" id="newsModalClose" aria-label="閉じる">
+        <h3 id="newsModalTitle" data-i18n="news.title">お知らせ</h3>
+        <button class="news-modal-close" id="newsModalClose" aria-label="閉じる" data-i18n-aria-label="dialog.close" autofocus>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M6 18 18 6M6 6l12 12"/>
           </svg>
@@ -269,7 +290,7 @@
       </div>
       <ul class="news-list" id="newsList"></ul>
     </div>
-  </div>
+  </dialog>
 
   <!-- load order: data → core → script -->
   <script src="database/data.js"></script>

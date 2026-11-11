@@ -1,0 +1,11 @@
+{
+  "name": "marc2825-portfolio",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "preview": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}

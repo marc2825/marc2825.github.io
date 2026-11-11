@@ -7,7 +7,7 @@
    State
    ========================================================= */
 let currentLang     = "ja";
-let currentTheme    = localStorage.getItem("theme") || "dark";
+let currentTheme    = document.documentElement.getAttribute("data-theme") || "dark";
 let activePubTab    = "papers";
 let activePubFilter = "fullpaper";
 let firstAuthorOnly = true;
@@ -62,7 +62,11 @@ function initTheme() {
 function toggleTheme() {
   currentTheme = currentTheme === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", currentTheme);
-  localStorage.setItem("theme", currentTheme);
+  try {
+    localStorage.setItem("theme", currentTheme);
+  } catch (_) {
+    /* Theme switching still works when browser storage is unavailable. */
+  }
   updateThemeIcon();
 }
 
@@ -72,7 +76,13 @@ function updateThemeIcon() {
   const isDark = currentTheme === "dark";
   btn.querySelector(".icon-moon").style.display = isDark  ? "block" : "none";
   btn.querySelector(".icon-sun").style.display  = !isDark ? "block" : "none";
-  btn.setAttribute("aria-label", isDark ? "ライトモードに切り替え" : "ダークモードに切り替え");
+  btn.setAttribute("aria-label", t(isDark ? "theme.light" : "theme.dark"));
+}
+
+function updateMenuToggle() {
+  const btn = document.getElementById("navToggle");
+  if (!btn) return;
+  btn.setAttribute("aria-label", t(btn.getAttribute("aria-expanded") === "true" ? "nav.menu.close" : "nav.menu.open"));
 }
 
 /* =========================================================
@@ -94,7 +104,6 @@ function resolveUrl(href) {
 }
 
 function getConfiguredProfileLink(type) {
-  if (DATA.links?.[type]) return DATA.links[type];
   if (!Array.isArray(DATA.links?.items)) return "";
   const item = DATA.links.items.find(entry =>
     entry.type === type &&
@@ -123,23 +132,14 @@ function getLinkIcon(type) {
 }
 
 function getProfileLinks(flagKey) {
-  if (Array.isArray(DATA.links.items) && DATA.links.items.length) {
-    return DATA.links.items.filter(item => (item.disabled || (item.href && item.href !== "#")) && item[flagKey] !== false);
-  }
-
-  return [
-    DATA.links.cv       ? { type: "file",    label: "CV",              labelJP: "CV",              href: DATA.links.cv }       : null,
-    DATA.links.scholar  ? { type: "scholar", label: "Scholar",         labelJP: "Scholar",         href: DATA.links.scholar }  : null,
-    DATA.links.github   ? { type: "github",  label: "GitHub",          labelJP: "GitHub",          href: DATA.links.github }   : null,
-    DATA.links.sketchfab? { type: "sketchfab", label: "Sketchfab",     labelJP: "Sketchfab",       href: DATA.links.sketchfab }: null,
-    DATA.links.twitter  ? { type: "web",     label: "Twitter",         labelJP: "Twitter",         href: DATA.links.twitter }  : null,
-    DATA.links.linkedin ? { type: "web",     label: "LinkedIn",        labelJP: "LinkedIn",        href: DATA.links.linkedin } : null,
-  ].filter(Boolean);
+  return (DATA.links.items || []).filter(item =>
+    (item.disabled || (item.href && item.href !== "#")) && item[flagKey] !== false
+  );
 }
 
 function applyI18n() {
   document.documentElement.lang = currentLang;
-  document.title = t("meta.title");
+  document.title = t(document.querySelector("title")?.dataset.i18n || "meta.title");
 
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const val = t(el.dataset.i18n);
@@ -151,9 +151,19 @@ function applyI18n() {
     if (val) el.setAttribute("content", val);
   });
 
-  document.querySelectorAll(".lang-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.lang === currentLang);
+  document.querySelectorAll("[data-i18n-aria-label]").forEach(el => {
+    el.setAttribute("aria-label", t(el.dataset.i18nAriaLabel));
   });
+
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    const active = btn.dataset.lang === currentLang;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+  const locale = document.querySelector('meta[property="og:locale"]');
+  if (locale) locale.content = currentLang === "ja" ? "ja_JP" : "en_US";
+  updateThemeIcon();
+  updateMenuToggle();
 }
 
 /* =========================================================
@@ -264,22 +274,27 @@ function getFilteredPapers() {
 
 function syncPublicationFilterControls() {
   document.querySelectorAll(".pub-filter").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.filter === activePubFilter);
+    const active = btn.dataset.filter === activePubFilter;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
   });
   const faToggle = document.getElementById("firstAuthorToggle");
-  if (faToggle) faToggle.classList.toggle("active", firstAuthorOnly);
+  if (faToggle) {
+    faToggle.classList.toggle("active", firstAuthorOnly);
+    faToggle.setAttribute("aria-pressed", String(firstAuthorOnly));
+  }
 }
 
 function renderPapers(limit = currentPapersLimit) {
   const el = document.getElementById("pubList");
   if (!el) return;
   currentPapersLimit = limit;
+  const pubFilters = document.getElementById("pubFilters");
+  const pubTabs = document.querySelector(".pub-tabs");
+  if (pubFilters) pubFilters.hidden = limit === -1 || activePubTab !== "papers";
+  if (pubTabs) pubTabs.hidden = limit === -1;
   if (limit === -1) {
     el.innerHTML = `<li style="list-style:none">${comingSoonHtml()}</li>`;
-    const pubFilters = document.getElementById("pubFilters");
-    const pubTabs    = document.querySelector(".pub-tabs");
-    if (pubFilters) pubFilters.hidden = true;
-    if (pubTabs)    pubTabs.hidden    = true;
     return;
   }
   const filteredPapers = getFilteredPapers();
@@ -329,6 +344,18 @@ function renderTalks() {
   `).join("");
 }
 
+function renderReviewing() {
+  const section = document.getElementById("pubReviewing");
+  const list = document.getElementById("pubReviewingList");
+  if (!section || !list) return;
+
+  const items = DATA.reviewing || [];
+  section.hidden = items.length === 0;
+  list.innerHTML = items.map(item => `
+    <li>${d(item.venue, item.venueJP ?? item.venue)}${item.year ? ` ${item.year}` : ""}</li>
+  `).join("");
+}
+
 function getProjectMediaItems(project) {
   if (Array.isArray(project.gallery) && project.gallery.length) {
     return project.gallery;
@@ -357,8 +384,11 @@ function initProjectGalleries(root) {
     buttons.forEach(button => {
       button.addEventListener("click", () => {
         image.src = button.dataset.src || image.src;
-        image.alt = d(button.dataset.altEn || "", button.dataset.altJP || button.dataset.altEn || "");
-        buttons.forEach(item => item.classList.toggle("active", item === button));
+        image.alt = d(button.dataset.altEn || "", button.dataset.altJp || button.dataset.altEn || "");
+        buttons.forEach(item => {
+          item.classList.toggle("active", item === button);
+          item.setAttribute("aria-pressed", String(item === button));
+        });
       });
     });
   });
@@ -390,6 +420,7 @@ function renderProjects(limit) {
           <button
             type="button"
             class="project-gallery-btn${index === 0 ? " active" : ""}"
+            aria-pressed="${index === 0}"
             data-project-gallery-button
             data-src="${resolveUrl(media.src)}"
             data-alt-en="${media.alt || p.title}"
@@ -424,7 +455,8 @@ function renderArticles(limit) {
   const el = document.getElementById("articlesList");
   if (!el) return;
   if (limit === -1) { el.innerHTML = `<li>${comingSoonHtml()}</li>`; return; }
-  const items = limit != null ? DATA.articles.slice(0, limit) : DATA.articles;
+  const articles = DATA.articles || [];
+  const items = limit != null ? articles.slice(0, limit) : articles;
   if (!items.length) { el.innerHTML = `<li>${comingSoonHtml()}</li>`; return; }
   el.innerHTML = items.map(a => `
     <li class="article-item reveal">
@@ -445,7 +477,7 @@ function renderSkills() {
         ${group.items.map(item => `
           <div class="skill-item"${item.anchorId ? ` id="${item.anchorId}"` : ""}${item.dynamicKey ? ` data-dynamic-skill="${item.dynamicKey}"` : ""}${item.tone ? ` data-skill-tone="${item.tone}"` : ""}>
             <span class="skill-label">${item.href ? `<a href="${resolveUrl(item.href)}" class="skill-link">${d(item.name, item.nameJP ?? item.name)}</a>` : d(item.name, item.nameJP ?? item.name)}</span>
-            ${(!item.dynamicKey && (item.detail || item.detailJP)) ? `<span class="skill-detail">${d(item.detail ?? "", item.detailJP ?? item.detail ?? "")}</span>` : ""}
+            ${(item.detail || item.detailJP) ? `<span class="skill-detail">${d(item.detail ?? "", item.detailJP ?? item.detail ?? "")}</span>` : ""}
             <div class="skill-bar">
               <div class="skill-fill" data-level="${item.level}"></div>
             </div>
@@ -531,9 +563,7 @@ function renderContact() {
   if (textEl)  textEl.textContent = d(DATA.contactText, DATA.contactTextJP);
   if (emailEl) {
     const contactInfo = emailEl.parentElement;
-    const emails = Array.isArray(DATA.links.emails) && DATA.links.emails.length
-      ? DATA.links.emails
-      : (DATA.links.email ? [DATA.links.email] : []);
+    const emails = DATA.links.emails || [];
 
     if (contactInfo && emails.length) {
       contactInfo.innerHTML = emails.map((email, index) => `
@@ -608,19 +638,28 @@ function updateCompetitiveSkill(dynamicKey, config) {
   return true;
 }
 
+function competitiveDetails(profile, dateKey) {
+  const date = typeof profile?.[dateKey] === "string" ? profile[dateKey].slice(0, 10) : "";
+  const en = ["Peak rating"];
+  const ja = ["最高レート"];
+  if (Number.isFinite(profile?.currentRating)) {
+    en.push(`Current rating: ${profile.currentRating}`);
+    ja.push(`現在レート: ${profile.currentRating}`);
+  }
+  if (profile?.rank) {
+    en.push(`Rank: ${profile.rank}`);
+    ja.push(`ランク: ${profile.rank}`);
+  }
+  if (date) {
+    en.push(`Last rated contest: ${date}`);
+    ja.push(`最終レート更新コンテスト: ${date}`);
+  }
+  return { detailEn: en.join(" · "), detailJP: ja.join(" · ") };
+}
+
 function hydrateCompetitiveProfiles(payload) {
   const platforms = payload?.platforms;
   if (!platforms) return;
-
-  const algoDate = typeof platforms.atcoderAlgorithm?.lastRatedContest === "string"
-    ? platforms.atcoderAlgorithm.lastRatedContest.slice(0, 10)
-    : "";
-  const heuristicDate = typeof platforms.atcoderHeuristic?.lastRatedContest === "string"
-    ? platforms.atcoderHeuristic.lastRatedContest.slice(0, 10)
-    : "";
-  const codeforcesDate = typeof platforms.codeforces?.lastRatedContestTime === "string"
-    ? platforms.codeforces.lastRatedContestTime.slice(0, 10)
-    : "";
 
   const updates = [
     updateCompetitiveSkill("atcoder_algorithm", {
@@ -628,24 +667,21 @@ function hydrateCompetitiveProfiles(payload) {
       peakRating: platforms.atcoderAlgorithm?.highestRating,
       labelEn: "AtCoder Algorithm",
       labelJP: "AtCoder（アルゴ）",
-      detailEn: `Auto-updated from official history JSON.${Number.isFinite(platforms.atcoderAlgorithm?.currentRating) ? ` Current rating: ${platforms.atcoderAlgorithm.currentRating}.` : ""}${algoDate ? ` Last rated contest: ${algoDate}` : ""}`,
-      detailJP: `公式履歴JSONから自動更新。${Number.isFinite(platforms.atcoderAlgorithm?.currentRating) ? `現在レート: ${platforms.atcoderAlgorithm.currentRating}。` : ""}${algoDate ? `最終ratedコンテスト: ${algoDate}` : ""}`,
+      ...competitiveDetails(platforms.atcoderAlgorithm, "lastRatedContest"),
     }),
     updateCompetitiveSkill("atcoder_heuristic", {
       currentRating: platforms.atcoderHeuristic?.currentRating,
       peakRating: platforms.atcoderHeuristic?.highestRating,
       labelEn: "AtCoder Heuristic",
       labelJP: "AtCoder（ヒューリスティック）",
-      detailEn: `Auto-updated from official history JSON.${Number.isFinite(platforms.atcoderHeuristic?.currentRating) ? ` Current rating: ${platforms.atcoderHeuristic.currentRating}.` : ""}${heuristicDate ? ` Last rated contest: ${heuristicDate}` : ""}`,
-      detailJP: `公式履歴JSONから自動更新。${Number.isFinite(platforms.atcoderHeuristic?.currentRating) ? `現在レート: ${platforms.atcoderHeuristic.currentRating}。` : ""}${heuristicDate ? `最終ratedコンテスト: ${heuristicDate}` : ""}`,
+      ...competitiveDetails(platforms.atcoderHeuristic, "lastRatedContest"),
     }),
     updateCompetitiveSkill("codeforces", {
       currentRating: platforms.codeforces?.currentRating,
       peakRating: platforms.codeforces?.highestRating,
       labelEn: "Codeforces",
       labelJP: "Codeforces",
-      detailEn: `Auto-updated from official API.${Number.isFinite(platforms.codeforces?.currentRating) ? ` Current rating: ${platforms.codeforces.currentRating}.` : ""}${platforms.codeforces?.rank ? ` Rank: ${platforms.codeforces.rank}.` : ""}${codeforcesDate ? ` Last rated contest: ${codeforcesDate}` : ""}`,
-      detailJP: `公式APIから自動更新。${Number.isFinite(platforms.codeforces?.currentRating) ? `現在レート: ${platforms.codeforces.currentRating}。` : ""}${platforms.codeforces?.rank ? `現在ランク: ${platforms.codeforces.rank}。` : ""}${codeforcesDate ? `最終ratedコンテスト: ${codeforcesDate}` : ""}`,
+      ...competitiveDetails(platforms.codeforces, "lastRatedContestTime"),
     }),
   ];
 
@@ -658,6 +694,7 @@ function hydrateCompetitiveProfiles(payload) {
 }
 
 async function loadDynamicData() {
+  if (!document.getElementById("skillsGrid")) return;
   try {
     const res = await fetch(resolveUrl("database/atcoder.json"), { cache: "no-store" });
     if (!res.ok) return;
@@ -683,7 +720,7 @@ function setPubTab(tab) {
   const pubFilters = document.getElementById("pubFilters");
   if (pubList)    pubList.hidden    = tab !== "papers";
   if (talksList)  talksList.hidden  = tab !== "talks";
-  if (pubFilters) pubFilters.hidden = tab !== "papers";
+  if (pubFilters) pubFilters.hidden = tab !== "papers" || currentPapersLimit === -1;
   document.querySelectorAll(".pub-tab").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.tab === tab);
   });
@@ -697,6 +734,17 @@ let io;
 function reobserve() {
   if (io) io.disconnect();
 
+  const elements = document.querySelectorAll(".reveal");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+    elements.forEach(el => {
+      el.classList.add("visible");
+      el.querySelectorAll(".skill-fill").forEach(bar => {
+        bar.style.width = bar.dataset.level + "%";
+      });
+    });
+    return;
+  }
+
   io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -708,5 +756,5 @@ function reobserve() {
     });
   }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
 
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  elements.forEach(el => io.observe(el));
 }

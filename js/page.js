@@ -32,6 +32,7 @@ function initSubPage(section) {
       currentLang = btn.dataset.lang;
       renderSubPage(section);
       applyI18n();
+      reobserve();
     });
   });
 
@@ -82,6 +83,7 @@ function renderSubPage(section) {
     case "publications":
       renderPapers();
       renderTalks();
+      renderReviewing();
       renderFooter();
       break;
     case "projects":

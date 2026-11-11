@@ -126,6 +126,7 @@ a { color: inherit; text-decoration: none; }
 img, svg { display: block; }
 ul, ol { list-style: none; }
 button { font-family: inherit; }
+[hidden] { display: none !important; }
 
 /* =========================================================
    Navigation
@@ -532,7 +533,7 @@ button { font-family: inherit; }
    ========================================================= */
 .research-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr));
   gap: 1.25rem;
 }
 .research-card {
@@ -664,6 +665,16 @@ button { font-family: inherit; }
 .badge-poster    { background: rgba(100,220,160,0.12); color: #64dca0; }
 .badge-demo      { background: rgba(200,169,110,0.12); color: var(--accent-warm); }
 
+/* Peer review service — secondary to publications */
+.pub-reviewing {
+  margin-top: 1.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.pub-reviewing h3 { font-size: inherit; font-weight: 500; margin-bottom: 0.35rem; }
+.pub-reviewing ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+
 /* Talks list */
 .talks-list { display: flex; flex-direction: column; }
 .talk-item {
@@ -679,7 +690,7 @@ button { font-family: inherit; }
    Projects
    ========================================================= */
 .projects-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: 1.25rem;
 }
 .project-card {
@@ -1119,17 +1130,27 @@ button { font-family: inherit; }
   position: fixed;
   inset: 0;
   z-index: 200;
-  display: flex;
+  display: none;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   align-items: flex-end;
   justify-content: flex-end;
   padding: 0 2rem 6rem; /* 6rem leaves room above FAB */
   pointer-events: none;
   visibility: hidden;
 }
-.news-modal.is-open {
+.news-modal[open] {
+  display: flex;
   pointer-events: auto;
   visibility: visible;
 }
+.news-modal::backdrop { background: transparent; }
 
 .news-modal-backdrop {
   position: fixed; inset: 0;
@@ -1139,7 +1160,7 @@ button { font-family: inherit; }
   opacity: 0;
   transition: opacity 0.3s var(--ease);
 }
-.news-modal.is-open .news-modal-backdrop { opacity: 1; }
+.news-modal[open] .news-modal-backdrop { opacity: 1; }
 
 .news-modal-panel {
   position: relative;
@@ -1157,7 +1178,7 @@ button { font-family: inherit; }
               background-color 0.35s var(--ease), border-color 0.35s var(--ease);
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
-.news-modal.is-open .news-modal-panel { transform: none; opacity: 1; }
+.news-modal[open] .news-modal-panel { transform: none; opacity: 1; }
 
 .news-modal-header {
   display: flex;
@@ -1205,4 +1226,14 @@ button { font-family: inherit; }
   .news-fab { bottom: 1.25rem; right: 1.25rem; }
   .news-modal { padding: 0 1rem 5.5rem; }
   .news-modal .news-item { grid-template-columns: 1fr; gap: 0.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
 }
