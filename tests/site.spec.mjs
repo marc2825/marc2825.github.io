@@ -61,15 +61,21 @@ test("hidden links, empty profile facts, and unpublished paper controls stay hid
 
 test("publication filters remain usable after switching languages", async ({ page }) => {
   await page.goto("/pages/publications.html?filter=all&firstAuthor=0");
-  await expect(page.locator(".pub-item")).toHaveCount(5);
+  // Keep this interaction test independent of additions to the publication list.
+  const counts = await page.evaluate(() => ({
+    all: DATA.papers.length,
+    poster: DATA.papers.filter(paper => paper.type === "poster").length,
+    demo: DATA.papers.filter(paper => paper.type === "demo").length,
+  }));
+  await expect(page.locator(".pub-item")).toHaveCount(counts.all);
   await page.locator('[data-filter="poster"]').click();
-  await expect(page.locator(".pub-item")).toHaveCount(1);
+  await expect(page.locator(".pub-item")).toHaveCount(counts.poster);
   await page.locator('[data-lang="en"]').click();
   await expect(page.locator('[data-filter="poster"]')).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#firstAuthorToggle")).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator(".pub-item")).toHaveCount(1);
+  await expect(page.locator(".pub-item")).toHaveCount(counts.poster);
   await page.locator('[data-filter="demo"]').click();
-  await expect(page.locator(".pub-item")).toHaveCount(2);
+  await expect(page.locator(".pub-item")).toHaveCount(counts.demo);
 });
 
 test("the news dialog contains keyboard focus and restores it on every close path", async ({ page }) => {
@@ -157,13 +163,15 @@ test("blocked browser storage does not break the page or theme toggle", async ({
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
-test("Codeforces keeps its red fallback and details if rating data cannot load", async ({ page }) => {
+test("Codeforces keeps its red fallback and peak rating if rating data cannot load", async ({ page }) => {
   await page.route("**/database/atcoder.json", route => route.abort());
   await page.goto("/");
   const skill = page.locator('[data-dynamic-skill="codeforces"]');
   await expect(skill).toHaveAttribute("data-skill-tone", "red");
-  await expect(skill).toContainText("2415");
-  await expect(skill.locator(".skill-detail")).toContainText("Grandmaster");
+  await expect(skill.locator(".skill-label")).toHaveText("Codeforces 最高レート 2415");
+  await expect(skill.locator(".skill-detail")).toHaveCount(0);
+  await page.locator('[data-lang="en"]').click();
+  await expect(skill.locator(".skill-label")).toHaveText("Codeforces Peak Rating 2415");
 });
 
 test("English skill descriptions and Japanese gallery captions stay in the selected language", async ({ page }) => {
