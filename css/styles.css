@@ -492,6 +492,19 @@ button { font-family: inherit; }
   border-radius: var(--radius);
   padding: 0.95rem 1rem;
 }
+.about-fact.is-wide,
+.about-fact.is-full { grid-column: 1 / -1; }
+/* Wide cards: the list fills the left column first, then continues on the right.
+   Falls back to one column automatically when the card is too narrow for two. */
+.about-fact.is-wide .about-fact-list {
+  display: block;
+  columns: 2 16rem;
+  column-gap: 2.5rem;
+}
+.about-fact.is-wide .about-fact-item {
+  break-inside: avoid;
+  padding-bottom: 0.55rem;
+}
 .about-fact-label {
   font-size: 0.66rem;
   font-weight: 600;
@@ -639,6 +652,7 @@ button { font-family: inherit; }
   color: var(--text-heading); line-height: 1.4; margin-bottom: 0.3rem;
 }
 .pub-authors { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+.pub-author-self { text-decoration: underline; text-underline-offset: 0.2em; }
 .pub-venue   { font-size: 0.82rem; font-style: italic; color: var(--text-muted); margin-bottom: 0.6rem; }
 .pub-venue-link {
   color: inherit;
@@ -819,6 +833,10 @@ button { font-family: inherit; }
 .skill-group-title {
   font-size: 0.68rem; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 1rem;
+}
+.skill-group-note {
+  font-size: 0.72rem; color: var(--text-muted); line-height: 1.55;
+  margin: -0.5rem 0 1rem;
 }
 .skill-items { display: flex; flex-direction: column; gap: 0.7rem; }
 .skill-item  { display: flex; flex-direction: column; gap: 0.28rem; }

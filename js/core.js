@@ -205,6 +205,23 @@ function renderHero() {
   }
 }
 
+/* `wide` cards span the full row and split their list into two columns; `full` cards
+   just span the row. A regular card left alone in its row also spans it, so no half sits empty. */
+function getAboutFactClasses(items) {
+  const classes = items.map(item => item.wide ? " is-wide" : item.full ? " is-full" : "");
+  let loneIndex = -1;
+  items.forEach((item, index) => {
+    if (item.wide || item.full) {
+      if (loneIndex >= 0) classes[loneIndex] = " is-full";
+      loneIndex = -1;
+    } else {
+      loneIndex = loneIndex >= 0 ? -1 : index;
+    }
+  });
+  if (loneIndex >= 0) classes[loneIndex] = " is-full";
+  return classes;
+}
+
 function renderAbout() {
   const intro       = document.getElementById("aboutIntro");
   const affiliation = document.getElementById("aboutAffiliation");
@@ -214,8 +231,9 @@ function renderAbout() {
   if (affiliation) affiliation.textContent = d(DATA.about.affiliation, DATA.about.affiliationJP);
   if (facts) {
     const items = Array.isArray(DATA.about.profile) ? DATA.about.profile : [];
-    facts.innerHTML = items.map(item => `
-      <div class="about-fact">
+    const cardClasses = getAboutFactClasses(items);
+    facts.innerHTML = items.map((item, index) => `
+      <div class="about-fact${cardClasses[index]}">
         <p class="about-fact-label">${d(item.label, item.labelJP ?? item.label)}</p>
         ${Array.isArray(item.values) && item.values.length ? `
           <ul class="about-fact-list">
@@ -285,6 +303,14 @@ function syncPublicationFilterControls() {
   }
 }
 
+/* Underlines the site owner's name (DATA.selfAuthorNames) in an author list. */
+function markSelfAuthor(authors) {
+  return (DATA.selfAuthorNames || []).reduce(
+    (html, name) => html.split(name).join(`<span class="pub-author-self">${name}</span>`),
+    authors || ""
+  );
+}
+
 function renderPapers(limit = currentPapersLimit) {
   const el = document.getElementById("pubList");
   if (!el) return;
@@ -317,7 +343,7 @@ function renderPapers(limit = currentPapersLimit) {
         <span class="pub-num">${num}</span>
         <div class="pub-body">
           <p class="pub-title">${d(p.title, p.titleJP)}<span class="pub-badge ${classMap[p.type]}">${badgeMap[p.type]}</span></p>
-          <p class="pub-authors">${p.authors}</p>
+          <p class="pub-authors">${markSelfAuthor(p.authors)}</p>
           <p class="pub-venue">${venueHtml}</p>
           <div class="pub-links">${linksHtml}</div>
         </div>
@@ -473,6 +499,7 @@ function renderSkills() {
   el.innerHTML = DATA.skills.map(group => `
     <div class="skill-group reveal"${group.anchorId ? ` id="${group.anchorId}"` : ""}>
       <p class="skill-group-title">${d(group.category, group.categoryJP)}</p>
+      ${(group.note || group.noteJP) ? `<p class="skill-group-note">${d(group.note ?? "", group.noteJP ?? group.note ?? "")}</p>` : ""}
       <div class="skill-items">
         ${group.items.map(item => `
           <div class="skill-item"${item.anchorId ? ` id="${item.anchorId}"` : ""}${item.dynamicKey ? ` data-dynamic-skill="${item.dynamicKey}"` : ""}${item.tone ? ` data-skill-tone="${item.tone}"` : ""}>
@@ -629,32 +656,13 @@ function updateCompetitiveSkill(dynamicKey, config) {
   if (!Number.isFinite(referenceRating)) return false;
 
   skill.level    = competitiveLevelFromRating(dynamicKey, referenceRating);
-  skill.name     = `${config.labelEn} ${referenceRating}`;
-  skill.nameJP   = `${config.labelJP} ${referenceRating}`;
-  skill.detail   = config.detailEn;
-  skill.detailJP = config.detailJP;
+  skill.name     = `${config.labelEn} Peak Rating ${referenceRating}`;
+  skill.nameJP   = `${config.labelJP} 最高レート ${referenceRating}`;
+  skill.detail   = "";
+  skill.detailJP = "";
   skill.tone     = competitiveToneFromRating(dynamicKey, referenceRating);
 
   return true;
-}
-
-function competitiveDetails(profile, dateKey) {
-  const date = typeof profile?.[dateKey] === "string" ? profile[dateKey].slice(0, 10) : "";
-  const en = ["Peak rating"];
-  const ja = ["最高レート"];
-  if (Number.isFinite(profile?.currentRating)) {
-    en.push(`Current rating: ${profile.currentRating}`);
-    ja.push(`現在レート: ${profile.currentRating}`);
-  }
-  if (profile?.rank) {
-    en.push(`Rank: ${profile.rank}`);
-    ja.push(`ランク: ${profile.rank}`);
-  }
-  if (date) {
-    en.push(`Last rated contest: ${date}`);
-    ja.push(`最終レート更新コンテスト: ${date}`);
-  }
-  return { detailEn: en.join(" · "), detailJP: ja.join(" · ") };
 }
 
 function hydrateCompetitiveProfiles(payload) {
@@ -667,21 +675,18 @@ function hydrateCompetitiveProfiles(payload) {
       peakRating: platforms.atcoderAlgorithm?.highestRating,
       labelEn: "AtCoder Algorithm",
       labelJP: "AtCoder（アルゴ）",
-      ...competitiveDetails(platforms.atcoderAlgorithm, "lastRatedContest"),
     }),
     updateCompetitiveSkill("atcoder_heuristic", {
       currentRating: platforms.atcoderHeuristic?.currentRating,
       peakRating: platforms.atcoderHeuristic?.highestRating,
       labelEn: "AtCoder Heuristic",
       labelJP: "AtCoder（ヒューリスティック）",
-      ...competitiveDetails(platforms.atcoderHeuristic, "lastRatedContest"),
     }),
     updateCompetitiveSkill("codeforces", {
       currentRating: platforms.codeforces?.currentRating,
       peakRating: platforms.codeforces?.highestRating,
       labelEn: "Codeforces",
       labelJP: "Codeforces",
-      ...competitiveDetails(platforms.codeforces, "lastRatedContestTime"),
     }),
   ];
 

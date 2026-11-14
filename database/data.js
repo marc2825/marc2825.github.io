@@ -113,64 +113,49 @@ const DATA = {
 
   /* ── About ────────────────────────────────────── */
   about: {
-    intro:          WIP_EN,
-    introJP:        WIP_JP,
     affiliation:    "Department of Computer Science, Graduate School of Information Science and Technology · The University of Tokyo",
     affiliationJP:  "東京大学 大学院 情報理工学系研究科 コンピュータ科学専攻 修士課程",
     profile: [
       {
         label: "Hobbies",
         labelJP: "趣味",
+        wide: true,
         values: [
-          {
-            title: "3D Modeling",
-            titleJP: "3Dモデリング",
-            desc: "I create anime-style humanoid models from scratch in Blender, and also develop add-ons.",
-            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております💻️",
-          },
           {
             title: "Competitive Programming",
             titleJP: "競技プログラミング",
             desc: "I have been actively participating in programming contests for several years and have achieved AtCoder Yellow (2 Dan) and Codeforces Grandmaster.",
-            descJP: "数年間にわたって継続的にコンテストへ参加しており、AtCoder黄色（二段）やCodeforces Grandmasterを達成しております💪",
+            descJP: "数年間にわたって継続的にコンテストへ参加・作問しており、AtCoder黄色（二段）やCodeforces Grandmasterを達成しております💪",
+          },
+          {
+            title: "3D Modeling",
+            titleJP: "3Dモデリング",
+            desc: "I create anime-style humanoid models from scratch in Blender, and also develop add-ons.",
+            descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております💻️ ",
           },
           {
             title: "Traveling",
             titleJP: "旅行",
             desc: "I especially love traveling to places rich in nature and off the beaten path. Lately, I've been really into exploring remote islands!",
-            descJP: "自然豊かな場所や人里離れた場所に行くのが特に好きです✈️ 最近は離島巡りにハマってます🏝️",
+            descJP: "自然豊かな場所や、人里離れた場所に行くのが特に好きです✈️ 最近は離島巡りにハマってます🏝️",
           },
-          /*
-          {
-            title: "Gaming / Anime / Music / Streams",
-            titleJP: "ゲーム・アニメ・音楽・配信視聴",
-            desc: "I've been into anime and gaming since my school days! I enjoy FPS games (mainly Apex), competitive Pokémon, and VRChat. These days, I watch more streams, esports, and 3D live concerts than anime. I'm also a big fan of Vocaloid, Project SEKAI, Gakumas, and VTuber music, especially Project SEKAI!",
-            descJP: "特に中高時代はアニメやゲームに熱中してました👾 近年よく遊んでるゲームはFPS（主にApex）、ポケモン対戦、VRChatなどです🎮️ 最近はアニメ以外にも配信や競技シーン、3Dライブをよく観ています📺️ 楽曲はボカロ・プロセカ・学マス・Vなどが好みで、特にプロセカは大大大好きです🎶",
-          },
-          */
           {
             title: "Video Game",
             titleJP: "ゲーム",
             desc: "I've loved gaming since my school days! These days, I mainly play FPS games (especially Apex), competitive Pokémon, and VRChat. 🎮",
-            descJP: "中高時代からゲーム（特に対戦型・戦略ゲーム）が大好きです👾 最近はFPS（主にApex）、ポケモン対戦などでよく遊んでいます🎮️",
+            descJP: "中高時代からゲーム（特に対戦型・戦略ゲーム）が大好きです👾 最近はFPS（主にApex）、ポケモン対戦などで遊ぶことが多いです🎮️",
           },
           {
             title: "Anime / Streams",
             titleJP: "アニメ・配信視聴",
             desc: "I was especially into anime during my junior high and high school years! These days, I also enjoy watching livestreams, esports, and 3D live concerts. 📺",
-            descJP: "特に中高時代は、毎クール放送される数多くの深夜アニメを楽しんでおりました。特定の作品に限らず、総体としてのアニメそのものが好きです！ 最近は配信や競技シーン、3Dライブなどもよく観ています📺️",
+            descJP: "特に中高時代は、毎クール放送される数多くの深夜アニメを楽しんでました。特定の作品に限らず、総体としてのアニメが好きです！ 最近は配信や競技シーン、3Dライブなどを比較的よく観ています📺️",
           },
           {
             title: "Japanese Internet Music",
             titleJP: "ネットカルチャー系音楽",
             desc: "I'm a big fan of Vocaloid, Project SEKAI, Gakumas, and VTuber music. I especially LOVE Project SEKAI! 🎶",
-            descJP: "ボカロ・プロセカ・学マス・Vなどの楽曲が好みで、特にプロセカは大好きです🎶",
-          },
-          {
-            title: WIP_EN,
-            titleJP: WIP_JP,
-            desc: WIP_EN,
-            descJP: WIP_JP,
+            descJP: "ボカロ・プロセカ・学マス・VTuberなどの楽曲が好みで、特にプロセカは大好きです🎶",
           },
         ],
       },
@@ -182,21 +167,14 @@ const DATA = {
             title: "Design Principle",
             titleJP: "設計思想",
           },
-          {
-            title: WIP_EN,
-            titleJP: WIP_JP,
-          },
         ],
       },
       {
-        label: WIP_EN,
-        labelJP: WIP_JP,
-        values: [
-          {
-            title: "",
-            titleJP: "",
-          },
-        ],
+        label: "Recent Thoughts",
+        labelJP: "最近のひとこと",
+        full: true,  
+        value: "With all the recent advances in AI, I've been having fun trying out things I've always wanted to do and finding ways to make my existing workflows more efficient! 💪",
+        valueJP: "AIの進化でできることが増えたので、以前からやってみたかったことに挑戦したり、これまでやってきたことを効率化したりして楽しんでます💪",
       },
     ],
   },
@@ -210,8 +188,8 @@ const DATA = {
       titleJP:  "東京大学大学院 情報理工学系研究科 コンピュータ科学専攻",
       sub:      "M.S. Student in Computer Science",
       subJP:    "修士課程（情報理工学）",
-      desc:     "Researching creativity support tools, optimization in CG, and NPR-related topics in the Igarashi Lab.",
-      descJP:   "五十嵐研究室にて、クリエイター向け制作支援ツール、CG分野の最適化、NPR関連技術などを研究中。",
+      desc:     "Researching creativity support tools, optimization in CG, and NPR-related topics in the Igarashi Lab (e.g., <a href=\"#research-gapfill\">GapFill</a>).",
+      descJP:   "五十嵐研究室にて、クリエイター向け制作支援ツール、CG分野の最適化、NPR関連技術などを研究中です。（研究例：<a href=\"#research-gapfill\">GapFill</a>）",
       link:     "https://www-ui.is.s.u-tokyo.ac.jp/",
       linkLabel:   "Igarashi Lab",
       linkLabelJP: "五十嵐研究室",
@@ -250,8 +228,8 @@ const DATA = {
 
   experience: [
     {
-      period:   "2024.12-2026.2",
-      periodJP: "2024.12-2026.2",
+      period:   "2024.12-2026.9",
+      periodJP: "2024.12-2026.9",
       title:    "Research Assistant, OLM Digital, Inc.",
       titleJP:  "RA（技術調査員）, 株式会社オー・エル・エム・デジタル",
       sub:      "R&D Division",
@@ -267,16 +245,6 @@ const DATA = {
       sub:      "Faculty of Science, The University of Tokyo",
       subJP:    "東京大学 理学部 情報科学科",
       desc:     "Supported coursework on computer graphics concepts and implementation.",
-      descJP:   "",
-    },
-    {
-      period:   "",
-      periodJP: "",
-      title:    WIP_EN,
-      titleJP:  WIP_JP,
-      sub:      "",
-      subJP:    "",
-      desc:     "",
       descJP:   "",
     },
   ],
@@ -328,7 +296,7 @@ const DATA = {
           name: "Coding Agent",
           nameJP: "コーディングエージェント",
           detail: "I have primarily developed with Codex and Claude Code since summer 2025.",
-          detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております",
+          detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております。",
           level: 79,
         },
       ],
@@ -338,30 +306,30 @@ const DATA = {
       categoryJP: "競技プログラミング",
       items: [
         {
-          name: "AtCoder Algorithm 2215",
-          nameJP: "AtCoder（アルゴリズム）2215",
-          detail: "Peak rating · Current rating: 2215",
-          detailJP: "最高レート · 現在レート: 2215",
+          name: "AtCoder Algorithm Peak Rating 2215",
+          nameJP: "AtCoder（アルゴ） 最高レート 2215",
+          detail: "",
+          detailJP: "",
           level: 92,
           href: "https://atcoder.jp/users/marc2825",
           dynamicKey: "atcoder_algorithm",
           tone: "yellow",
         },
         {
-          name: "AtCoder Heuristic 2121",
-          nameJP: "AtCoder（ヒューリスティック）2121",
-          detail: "Peak rating · Current rating: 2121",
-          detailJP: "最高レート · 現在レート: 2121",
+          name: "AtCoder Heuristic Peak Rating 2121",
+          nameJP: "AtCoder（ヒューリスティック） 最高レート 2121",
+          detail: "",
+          detailJP: "",
           level: 88,
           href: "https://atcoder.jp/users/marc2825?contestType=heuristic",
           dynamicKey: "atcoder_heuristic",
           tone: "yellow",
         },
         {
-          name: "Codeforces 2415",
-          nameJP: "Codeforces 2415",
-          detail: "Peak rating · Current rating: 2415 · Grandmaster",
-          detailJP: "最高レート · 現在レート: 2415 · Grandmaster",
+          name: "Codeforces Peak Rating 2415",
+          nameJP: "Codeforces 最高レート 2415",
+          detail: "",
+          detailJP: "",
           level: 93,
           href: "https://codeforces.com/profile/marc2825",
           dynamicKey: "codeforces",
@@ -387,6 +355,8 @@ const DATA = {
     {
       category:   "CG & DCC Tools",
       categoryJP: "CG・DCCツール",
+      note:       "Lately, I've also been exploring ways to make use of AI 🔎",
+      noteJP:     "最近はAIの活用法も模索中です🔎",
       items: [
         {
           name: "Blender",
@@ -501,7 +471,7 @@ const DATA = {
         },
         {
           name: "Others: CG Engineer Expert / JDLA G Certification",
-          nameJP: "その他： CGエンジニア検定 エキスパート / G検定",
+          nameJP: "その他： CGエンジニア検定 エキスパート / G検定 など",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 60,
@@ -510,7 +480,7 @@ const DATA = {
     },
     {
       category:   "Other",
-      categoryJP: "その他",
+      categoryJP: "その他の活動",
       items: [
         {
           name: "Novel Writing",
@@ -526,6 +496,21 @@ const DATA = {
           detailJP: "NovelAI や ComfyUI で画像生成の制御性を高めるために試行錯誤中です。",
           level: 74,
         },
+        /*
+        {
+          name: "Investing",
+          nameJP: "投資",
+          detail: WIP_EMPTY,
+          detailJP: WIP_EMPTY,
+          level: 54,
+        },
+        {
+          name: "AI Utilization",
+          nameJP: "AI運用",
+          detail: WIP_EMPTY,
+          detailJP: WIP_EMPTY,
+          level: 44,
+        }, 
         {
           name: "CTF (security)",
           nameJP: "CTF （セキュリティの勉強）",
@@ -533,12 +518,13 @@ const DATA = {
           detailJP: "AlpacaHack の過去問や実験的な個人開発を通じて、実践的なセキュリティを勉強中です。",
           level: 36,
         },
+        */
         {
-          name: "Investing",
-          nameJP: "投資",
+          name: "Others: Investing / AI Utilization / CTF (security)",
+          nameJP: "その他： 投資 / AI運用 / CTF（セキュリティの勉強） など",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
-          level: 54,
+          level: 45,
         },
       ],
     },
@@ -586,7 +572,22 @@ const DATA = {
   ],
 
   /* ── Publications ─────────────────────────────── */
+  /* 著者一覧で下線を引く自分の名前（表記ゆれがあれば追加） */
+  selfAuthorNames: ["Masahiro Kono"],
+
   papers: [
+    {
+      title:   "ScrapCuts: Fabric Scrap Recomposition with Differentiable Cutline Optimization",
+      titleJP: "ScrapCuts: Fabric Scrap Recomposition with Differentiable Cutline Optimization",
+      authors: "Yinfei Qian, Quentin Becker, I-Chao Shen, Masahiro Kono, Hennes Rave, Maria Larsson, Takeo Igarashi",
+      venue:   "SCF '26: ACM Symposium on Computational Fabrication",
+      venueJP: "SCF '26: ACM Symposium on Computational Fabrication",
+      venueHref: "https://scf.acm.org/2026/papers.html",   /* 論文リンク未公開のため採択論文一覧へ */
+      year:    2026,
+      type:    "fullpaper",
+      firstAuthor: false,
+      links: [],
+    },
     {
       title:   "No Pixel Left Behind: Filling Gaps in Anime Colorization",
       titleJP: "No Pixel Left Behind: Filling Gaps in Anime Colorization",
@@ -781,8 +782,8 @@ const DATA = {
     {
       date: "2027.04 (Incoming)",
       dateJP: "2027.04（入社予定）",
-      text: "I will join the R&D division of Sony Group in April 2027! Excited to start a new chapter in the entertainment industry! 💪 (Please note that I cannot discuss company-related matters🙏.)",
-      textJP: "2027年4月にSony Group 株式会社 (SGC) の R&D部門に入社予定です。エンタメ業界で心機一転、頑張ります！💪（なお、会社に関するお問い合わせにはお答えできません🙏）"
+      text: "I will join the R&D division of Sony Group in April 2027! Excited to start a new chapter in the entertainment industry!  (Please note that I cannot discuss company-related matters🙏.)",
+      textJP: "2027年4月にSony Group 株式会社 (SGC) の R&D部門に入社予定です。エンタメ業界で心機一転、頑張ります！（なお、会社に関するお問い合わせにはお答えできません🙏）"
     },
     { date: "2026.09", text: "I gave an <a href='https://visualcomputing.jp/vc2026/program/oral/'>invited talk at Visual Computing 2026 (VC2026)</a> on our <a href='https://marc2825.github.io/GapFill/'>GapFill</a> research.", textJP: "<a href='https://visualcomputing.jp/vc2026/program/oral/'>Visual Computing 2026 (VC2026)</a>にて、<a href='https://marc2825.github.io/GapFill/'>GapFill</a>の招待講演を行いました。" },
     { date: "2026.04", text: "One <a href='https://marc2825.github.io/GapFill/'>first-author full paper</a> was accepted to <a href='https://chi2026.acm.org/'>CHI 2026</a>. I will present it in person in Barcelona, Spain.", textJP: "<a href='https://chi2026.acm.org/'>CHI 2026</a>に、<a href='https://marc2825.github.io/GapFill/'>筆頭著者のフルペーパー1件</a>が採択されました。スペイン・バルセロナにて現地発表を行います。" },
@@ -832,7 +833,6 @@ const I18N = {
     "hero.cta2":               "Get in Touch",
     "hero.scroll":             "Scroll",
     "about.title":             "About",
-    "about.intro.title":       "Introduction",
     "about.history.title":     "Career",
     "about.affiliation.title": "Affiliation",
     "research.title":          "Research Projects",
@@ -845,12 +845,12 @@ const I18N = {
     "pub.filter.demo":         "Demo",
     "pub.filter.firstAuthor":  "First Author Only",
     "pub.reviewing":           "Peer Review Service",
-    "projects.title":          "Projects (Other)",
+    "projects.title":          "Projects (Other, Selected)",
     "articles.title":          "Articles",
     "skills.title":            "Skills",
     "edu.title":               "Education & Experience",
     "edu.section.education":   "Education",
-    "edu.section.experience":  "Experience",
+    "edu.section.experience":  "Experience (Selected)",
     "news.title":              "News",
     "news.fab":                "News",
     "contact.title":           "Contact",
@@ -891,7 +891,6 @@ const I18N = {
     "hero.cta2":               "連絡する",
     "hero.scroll":             "スクロール",
     "about.title":             "自己紹介",
-    "about.intro.title":       "自己紹介",
     "about.history.title":     "経歴",
     "about.affiliation.title": "所属",
     "research.title":          "研究プロジェクト",
@@ -904,12 +903,12 @@ const I18N = {
     "pub.filter.demo":         "デモ発表",
     "pub.filter.firstAuthor":  "筆頭著者のみ",
     "pub.reviewing":           "査読経験",
-    "projects.title":          "プロジェクト（その他）",
+    "projects.title":          "プロジェクト（その他・抜粋）",
     "articles.title":          "記事",
     "skills.title":            "スキル",
     "edu.title":               "学歴・職歴",
     "edu.section.education":   "学歴",
-    "edu.section.experience":  "職歴（インターン等含む）",
+    "edu.section.experience":  "職歴（アルバイト等含む・抜粋）",
     "news.title":              "お知らせ",
     "news.fab":                "お知らせ",
     "contact.title":           "連絡先",
