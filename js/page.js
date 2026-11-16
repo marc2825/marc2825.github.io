@@ -31,8 +31,8 @@ function initSubPage(section) {
       if (btn.dataset.lang === currentLang) return;
       currentLang = btn.dataset.lang;
       renderSubPage(section);
-      applyI18n();
-      reobserve();
+      renderSafely(applyI18n);
+      renderSafely(reobserve);
     });
   });
 
@@ -44,11 +44,8 @@ function initSubPage(section) {
     }, { passive: true });
   }
 
-  /* Publication tabs & filters (publications page only) */
+  /* Publication filters (publications page only) */
   if (section === "publications") {
-    document.querySelectorAll(".pub-tab").forEach(btn => {
-      btn.addEventListener("click", () => setPubTab(btn.dataset.tab));
-    });
     document.querySelectorAll(".pub-filter").forEach(btn => {
       btn.addEventListener("click", () => {
         activePubFilter = btn.dataset.filter;
@@ -67,36 +64,29 @@ function initSubPage(section) {
   }
 
   renderSubPage(section);
-  applyI18n();
-  reobserve();
+  renderSafely(applyI18n);
+  renderSafely(reobserve);
   loadDynamicData();
-
-  if (section === "publications") setPubTab("papers");
 }
 
 function renderSubPage(section) {
   switch (section) {
     case "research":
-      renderResearch();
-      renderFooter();
+      renderSafely(renderResearch);
       break;
     case "publications":
-      renderPapers();
-      renderTalks();
-      renderReviewing();
-      renderFooter();
+      renderSafely(renderPapers);
+      renderSafely(renderReviewing);
       break;
     case "projects":
-      renderProjects();
-      renderFooter();
+      renderSafely(renderProjects);
       break;
     case "articles":
-      renderArticles();
-      renderFooter();
+      renderSafely(renderArticles);
       break;
     case "news":
-      renderNews();
-      renderFooter();
+      renderSafely(renderNews);
       break;
   }
+  renderSafely(renderFooter);
 }

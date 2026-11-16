@@ -598,20 +598,6 @@ button { font-family: inherit; }
 /* =========================================================
    Publications
    ========================================================= */
-.pub-tabs {
-  display: flex; margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.pub-tab {
-  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--text-muted); background: none; border: none;
-  padding: 0.6rem 1.25rem 0.75rem; cursor: pointer;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-  transition: color 0.2s, border-color 0.2s;
-}
-.pub-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.pub-tab:hover:not(.active) { color: var(--text); }
-
 .pub-filters {
   display: flex; gap: 0.4rem; margin-bottom: 2rem; flex-wrap: wrap;
 }
@@ -688,17 +674,6 @@ button { font-family: inherit; }
 }
 .pub-reviewing h3 { font-size: inherit; font-weight: 500; margin-bottom: 0.35rem; }
 .pub-reviewing ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
-
-/* Talks list */
-.talks-list { display: flex; flex-direction: column; }
-.talk-item {
-  display: grid; grid-template-columns: 120px 1fr;
-  gap: 0 2rem; padding: 1.25rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.talk-year  { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); padding-top: 0.1rem; }
-.talk-title { font-family: var(--ff-serif); font-size: 1rem; color: var(--text-heading); margin-bottom: 0.2rem; }
-.talk-venue { font-size: 0.82rem; font-style: italic; color: var(--text-muted); }
 
 /* =========================================================
    Projects
@@ -1098,7 +1073,6 @@ button { font-family: inherit; }
   .pub-item { grid-template-columns: 1fr; gap: 0.2rem; }
   .pub-num  { display: none; }
 
-  .talk-item    { grid-template-columns: 1fr; gap: 0.15rem; }
   .experience-item { grid-template-columns: 1fr; gap: 0.15rem; }
   .news-item    { grid-template-columns: 1fr; gap: 0.15rem; }
   .article-item { grid-template-columns: 1fr; gap: 0.1rem; }

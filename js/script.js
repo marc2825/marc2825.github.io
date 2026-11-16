@@ -7,33 +7,28 @@
    Render all dynamic content  (main page, preview limits)
    ========================================================= */
 function renderAll() {
-  renderHero();
-  renderAbout();
-  const p = DATA.preview;
-  renderResearch(p.research  || undefined);
-  renderPapers(p.papers      || undefined);
-  renderTalks();
-  renderReviewing();
-  renderProjects(p.projects  || undefined);
-  renderArticles(p.articles  || undefined);
-  renderSkills();
-  renderTimeline();
-  renderExperience();
-  renderNews();                              /* modal list — always all */
-  renderNewsSection(p.news   || undefined);  /* in-page section */
-  renderContact();
-  renderFooter();
-  applyI18n();
-  reobserve();
+  const p = DATA.preview || {};
+  renderSafely(renderHero);
+  renderSafely(renderAbout);
+  renderSafely(renderResearch, p.research || undefined);
+  renderSafely(renderPapers, p.papers || undefined);
+  renderSafely(renderReviewing);
+  renderSafely(renderProjects, p.projects || undefined);
+  renderSafely(renderArticles, p.articles || undefined);
+  renderSafely(renderSkills);
+  renderSafely(renderTimeline);
+  renderSafely(renderExperience);
+  renderSafely(renderNews);                              /* modal list — always all */
+  renderSafely(renderNewsSection, p.news || undefined);   /* in-page section */
+  renderSafely(renderContact);
+  renderSafely(renderFooter);
+  renderSafely(applyI18n);
+  renderSafely(reobserve);
 }
 
 /* =========================================================
-   Publication tabs & filters
+   Publication filters
    ========================================================= */
-document.querySelectorAll(".pub-tab").forEach(btn => {
-  btn.addEventListener("click", () => setPubTab(btn.dataset.tab));
-});
-
 document.querySelectorAll(".pub-filter").forEach(btn => {
   btn.addEventListener("click", () => {
     activePubFilter = btn.dataset.filter;
@@ -42,9 +37,9 @@ document.querySelectorAll(".pub-filter").forEach(btn => {
   });
 });
 
-document.getElementById("firstAuthorToggle").addEventListener("click", () => {
+const firstAuthorToggle = document.getElementById("firstAuthorToggle");
+firstAuthorToggle?.addEventListener("click", () => {
   firstAuthorOnly = !firstAuthorOnly;
-  document.getElementById("firstAuthorToggle").classList.toggle("active", firstAuthorOnly);
   applyPubFilter();
 });
 
@@ -52,18 +47,32 @@ document.getElementById("firstAuthorToggle").addEventListener("click", () => {
    Navigation — scroll & active-link highlight
    ========================================================= */
 const nav = document.getElementById("nav");
+const navSections = Array.from(document.querySelectorAll("section[id]"));
+const sectionLinks = document.querySelectorAll(".nav-links a");
+let navFramePending = false;
 
-window.addEventListener("scroll", () => {
-  nav.classList.toggle("scrolled", window.scrollY > 20);
-
+function updateNavigation() {
+  navFramePending = false;
+  const scrollY = window.scrollY;
   let current = "";
-  document.querySelectorAll("section[id]").forEach(sec => {
-    if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+  navSections.forEach(sec => {
+    if (scrollY >= sec.offsetTop - 100) current = sec.id;
   });
-  document.querySelectorAll(".nav-links a").forEach(a => {
+  // Finish layout reads before writing classes, once per animation frame.
+  nav?.classList.toggle("scrolled", scrollY > 20);
+  sectionLinks.forEach(a => {
     a.classList.toggle("active", a.getAttribute("href") === `#${current}`);
   });
-}, { passive: true });
+}
+
+function scheduleNavigationUpdate() {
+  if (navFramePending) return;
+  navFramePending = true;
+  requestAnimationFrame(updateNavigation);
+}
+
+window.addEventListener("scroll", scheduleNavigationUpdate, { passive: true });
+window.addEventListener("resize", scheduleNavigationUpdate);
 
 /* =========================================================
    Mobile nav toggle
@@ -72,26 +81,27 @@ const navToggle = document.getElementById("navToggle");
 const navLinks  = document.getElementById("navLinks");
 
 function setMobileNavOpen(open) {
+  if (!navLinks || !navToggle) return;
   navLinks.classList.toggle("open", open);
   navToggle.classList.toggle("open", open);
   navToggle.setAttribute("aria-expanded", String(open));
   updateMenuToggle();
 }
 
-navToggle.addEventListener("click", () => setMobileNavOpen(!navLinks.classList.contains("open")));
+if (navToggle && navLinks) {
+  navToggle.addEventListener("click", () => setMobileNavOpen(!navLinks.classList.contains("open")));
 
-navLinks.querySelectorAll("a").forEach(a => {
-  a.addEventListener("click", () => {
-    setMobileNavOpen(false);
+  navLinks.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => setMobileNavOpen(false));
   });
-});
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && navLinks.classList.contains("open")) {
-    setMobileNavOpen(false);
-    navToggle.focus();
-  }
-});
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && navLinks.classList.contains("open")) {
+      setMobileNavOpen(false);
+      navToggle.focus();
+    }
+  });
+}
 
 /* =========================================================
    Language switch
@@ -107,7 +117,7 @@ document.querySelectorAll(".lang-btn").forEach(btn => {
 /* =========================================================
    Theme toggle
    ========================================================= */
-document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
 
 /* =========================================================
    News modal
@@ -120,19 +130,19 @@ let newsModalPreviousFocus;
 let newsModalPreviousOverflow;
 
 function openNewsModal() {
-  if (newsModal.open) return;
+  if (!newsModal || newsModal.open) return;
   newsModalPreviousFocus = document.activeElement;
   newsModalPreviousOverflow = document.body.style.overflow;
   newsModal.showModal();
-  newsFab.classList.add("hidden");
+  newsFab?.classList.add("hidden");
   document.body.style.overflow = "hidden";
 }
 
 function closeNewsModal() {
-  if (newsModal.open) newsModal.close();
+  if (newsModal?.open) newsModal.close();
 }
 
-newsModal.addEventListener("keydown", event => {
+newsModal?.addEventListener("keydown", event => {
   if (event.key !== "Tab") return;
   const controls = Array.from(newsModal.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'))
     .filter(el => el.getClientRects().length > 0);
@@ -149,15 +159,15 @@ newsModal.addEventListener("keydown", event => {
   }
 });
 
-newsModal.addEventListener("close", () => {
-  newsFab.classList.remove("hidden");
+newsModal?.addEventListener("close", () => {
+  newsFab?.classList.remove("hidden");
   document.body.style.overflow = newsModalPreviousOverflow;
   if (newsModalPreviousFocus?.isConnected) newsModalPreviousFocus.focus();
 });
 
-newsFab.addEventListener("click", openNewsModal);
-newsModalClose.addEventListener("click", closeNewsModal);
-newsModalBackdrop.addEventListener("click", closeNewsModal);
+newsFab?.addEventListener("click", openNewsModal);
+newsModalClose?.addEventListener("click", closeNewsModal);
+newsModalBackdrop?.addEventListener("click", closeNewsModal);
 
 /* =========================================================
    Init
@@ -167,4 +177,4 @@ initTheme();
 renderWipBanner();
 renderAll();
 loadDynamicData();
-setPubTab("papers");
+scheduleNavigationUpdate();

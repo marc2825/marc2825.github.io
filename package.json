@@ -2,7 +2,8 @@
   "name": "marc2825-portfolio",
   "private": true,
   "scripts": {
-    "test": "playwright test",
+    "test": "node --test tests/*.test.mjs && playwright test",
+    "test:links": "node scripts/check-external-links.mjs",
     "preview": "node scripts/serve.mjs"
   },
   "devDependencies": {

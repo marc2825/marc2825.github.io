@@ -8,7 +8,6 @@
    ========================================================= */
 let currentLang     = "ja";
 let currentTheme    = document.documentElement.getAttribute("data-theme") || "dark";
-let activePubTab    = "papers";
 let activePubFilter = "fullpaper";
 let firstAuthorOnly = true;
 let currentPapersLimit;
@@ -74,8 +73,10 @@ function updateThemeIcon() {
   const btn = document.getElementById("themeToggle");
   if (!btn) return;
   const isDark = currentTheme === "dark";
-  btn.querySelector(".icon-moon").style.display = isDark  ? "block" : "none";
-  btn.querySelector(".icon-sun").style.display  = !isDark ? "block" : "none";
+  const moon = btn.querySelector(".icon-moon");
+  const sun = btn.querySelector(".icon-sun");
+  if (moon) moon.style.display = isDark ? "block" : "none";
+  if (sun) sun.style.display = isDark ? "none" : "block";
   btn.setAttribute("aria-label", t(isDark ? "theme.light" : "theme.dark"));
 }
 
@@ -176,6 +177,14 @@ function comingSoonHtml() {
 /* =========================================================
    Render helpers  (null-guarded; accept optional limit)
    ========================================================= */
+function renderSafely(render, ...args) {
+  try {
+    render(...args);
+  } catch (error) {
+    console.error(`Failed to render ${render.name}:`, error);
+  }
+}
+
 function renderHero() {
   const label         = document.getElementById("heroLabel");
   const name          = document.getElementById("heroName");
@@ -283,11 +292,12 @@ function renderResearch(limit) {
 }
 
 function getFilteredPapers() {
+  // Sort by year without changing DATA; retain editorial order within a year.
   return DATA.papers.filter(paper => {
     const typeMatch = activePubFilter === "all" || paper.type === activePubFilter;
     const authorMatch = !firstAuthorOnly || paper.firstAuthor === true;
     return typeMatch && authorMatch;
-  });
+  }).sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
 }
 
 function syncPublicationFilterControls() {
@@ -316,9 +326,7 @@ function renderPapers(limit = currentPapersLimit) {
   if (!el) return;
   currentPapersLimit = limit;
   const pubFilters = document.getElementById("pubFilters");
-  const pubTabs = document.querySelector(".pub-tabs");
-  if (pubFilters) pubFilters.hidden = limit === -1 || activePubTab !== "papers";
-  if (pubTabs) pubTabs.hidden = limit === -1;
+  if (pubFilters) pubFilters.hidden = limit === -1;
   if (limit === -1) {
     el.innerHTML = `<li style="list-style:none">${comingSoonHtml()}</li>`;
     return;
@@ -350,24 +358,6 @@ function renderPapers(limit = currentPapersLimit) {
       </li>
     `;
   }).join("");
-}
-
-function renderTalks() {
-  const el = document.getElementById("talksList");
-  if (!el) return;
-  if (!DATA.talks.length) {
-    el.innerHTML = `<li style="list-style:none">${comingSoonHtml()}</li>`;
-    return;
-  }
-  el.innerHTML = DATA.talks.map(tk => `
-    <li class="talk-item reveal">
-      <span class="talk-year">${tk.year}</span>
-      <div class="talk-body">
-        <p class="talk-title">${d(tk.title, tk.titleJP)}</p>
-        <p class="talk-venue">${d(tk.venue, tk.venueJP)}</p>
-      </div>
-    </li>
-  `).join("");
 }
 
 function renderReviewing() {
@@ -459,13 +449,13 @@ function renderProjects(limit) {
           ${(p.period || p.periodJP) ? `<p class="project-period">${d(p.period || "", p.periodJP || p.period || "")}</p>` : ""}
           <h3 class="project-title">${d(p.title, p.titleJP)}</h3>
         </div>
-        ${detailHref ? `<a href="${resolveUrl(detailHref)}" class="project-ext" title="${d("View details", "詳細を見る")}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+        ${detailHref ? `<a href="${resolveUrl(detailHref)}" class="project-ext" title="${d("View details", "詳細を見る")}" aria-label="${d("View details", "詳細を見る")}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
         </a>` : ""}
       </div>
       <div class="project-body">
         <p class="project-desc">${d(p.desc, p.descJP)}</p>
-        <div class="project-stack">${p.stack.map(s => `<span class="stack-tag">${s}</span>`).join("")}</div>
+        ${Array.isArray(p.stack) && p.stack.length ? `<div class="project-stack">${p.stack.map(s => `<span class="stack-tag">${s}</span>`).join("")}</div>` : ""}
         ${(p.detailHref || (Array.isArray(p.links) && p.links.length)) ? `<div class="project-actions">
           ${p.detailHref ? `<a href="${resolveUrl(p.detailHref)}" class="project-detail-link">${d(p.detailLabel || "Details", p.detailLabelJP || p.detailLabel || "詳細")}</a>` : ""}
           ${Array.isArray(p.links) && p.links.length ? `<div class="project-links">${p.links.map(link => `<a href="${resolveUrl(link.href)}" class="pub-link">${d(link.label, link.labelJP ?? link.label)}</a>`).join("")}</div>` : ""}
@@ -711,24 +701,11 @@ async function loadDynamicData() {
 }
 
 /* =========================================================
-   Publication tabs & filters
+   Publication filters
    ========================================================= */
 function applyPubFilter() {
-  renderPapers();
-  reobserve();
-}
-
-function setPubTab(tab) {
-  activePubTab = tab;
-  const pubList    = document.getElementById("pubList");
-  const talksList  = document.getElementById("talksList");
-  const pubFilters = document.getElementById("pubFilters");
-  if (pubList)    pubList.hidden    = tab !== "papers";
-  if (talksList)  talksList.hidden  = tab !== "talks";
-  if (pubFilters) pubFilters.hidden = tab !== "papers" || currentPapersLimit === -1;
-  document.querySelectorAll(".pub-tab").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.tab === tab);
-  });
+  renderSafely(renderPapers);
+  renderSafely(reobserve);
 }
 
 /* =========================================================

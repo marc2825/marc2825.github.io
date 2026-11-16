@@ -1,12 +1,21 @@
 import { test as base, expect } from "@playwright/test";
 
 const test = base.extend({
-  page: async ({ page }, use) => {
+  page: async ({ page }, use, testInfo) => {
     const errors = [];
+    const renderErrors = [];
     page.on("pageerror", error => errors.push(error.message));
-    await page.route(/^https:\/\//, route => route.abort());
+    page.on("console", message => {
+      if (message.type() === "error" && message.text().startsWith("Failed to render ")) renderErrors.push(message.text());
+    });
+    // Only fonts are optional remote assets; do not suppress arbitrary HTTPS requests.
+    await page.route(/^https:\/\/fonts\.(?:googleapis|gstatic)\.com\//, route => route.abort());
     await use(page);
     expect(errors, "Pages should work without JavaScript exceptions").toEqual([]);
+    const expected = testInfo.annotations.filter(item => item.type === "expected-render-error").map(item => item.description);
+    expect(renderErrors.filter(report => !expected.some(name => report.startsWith(`Failed to render ${name}:`))),
+      "Unexpected section failures should not be hidden by exception isolation").toEqual([]);
+    for (const name of expected) expect(renderErrors.some(report => report.startsWith(`Failed to render ${name}:`))).toBe(true);
   },
 });
 
@@ -18,6 +27,13 @@ const pages = [
   { path: "/pages/articles.html", item: ".coming-soon", ja: "記事", en: "Articles" },
   { path: "/pages/news.html", item: ".news-item", ja: "お知らせ", en: "News" },
 ];
+
+async function beforeMainScript(page, setup) {
+  await page.route("**/js/script.js", async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: `${setup}\n${await response.text()}` });
+  });
+}
 
 for (const entry of pages) {
   test(`content and page title survive language changes: ${entry.path}`, async ({ page }) => {
@@ -46,7 +62,6 @@ test("hidden links, empty profile facts, and unpublished paper controls stay hid
     DATA.about.profile = [];
     DATA.preview.papers = -1;
     renderAll();
-    setPubTab("papers");
   });
   for (const selector of ["#heroGithubLink", "#heroAtcoderLink", "#aboutFacts", "#pubFilters"]) {
     await expect(page.locator(selector)).toBeHidden();
@@ -57,6 +72,132 @@ test("hidden links, empty profile facts, and unpublished paper controls stay hid
     renderAll();
   });
   await expect(page.locator("#pubFilters")).toBeVisible();
+});
+
+for (const path of ["/", "/pages/projects.html"]) {
+  test(`projects without stack metadata still render: ${path}`, async ({ page }) => {
+    await page.route("**/database/data.js", async route => {
+      const response = await route.fetch();
+      await route.fulfill({ response, body: `${await response.text()}\nDATA.projects.forEach(project => { delete project.stack; });` });
+    });
+    await page.goto(path);
+    const count = await page.evaluate(() => DATA.projects.length);
+    await expect(page.locator(".project-card")).toHaveCount(count);
+    await expect(page.locator("#footerName")).not.toBeEmpty();
+    await page.locator('[data-lang="en"]').click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.locator(".project-card")).toHaveCount(count);
+    if (path === "/") await expect(page.locator("#skillsGrid")).toContainText("Codeforces");
+  });
+}
+
+test("one failed renderer does not stop later sections, translations, or reveal", async ({ page }) => {
+  test.info().annotations.push({ type: "expected-render-error", description: "renderProjects" });
+  const reports = [];
+  page.on("console", message => {
+    if (message.type() === "error") reports.push(message.text());
+  });
+  await beforeMainScript(page, 'renderProjects = function renderProjects() { throw new Error("fixture render failure"); };');
+  await page.goto("/");
+  await page.locator('[data-lang="en"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page).toHaveTitle(/Portfolio/);
+  await expect(page.locator("#skillsGrid")).toContainText("Codeforces");
+  await expect(page.locator("#newsSectionList .news-item").first()).toBeAttached();
+  await expect(page.locator("#footerName")).not.toBeEmpty();
+  const skill = page.locator(".skill-group").first();
+  await skill.scrollIntoViewIfNeeded();
+  await expect(skill).toHaveClass(/visible/);
+  expect(reports.some(report => report.includes("Failed to render renderProjects:") && report.includes("fixture render failure"))).toBe(true);
+});
+
+test("a failed sub-page renderer still allows footer and language updates", async ({ page }) => {
+  test.info().annotations.push({ type: "expected-render-error", description: "renderProjects" });
+  await page.route("**/js/page.js", async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: `renderProjects = function renderProjects() { throw new Error("fixture render failure"); };\n${await response.text()}` });
+  });
+  await page.goto("/pages/projects.html");
+  await page.locator('[data-lang="en"]').click();
+  await expect(page).toHaveTitle(/Projects/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.locator("#footerName")).not.toBeEmpty();
+});
+
+for (const id of ["firstAuthorToggle", "nav", "navToggle", "navLinks", "themeToggle", "newsFab", "newsModal", "newsModalClose", "newsModalBackdrop"]) {
+  test(`initialization and events tolerate a missing #${id}`, async ({ page }) => {
+    await beforeMainScript(page, `document.getElementById(${JSON.stringify(id)}).remove(); currentLang = "en";`);
+    await page.goto("/");
+    await expect(page.locator("#heroName")).not.toBeEmpty();
+    await expect(page.locator("#skillsGrid")).toContainText("Codeforces");
+    await expect(page.locator("#footerName")).not.toBeEmpty();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page).toHaveTitle(/Portfolio/);
+    await page.evaluate(() => {
+      window.dispatchEvent(new Event("scroll"));
+      setMobileNavOpen(true);
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+      openNewsModal();
+      closeNewsModal();
+    });
+    if (await page.locator('[data-lang="ja"]').count()) {
+      await page.locator('[data-lang="ja"]').click();
+      await expect(page.locator("html")).toHaveAttribute("lang", "ja");
+    }
+  });
+}
+
+test("bursts of scroll events read section positions once per animation frame", async ({ page }) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    // Drain the initial navigation update before measuring a new burst.
+    await new Promise(requestAnimationFrame);
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    let reads = 0;
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      Object.defineProperty(section, "offsetTop", { configurable: true, get() { reads++; return top; } });
+    });
+    for (let i = 0; i < 40; i++) window.dispatchEvent(new Event("scroll"));
+    const synchronousReads = reads;
+    await new Promise(requestAnimationFrame);
+    sections.forEach(section => { delete section.offsetTop; });
+    return { synchronousReads, reads, sectionCount: sections.length };
+  });
+  expect(result.synchronousReads).toBe(0);
+  expect(result.reads).toBe(result.sectionCount);
+});
+
+test("publication order and numbering follow years even if source order changes", async ({ page }) => {
+  await page.goto("/pages/publications.html?filter=all&firstAuthor=0");
+  await page.evaluate(() => {
+    DATA.papers = [
+      { ...DATA.papers[0], title: "Old paper", titleJP: "Old paper", year: 2023 },
+      { ...DATA.papers[0], title: "Newest paper A", titleJP: "Newest paper A", year: 2027 },
+      { ...DATA.papers[0], title: "Middle paper", titleJP: "Middle paper", year: 2025 },
+      { ...DATA.papers[0], title: "Newest paper B", titleJP: "Newest paper B", year: 2027 },
+    ];
+    renderSubPage("publications");
+  });
+  await expect(page.locator(".pub-title")).toHaveText([/Newest paper A/, /Newest paper B/, /Middle paper/, /Old paper/]);
+  await expect(page.locator(".pub-num")).toHaveText(["4", "3", "2", "1"]);
+  expect(await page.evaluate(() => DATA.papers[0].title)).toBe("Old paper");
+  await page.locator('[data-lang="en"]').click();
+  await expect(page.locator(".pub-title").first()).toContainText("Newest paper A");
+});
+
+test("project icon links have accessible names in both languages", async ({ page }) => {
+  await page.goto("/pages/projects.html");
+  // Exercise the icon even if current content has no standalone details URL.
+  await page.evaluate(() => {
+    DATA.projects[0].detailHref = "#footer";
+    renderSubPage("projects");
+  });
+  const icon = page.locator(".project-ext").first();
+  await expect(icon).toHaveAccessibleName("詳細を見る");
+  await expect(icon.locator("svg")).toHaveAttribute("aria-hidden", "true");
+  await page.locator('[data-lang="en"]').click();
+  await expect(icon).toHaveAccessibleName("View details");
 });
 
 test("publication filters remain usable after switching languages", async ({ page }) => {
@@ -172,6 +313,53 @@ test("Codeforces keeps its red fallback and peak rating if rating data cannot lo
   await expect(skill.locator(".skill-detail")).toHaveCount(0);
   await page.locator('[data-lang="en"]').click();
   await expect(skill.locator(".skill-label")).toHaveText("Codeforces Peak Rating 2415");
+});
+
+test("the real ratings JSON hydrates all competitive profiles", async ({ page }) => {
+  const responseReady = page.waitForResponse("**/database/atcoder.json");
+  await page.goto("/");
+  const response = await responseReady;
+  expect(response.ok()).toBe(true);
+  const { platforms } = await response.json();
+  for (const [key, data, label] of [
+    ["atcoder_algorithm", platforms.atcoderAlgorithm, "AtCoder（アルゴ）"],
+    ["atcoder_heuristic", platforms.atcoderHeuristic, "AtCoder（ヒューリスティック）"],
+    ["codeforces", platforms.codeforces, "Codeforces"],
+  ]) {
+    await expect(page.locator(`[data-dynamic-skill="${key}"] .skill-label`)).toHaveText(`${label} 最高レート ${data.highestRating}`);
+  }
+});
+
+test("a delayed successful JSON response replaces fallbacks and survives language switches", async ({ page }) => {
+  let release;
+  const ready = new Promise(resolve => { release = resolve; });
+  await page.route("**/database/atcoder.json", async route => {
+    await ready;
+    await route.fulfill({ json: { platforms: {
+      atcoderAlgorithm: { currentRating: 2501, highestRating: 2876 },
+      atcoderHeuristic: { currentRating: 1503, highestRating: 1642 },
+      codeforces: { currentRating: 1630, highestRating: 1934 },
+    } } });
+  });
+  try {
+    await page.goto("/");
+    await expect(page.locator('[data-dynamic-skill="codeforces"] .skill-label')).toHaveText("Codeforces 最高レート 2415");
+    await page.locator('[data-lang="en"]').click();
+  } finally {
+    release();
+  }
+  for (const [key, peak, tone, en, ja] of [
+    ["atcoder_algorithm", 2876, "red", "AtCoder Algorithm", "AtCoder（アルゴ）"],
+    ["atcoder_heuristic", 1642, "blue", "AtCoder Heuristic", "AtCoder（ヒューリスティック）"],
+    ["codeforces", 1934, "violet", "Codeforces", "Codeforces"],
+  ]) {
+    const skill = page.locator(`[data-dynamic-skill="${key}"]`);
+    await expect(skill).toHaveAttribute("data-skill-tone", tone);
+    await expect(skill.locator(".skill-label")).toHaveText(`${en} Peak Rating ${peak}`);
+    await page.locator('[data-lang="ja"]').click();
+    await expect(skill.locator(".skill-label")).toHaveText(`${ja} 最高レート ${peak}`);
+    await page.locator('[data-lang="en"]').click();
+  }
 });
 
 test("English skill descriptions and Japanese gallery captions stay in the selected language", async ({ page }) => {
