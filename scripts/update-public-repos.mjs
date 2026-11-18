@@ -97,15 +97,16 @@ export function updateReadme(readme, repos, now = new Date()) {
   }
   const blockStart = start + begin.length;
   const previous = readme.slice(blockStart, stop).replaceAll("\r\n", "\n");
-  const previousList = previous.match(/^\n最終更新：[^\n]+ JST\n\n([\s\S]*?)\n$/)?.[1];
+  const previousUpdate = previous.match(/^\n(最終更新(?:（自動）)?)：[^\n]+ JST\n\n([\s\S]*?)\n$/);
   const list = renderRepos(repos);
-  if (previousList === list) return readme;
+  if (previousUpdate?.[2] === list) return readme;
 
   const updated = new Intl.DateTimeFormat("sv-SE", {
     timeZone: "Asia/Tokyo", dateStyle: "short", timeStyle: "short",
   }).format(now);
   const eol = readme.includes("\r\n") ? "\r\n" : "\n";
-  const block = `\n最終更新：${updated} JST\n\n${list}\n`.replaceAll("\n", eol);
+  const label = previousUpdate?.[1] ?? "最終更新";
+  const block = `\n${label}：${updated} JST\n\n${list}\n`.replaceAll("\n", eol);
   return readme.slice(0, blockStart) + block + readme.slice(stop);
 }
 

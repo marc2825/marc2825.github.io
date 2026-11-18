@@ -29,6 +29,9 @@ test("generates only the public catalog and advances the date only when the list
 
   const later = new Date("2026-11-25T00:23:00Z");
   assert.equal(updateReadme(first, repositories.toReversed(), later), first);
+  const automaticLabel = first.replace("最終更新：", "最終更新（自動）：");
+  assert.equal(updateReadme(automaticLabel, repositories, later), automaticLabel);
+  assert.match(updateReadme(automaticLabel, [repo("GapFill")], later), /最終更新（自動）：2026-11-25 09:23 JST/);
   const second = updateReadme(first, [repo("new-project", { description: "Image [sorter]" })], later);
   assert.match(second, /最終更新：2026-11-25 09:23 JST/);
   assert.match(second, /### その他\n\n- \[new-project\].*Image \\\[sorter\\\]/);

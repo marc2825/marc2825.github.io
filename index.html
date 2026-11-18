@@ -87,11 +87,14 @@
         <!-- <a href="https://sketchfab.com/marc2825" class="btn btn-ghost" id="heroSketchfabLink">Sketchfab</a> -->
         <!-- <a href="#contact"  class="btn btn-ghost"   data-i18n="hero.cta2">連絡する</a> -->
       </div>
-      <!-- <a href="?view=simplified" class="hero-version-link reveal" id="heroSimplifiedLink" data-i18n="hero.simplified">簡易版を見る →</a> -->
     </div>
     <div class="hero-scroll-hint">
+      <div id="compactDetailsHint" class="hero-details-hint" hidden>
+        <span class="hero-details-hint-text" data-i18n="hero.detailsHint">カーソルを合わせると、詳細が読めます！</span>
+        <p id="compactDetailsExample" data-i18n="hero.detailsExample">このように、項目ごとの詳細が表示されます。</p>
+      </div>
       <span data-i18n="hero.scroll">スクロール</span>
-      <div class="scroll-line"></div>
+      <div class="scroll-line" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -102,7 +105,6 @@
         <span class="section-number">01</span>
         <h2 class="section-title" data-i18n="about.title">自己紹介</h2>
       </div>
-      <p id="compactDetailsHint" class="compact-details-hint reveal" data-i18n="about.detailsHint" hidden>「i」にカーソルを合わせるか、押すと詳細が読めます。</p>
       <div class="about-grid">
         <div class="about-photo reveal">
           <div class="photo-frame">
@@ -228,14 +230,19 @@
   <!-- 08 News -->
   <section id="news" class="section section-alt">
     <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">08</span>
-        <h2 class="section-title" data-i18n="news.title">お知らせ</h2>
-      </div>
-      <ul class="news-list" id="newsSectionList"></ul>
-      <div class="section-more reveal">
-        <a href="pages/news.html" class="section-more-link" data-i18n="section.more">すべて見る →</a>
-      </div>
+      <details class="news-disclosure" id="newsDisclosure">
+        <summary class="reveal">
+          <h2 class="section-header news-disclosure-heading">
+            <span class="section-number" aria-hidden="true">08</span>
+            <span class="section-title" data-i18n="news.title">お知らせ</span>
+            <span class="news-disclosure-chevron" aria-hidden="true"></span>
+          </h2>
+        </summary>
+        <ul class="news-list" id="newsSectionList"></ul>
+        <div class="section-more reveal">
+          <a href="pages/news.html" class="section-more-link" data-i18n="section.more">すべて見る →</a>
+        </div>
+      </details>
     </div>
   </section>
 

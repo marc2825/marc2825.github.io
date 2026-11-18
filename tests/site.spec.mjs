@@ -55,6 +55,36 @@ for (const entry of pages) {
   });
 }
 
+test("the full view uses popovers and keeps the full education details", async ({ page }) => {
+  await page.goto("/");
+  const favorite = page.locator(".about-fact").filter({ has: page.locator(".about-fact-label", { hasText: "好きな言葉" }) });
+  const recent = page.locator(".about-fact").filter({ has: page.locator(".about-fact-label", { hasText: "最近のひとこと" }) });
+  await expect(page.locator("#compactDetailsHint")).toBeVisible();
+  await expect(favorite.locator(".compact-note")).toHaveText("設計思想");
+  await expect(favorite.locator(".compact-note")).toBeHidden();
+  await expect(recent.locator(".compact-note")).toBeHidden();
+  expect((await favorite.boundingBox()).y).toBe((await recent.boundingBox()).y);
+  await expect(page.locator("#skill-cert-other .compact-note")).toContainText("CGエンジニア検定");
+  await expect(page.locator("#skill-activities-other .compact-note")).toContainText("投資 / CTF");
+  await expect(page.locator("#news")).toBeVisible();
+  await expect(page.locator('#hero a[href*="?view=simplified"]')).toHaveCount(0);
+
+  for (const [lang, science, school, period] of [
+    ["ja", "東京大学 理科一類", "開成中学校・高等学校", "2014年 – 2020年"],
+    ["en", "Science I, The University of Tokyo", "Kaisei Junior and Senior High School", "2014 – 2020"],
+  ]) {
+    await page.locator(`[data-lang="${lang}"]`).click();
+    const scienceRow = page.locator(".timeline-item").filter({ has: page.locator(".timeline-title", { hasText: science }) });
+    const schoolRow = page.locator(".timeline-item").filter({ has: page.locator(".timeline-title", { hasText: school }) });
+    await expect(schoolRow.locator(".timeline-period")).toHaveText(period);
+    await expect(schoolRow.locator(".timeline-period")).toBeVisible();
+    await scienceRow.locator(".compact-note-button").press("Enter");
+    await expect(scienceRow.locator(".compact-note")).toBeVisible();
+    await expect(scienceRow.locator(".compact-note")).toContainText("Entrance Exam: 391.6/550");
+    await page.keyboard.press("Escape");
+  }
+});
+
 test("simpified shows a compact profile, trims education, and hides news", async ({ page }) => {
   await page.route("**/database/atcoder.json", route => route.abort());
   const sectionContent = () => page.locator("section[id]").evaluateAll(sections =>
@@ -62,9 +92,6 @@ test("simpified shows a compact profile, trims education, and hides news", async
   await page.goto("/");
   const original = await sectionContent();
   await expect(page.locator("html")).toHaveAttribute("data-view", "default");
-  await expect(page.locator("#compactDetailsHint")).toBeHidden();
-  await expect(page.locator("#skill-cert-other .skill-label")).toContainText("CGエンジニア検定");
-  await expect(page.locator("#skill-activities-other .skill-label")).toContainText("投資 / CTF");
   await page.goto("/?view=simpified");
   await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
   const hobbies = page.locator(".about-fact").filter({
@@ -75,7 +102,7 @@ test("simpified shows a compact profile, trims education, and hides news", async
   const timeline = page.locator("#timeline");
   for (const lang of ["ja", "en"]) {
     await page.locator(`[data-lang="${lang}"]`).click();
-    const hint = page.locator("#about #compactDetailsHint");
+    const hint = page.locator(".hero-scroll-hint #compactDetailsHint");
     await expect(hint).toBeVisible();
     await expect(hint).toContainText(lang === "ja" ? "詳細が読めます" : "to see details");
     await expect(page.locator("#heroBio")).toBeVisible();
@@ -178,28 +205,63 @@ test("simplified notes stay usable on hover and can be opened and dismissed by k
   await expect(page).toHaveURL(/#research-gapfill$/);
 });
 
-test("simplified research and project descriptions expand through their own controls", async ({ page }) => {
-  for (const [url, descriptionSelector] of [
-    ["/", ".research-description"],
-    ["/", ".project-desc"],
-    ["/pages/research.html", ".research-description"],
-    ["/pages/projects.html", ".project-desc"],
-  ]) {
-    await page.goto(`${url}?view=simpified`);
-    const disclosure = page.locator(".compact-card-description").filter({ has: page.locator(descriptionSelector) }).first();
-    const description = disclosure.locator(descriptionSelector);
-    const summary = disclosure.locator("summary");
-    await summary.hover();
-    await expect(description).toBeHidden();
-    await summary.click();
-    await expect(description).toBeVisible();
-    await summary.press("Space");
-    await expect(description).toBeHidden();
-  }
+for (const view of ["", "?view=simpified"]) {
+  test(`research and project descriptions expand on demand ${view || "in the full view"}`, async ({ page }) => {
+    for (const [url, descriptionSelector] of [
+      ["/", ".research-description"],
+      ["/", ".project-desc"],
+      ["/pages/research.html", ".research-description"],
+      ["/pages/projects.html", ".project-desc"],
+    ]) {
+      await page.goto(`${url}${view}`);
+      const disclosure = page.locator(".compact-card-description").filter({ has: page.locator(descriptionSelector) }).first();
+      const description = disclosure.locator(descriptionSelector);
+      const summary = disclosure.locator("summary");
+      await summary.hover();
+      await expect(description).toBeHidden();
+      await summary.click();
+      await expect(description).toBeVisible();
+      await summary.press("Space");
+      await expect(description).toBeHidden();
+    }
+  });
+}
+
+test("the hero hint demonstrates the same popover in both languages", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".research-description").first()).toBeVisible();
-  await expect(page.locator(".project-desc").first()).toBeVisible();
-  await expect(page.locator(".compact-note-button, .compact-card-description")).toHaveCount(0);
+  const hint = page.locator(".hero-scroll-hint #compactDetailsHint");
+  const example = hint.locator("#compactDetailsExample");
+  for (const [lang, name, content] of [
+    ["ja", "詳細ポップアップを試す", "このように、項目ごとの詳細が表示されます。"],
+    ["en", "Try a detail pop-up", "This is how item details appear."],
+  ]) {
+    await page.locator(`[data-lang="${lang}"]`).click();
+    await expect(example).toBeHidden();
+    const button = hint.getByRole("button", { name });
+    await expect(button).toHaveClass(/compact-note-button/);
+    await button.hover();
+    await expect(example).toBeVisible();
+    await expect(example).toHaveText(content);
+    await page.keyboard.press("Escape");
+    await expect(example).toBeHidden();
+  }
+});
+
+test("homepage news is folded initially and can be expanded with the heading", async ({ page }) => {
+  await page.goto("/");
+  const disclosure = page.locator("#newsDisclosure");
+  const summary = disclosure.locator("summary");
+  const firstItem = disclosure.locator(".news-item").first();
+  await expect(summary).toBeVisible();
+  await expect(firstItem).toBeHidden();
+  await summary.click();
+  await expect(firstItem).toBeVisible();
+  await expect(disclosure.locator(".section-more-link")).toBeVisible();
+  await page.locator('[data-lang="en"]').click();
+  await expect(summary).toContainText("News");
+  await expect(firstItem).toBeVisible();
+  await summary.press("Space");
+  await expect(firstItem).toBeHidden();
 });
 
 test.describe("simplified descriptions on touch screens", () => {

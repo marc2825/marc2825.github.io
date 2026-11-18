@@ -2,12 +2,13 @@
 
 [ポートフォリオ（完全版）](https://marc2825.github.io/)
 
-<!-- [ポートフォリオ（簡易版、整備中）](https://marc2825.github.io/?view=simpified) -->
+[ポートフォリオ（簡易版、整備中）](https://marc2825.github.io/?view=simpified)
+
 
 ## 公開リポジトリ
 
 <!-- BEGIN AUTO:PUBLIC_REPOSITORIES -->
-最終更新：2026-11-18 13:08 JST
+最終更新（自動）：2026-11-18 13:08 JST
 
 ### 研究
 
