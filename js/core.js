@@ -534,11 +534,30 @@ function syncPublicationFilterControls() {
     btn.classList.toggle("active", active);
     btn.setAttribute("aria-pressed", String(active));
   });
-  const faToggle = document.getElementById("firstAuthorToggle");
-  if (faToggle) {
-    faToggle.classList.toggle("active", firstAuthorOnly);
-    faToggle.setAttribute("aria-pressed", String(firstAuthorOnly));
-  }
+  const authorFilter = firstAuthorOnly ? "first" : "all";
+  document.querySelectorAll(".pub-author-filter").forEach(btn => {
+    const active = btn.dataset.authorFilter === authorFilter;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function initPublicationFilters() {
+  document.querySelectorAll(".pub-filter").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.filter === activePubFilter) return;
+      activePubFilter = btn.dataset.filter;
+      applyPubFilter();
+    });
+  });
+  document.querySelectorAll(".pub-author-filter").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const onlyFirst = btn.dataset.authorFilter === "first";
+      if (onlyFirst === firstAuthorOnly) return;
+      firstAuthorOnly = onlyFirst;
+      applyPubFilter();
+    });
+  });
 }
 
 /* Underlines the site owner's name (DATA.selfAuthorNames) in an author list. */
@@ -570,6 +589,7 @@ function renderPapers(limit = currentPapersLimit) {
     const num      = filteredPapers.length - i;
     const badgeMap = { fullpaper: "FULL", poster: "POSTER", demo: "DEMO" };
     const classMap = { fullpaper: "badge-fullpaper", poster: "badge-poster", demo: "badge-demo" };
+    const conferenceBadge = p.topConference ? '<span class="pub-badge badge-top-conference">TOP CONFERENCE</span>' : "";
     const linksHtml = (p.links || []).map(l => `<a href="${resolveUrl(l.href)}" class="pub-link">${d(l.label, l.labelJP ?? l.label)}</a>`).join("");
     const venueHtml = p.venueHref
       ? `<a href="${resolveUrl(p.venueHref)}" class="pub-venue-link">${d(p.venue, p.venueJP)}</a>`
@@ -578,7 +598,7 @@ function renderPapers(limit = currentPapersLimit) {
       <li class="pub-item reveal" data-type="${p.type}" data-first-author="${p.firstAuthor}">
         <span class="pub-num">${num}</span>
         <div class="pub-body">
-          <p class="pub-title">${d(p.title, p.titleJP)}<span class="pub-badge ${classMap[p.type]}">${badgeMap[p.type]}</span></p>
+          <p class="pub-title">${d(p.title, p.titleJP)}<span class="pub-badges"><span class="pub-badge ${classMap[p.type]}">${badgeMap[p.type]}</span>${conferenceBadge}</span></p>
           <p class="pub-authors">${markSelfAuthor(p.authors)}</p>
           <p class="pub-venue">${venueHtml}</p>
           <div class="pub-links">${linksHtml}</div>

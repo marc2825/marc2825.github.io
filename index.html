@@ -179,12 +179,17 @@
         <h2 class="section-title" data-i18n="pub.title">論文・出版・発表</h2>
       </div>
       <div class="pub-filters reveal" id="pubFilters">
-        <button class="pub-filter"        data-filter="all"        data-i18n="pub.filter.all">すべて</button>
-        <button class="pub-filter active" data-filter="fullpaper"  data-i18n="pub.filter.fullpaper">フルペーパー</button>
-        <button class="pub-filter"        data-filter="poster"     data-i18n="pub.filter.poster">ポスター</button>
-        <button class="pub-filter"        data-filter="demo"       data-i18n="pub.filter.demo">デモ発表</button>
-        <span class="pub-filter-sep"></span>
-        <button class="pub-filter-toggle active" id="firstAuthorToggle" data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
+        <div class="pub-type-filters" role="group" aria-label="発表種別" data-i18n-aria-label="pub.filter.typeGroup">
+          <button type="button" class="pub-filter" data-filter="all" data-i18n="pub.filter.all">すべて</button>
+          <button type="button" class="pub-filter active" data-filter="fullpaper" data-i18n="pub.filter.fullpaper">フルペーパー</button>
+          <button type="button" class="pub-filter" data-filter="poster" data-i18n="pub.filter.poster">ポスター</button>
+          <button type="button" class="pub-filter" data-filter="demo" data-i18n="pub.filter.demo">デモ発表</button>
+        </div>
+        <div class="pub-author-filters" role="group" aria-label="著者" data-i18n-aria-label="pub.filter.authorGroup">
+          <span class="pub-filter-sep" aria-hidden="true"></span>
+          <button type="button" class="pub-author-filter" data-author-filter="all" data-i18n="pub.filter.all">すべて</button>
+          <button type="button" class="pub-author-filter active" data-author-filter="first" id="firstAuthorFilter" data-i18n="pub.filter.firstAuthor">筆頭著者のみ</button>
+        </div>
       </div>
       <ol class="pub-list" id="pubList" reversed></ol>
       <aside class="pub-reviewing reveal" id="pubReviewing" aria-labelledby="pubReviewingTitle" hidden>

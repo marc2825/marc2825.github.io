@@ -30,19 +30,7 @@ function renderAll() {
 /* =========================================================
    Publication filters
    ========================================================= */
-document.querySelectorAll(".pub-filter").forEach(btn => {
-  btn.addEventListener("click", () => {
-    activePubFilter = btn.dataset.filter;
-    document.querySelectorAll(".pub-filter").forEach(b => b.classList.toggle("active", b === btn));
-    applyPubFilter();
-  });
-});
-
-const firstAuthorToggle = document.getElementById("firstAuthorToggle");
-firstAuthorToggle?.addEventListener("click", () => {
-  firstAuthorOnly = !firstAuthorOnly;
-  applyPubFilter();
-});
+initPublicationFilters();
 
 /* =========================================================
    Navigation — scroll & active-link highlight

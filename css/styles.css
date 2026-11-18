@@ -869,7 +869,11 @@ button { font-family: inherit; }
 .pub-filters {
   display: flex; gap: 0.4rem; margin-bottom: 2rem; flex-wrap: wrap;
 }
-.pub-filter {
+.pub-type-filters,
+.pub-author-filters { display: flex; gap: inherit; }
+.pub-type-filters { flex-wrap: wrap; }
+.pub-filter,
+.pub-author-filter {
   font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--text-muted); background: none;
   border: 1px solid var(--border); border-radius: 2px;
@@ -881,14 +885,8 @@ button { font-family: inherit; }
 .pub-filter-sep {
   width: 1px; background: var(--border); margin: 0 0.4rem; align-self: stretch;
 }
-.pub-filter-toggle {
-  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-muted); background: none;
-  border: 1px solid var(--border); border-radius: 2px;
-  padding: 0.3rem 0.8rem; cursor: pointer; transition: all 0.2s;
-}
-.pub-filter-toggle:hover { color: var(--accent-warm); border-color: var(--accent-warm); }
-.pub-filter-toggle.active {
+.pub-author-filter:hover { color: var(--accent-warm); border-color: var(--accent-warm); }
+.pub-author-filter.active {
   color: var(--accent-warm); border-color: var(--accent-warm);
   background: color-mix(in srgb, var(--accent-warm) 12%, transparent);
 }
@@ -924,6 +922,7 @@ button { font-family: inherit; }
 }
 [data-theme="light"] .pub-link { border-color: rgba(64,96,216,0.28); }
 .pub-link:hover { background: var(--accent-dim); }
+.pub-badges { display: inline-flex; align-items: center; vertical-align: middle; }
 .pub-badge {
   display: inline-block; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em;
   text-transform: uppercase; padding: 0.12rem 0.45rem; border-radius: 2px;
@@ -932,6 +931,10 @@ button { font-family: inherit; }
 .badge-fullpaper { background: rgba(123,156,255,0.12); color: var(--accent); }
 .badge-poster    { background: rgba(100,220,160,0.12); color: #64dca0; }
 .badge-demo      { background: rgba(200,169,110,0.12); color: var(--accent-warm); }
+.badge-top-conference {
+  background: color-mix(in srgb, var(--accent-warm) 18%, transparent);
+  color: var(--accent-warm);
+}
 
 /* Peer review service — secondary to publications */
 .pub-reviewing {

@@ -161,7 +161,8 @@ test("view survives all detail-page round trips and keeps existing publication f
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     if (entry.path.includes("publications")) {
       await expect(page.locator('[data-filter="all"]')).toHaveAttribute("aria-pressed", "true");
-      await expect(page.locator("#firstAuthorToggle")).toHaveAttribute("aria-pressed", "false");
+      await expect(page.locator('[data-author-filter="all"]')).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator('[data-author-filter="first"]')).toHaveAttribute("aria-pressed", "false");
     }
     if (entry.path.includes("news")) {
       await expect(page.locator(".subpage-section")).toBeHidden();
@@ -402,7 +403,7 @@ test("a failed sub-page renderer still allows footer and language updates", asyn
   await expect(page.locator("#footerName")).not.toBeEmpty();
 });
 
-for (const id of ["firstAuthorToggle", "nav", "navToggle", "navLinks", "themeToggle", "newsFab", "newsModal", "newsModalClose", "newsModalBackdrop"]) {
+for (const id of ["firstAuthorFilter", "nav", "navToggle", "navLinks", "themeToggle", "newsFab", "newsModal", "newsModalClose", "newsModalBackdrop"]) {
   test(`initialization and events tolerate a missing #${id}`, async ({ page }) => {
     await beforeMainScript(page, `document.getElementById(${JSON.stringify(id)}).remove(); currentLang = "en";`);
     await page.goto("/");
@@ -478,23 +479,54 @@ test("project icon links have accessible names in both languages", async ({ page
   await expect(icon).toHaveAccessibleName("View details");
 });
 
-test("publication filters remain usable after switching languages", async ({ page }) => {
+test("publication filters remain independent after switching languages", async ({ page }) => {
   await page.goto("/pages/publications.html?filter=all&firstAuthor=0");
   // Keep this interaction test independent of additions to the publication list.
   const counts = await page.evaluate(() => ({
     all: DATA.papers.length,
     poster: DATA.papers.filter(paper => paper.type === "poster").length,
     demo: DATA.papers.filter(paper => paper.type === "demo").length,
+    firstAuthorDemo: DATA.papers.filter(paper => paper.type === "demo" && paper.firstAuthor).length,
   }));
+  const allAuthors = page.locator('[data-author-filter="all"]');
+  const firstAuthors = page.locator('[data-author-filter="first"]');
   await expect(page.locator(".pub-item")).toHaveCount(counts.all);
   await page.locator('[data-filter="poster"]').click();
   await expect(page.locator(".pub-item")).toHaveCount(counts.poster);
   await page.locator('[data-lang="en"]').click();
   await expect(page.locator('[data-filter="poster"]')).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#firstAuthorToggle")).toHaveAttribute("aria-pressed", "false");
+  await expect(allAuthors).toHaveAttribute("aria-pressed", "true");
+  await expect(firstAuthors).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator(".pub-item")).toHaveCount(counts.poster);
   await page.locator('[data-filter="demo"]').click();
   await expect(page.locator(".pub-item")).toHaveCount(counts.demo);
+  await firstAuthors.click();
+  await expect(firstAuthors).toHaveAttribute("aria-pressed", "true");
+  await expect(allAuthors).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('[data-filter="demo"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".pub-item")).toHaveCount(counts.firstAuthorDemo);
+});
+
+test("homepage author choices keep the selected publication type", async ({ page }) => {
+  await page.goto("/");
+  const publicationTypes = page.getByRole("group", { name: "発表種別" });
+  const authors = page.getByRole("group", { name: "著者" });
+  const allAuthors = authors.getByRole("button", { name: "すべて" });
+  const firstAuthors = authors.getByRole("button", { name: "筆頭著者のみ" });
+  await expect(publicationTypes.getByRole("button").first()).toHaveText("すべて");
+  await expect(firstAuthors).toHaveAttribute("aria-pressed", "true");
+
+  await allAuthors.click();
+  await expect(allAuthors).toHaveAttribute("aria-pressed", "true");
+  await expect(firstAuthors).toHaveAttribute("aria-pressed", "false");
+  const publications = page.locator(".pub-item");
+  await expect(publications.filter({ has: page.locator(".badge-fullpaper") })).toHaveCount(await publications.count());
+  const firstAuthorCount = await page.locator('.pub-item[data-first-author="true"]').count();
+  await firstAuthors.click();
+  await firstAuthors.click();
+  await expect(firstAuthors).toHaveAttribute("aria-pressed", "true");
+  await expect(publications).toHaveCount(firstAuthorCount);
+  await expect(page.locator('.pub-item[data-first-author="false"]')).toHaveCount(0);
 });
 
 test("the news dialog contains keyboard focus and restores it on every close path", async ({ page }) => {

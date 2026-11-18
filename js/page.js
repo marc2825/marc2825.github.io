@@ -20,6 +20,7 @@ function initSubPage(section) {
     if (firstAuthor != null) {
       firstAuthorOnly = !["0", "false", "off"].includes(firstAuthor.toLowerCase());
     }
+    initPublicationFilters();
   }
 
   /* Theme toggle */
@@ -43,25 +44,6 @@ function initSubPage(section) {
     window.addEventListener("scroll", () => {
       nav.classList.toggle("scrolled", window.scrollY > 20);
     }, { passive: true });
-  }
-
-  /* Publication filters (publications page only) */
-  if (section === "publications") {
-    document.querySelectorAll(".pub-filter").forEach(btn => {
-      btn.addEventListener("click", () => {
-        activePubFilter = btn.dataset.filter;
-        document.querySelectorAll(".pub-filter").forEach(b => b.classList.toggle("active", b === btn));
-        applyPubFilter();
-      });
-    });
-    const faToggle = document.getElementById("firstAuthorToggle");
-    if (faToggle) {
-      faToggle.addEventListener("click", () => {
-        firstAuthorOnly = !firstAuthorOnly;
-        faToggle.classList.toggle("active", firstAuthorOnly);
-        applyPubFilter();
-      });
-    }
   }
 
   renderSubPage(section);
