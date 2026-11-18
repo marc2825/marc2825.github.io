@@ -162,23 +162,51 @@ button { font-family: inherit; }
   border-color: var(--accent);
 }
 .compact-note {
+  --note-border: var(--border);
+  --note-gap: 10px;
   position: fixed;
   inset: auto;
   margin: 0;
   padding: 0.8rem 0.95rem;
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow: visible;
   overflow-wrap: anywhere;
   background: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: 1px solid var(--note-border);
   border-radius: 6px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
 }
+/* The bubble stays unclipped for its tail; long text scrolls inside it instead. */
+.compact-note:popover-open {
+  display: flex;
+  flex-direction: column;
+}
 .compact-note > :first-child {
+  min-height: 0;
   margin: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
   color: inherit;
   text-align: start;
+}
+/* Speech-bubble tail pointing back at the "i" button (position set in core.js). */
+.compact-note::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 5px);
+  left: var(--note-anchor-x, 1.4rem);
+  width: 10px;
+  height: 10px;
+  background: var(--surface);
+  border: solid var(--note-border);
+  border-width: 0 1px 1px 0;
+  translate: -50% 0;
+  rotate: 45deg;
+}
+.compact-note[data-side="below"]::after {
+  top: auto;
+  bottom: calc(100% - 5px);
+  border-width: 1px 0 0 1px;
 }
 .compact-card-description { margin: 0.55rem 0 0.8rem; }
 .compact-card-description > summary {
@@ -437,11 +465,19 @@ button { font-family: inherit; }
   border-color: #98cb5c;
   color: #132108;
 }
+/* ---------- Hero cue: detail-popover demo + scroll indicator ---------- */
+/* Disabled for now: orbiting light on the capsule edge (see the ::before below).
+@property --hint-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+*/
 .hero-scroll-hint {
   position: absolute;
   bottom: 2.5rem; left: 50%;
   transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
   width: max-content;
   max-width: calc(100% - 2rem);
   color: var(--text-muted);
@@ -449,29 +485,176 @@ button { font-family: inherit; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+/* Each cue arrives after the hero text, one after another. */
+.hero-scroll-hint > * { animation: heroCueIn 0.9s var(--ease) 0.7s both; }
+.hero-scroll-hint > .hero-scroll-label { animation-delay: 0.9s; }
+.hero-scroll-hint > .scroll-line { animation-delay: 1.05s; }
+@keyframes heroCueIn {
+  from { opacity: 0; translate: 0 14px; filter: blur(4px); }
+  to   { opacity: 1; translate: none; filter: none; }
+}
+
 .hero-details-hint {
+  margin-bottom: 0.85rem;
   color: var(--text);
-  font-size: 0.9rem;
-  letter-spacing: normal;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
   text-transform: none;
 }
 .hero-details-hint > .compact-note-label {
+  position: relative;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.4rem 0.75rem;
-  background: var(--surface);
+  gap: 0.7rem;
+  padding: 0.4rem 1rem 0.4rem 0.45rem;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  backdrop-filter: blur(10px) saturate(1.3);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 999px;
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.55);
+  transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
-.hero-details-hint .compact-note-button { order: -1; }
+/* Disabled for now: a point of light orbiting the capsule's edge.
+.hero-details-hint > .compact-note-label::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--hint-angle),
+    transparent 0 60%,
+    color-mix(in srgb, var(--accent) 90%, transparent) 80%,
+    var(--accent-warm) 88%,
+    transparent 96%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: hintOrbit 5.5s linear infinite;
+  pointer-events: none;
+}
+@keyframes hintOrbit { to { --hint-angle: 360deg; } }
+*/
+.hero-details-hint > .compact-note-label:hover,
+.hero-details-hint:has(.compact-note:popover-open) > .compact-note-label {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 14px 36px -16px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+/* The "i" itself looks exactly like every other note button. */
+.hero-details-hint .compact-note-button {
+  order: -1;
+  position: relative;
+}
+/* Sonar ping until the visitor tries the demo once. */
+.hero-details-hint .compact-note-button::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: hintPing 2.6s var(--ease) 1.6s infinite;
+}
+.hero-details-hint[data-tried] .compact-note-button::after { animation: none; }
+@keyframes hintPing {
+  0%        { opacity: 0.9; transform: scale(1); }
+  55%, 100% { opacity: 0;   transform: scale(2.2); }
+}
+/* Opening the demo sends a shockwave out of the button. */
+.hero-details-hint:has(.compact-note:popover-open) .compact-note-button::after {
+  animation: hintBurst 0.65s var(--ease) both;
+}
+@keyframes hintBurst {
+  from { opacity: 1; transform: scale(1);   border-width: 2px; }
+  to   { opacity: 0; transform: scale(3.2); border-width: 1px; }
+}
+
+/* Only the hero demo pops out; the real notes elsewhere stay quiet. */
+#compactDetailsHint .compact-note {
+  --note-border: color-mix(in srgb, var(--accent) 50%, var(--border));
+  --note-gap: 12px;
+  width: fit-content !important;
+  max-width: min(400px, calc(100vw - 24px));
+  padding: 0.85rem 1.15rem;
+  font-size: 0.92rem;
+  /* Disabled for now: sheen layer swept by heroNoteSheen.
+  background:
+    linear-gradient(105deg, transparent 40%, color-mix(in srgb, var(--accent) 22%, transparent) 50%, transparent 60%)
+      -10% 0 / 250% 100% no-repeat,
+    var(--surface);
+  */
+  border-radius: 10px;
+  box-shadow:
+    0 24px 50px -20px color-mix(in srgb, var(--accent) 65%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.25);
+  transform-origin: var(--note-anchor-x, 1.4rem) 100%;
+  transition:
+    opacity 0.2s ease, scale 0.2s ease,
+    overlay 0.2s allow-discrete, display 0.2s allow-discrete;
+  --note-pop-y: 10px;
+  --note-pop-tilt: -34deg;
+}
+#compactDetailsHint .compact-note[data-side="below"] {
+  transform-origin: var(--note-anchor-x, 1.4rem) 0;
+  --note-pop-y: -10px;
+  --note-pop-tilt: 34deg;
+}
+#compactDetailsHint .compact-note:not(:popover-open) { opacity: 0; scale: 0.94; }
+/* Opacity fades by transition both ways, so closing can fade out as well. */
+#compactDetailsHint .compact-note:popover-open {
+  transition-duration: 0.35s, 0.2s, 0.2s, 0.2s;
+  animation:
+    heroNotePop 0.8s cubic-bezier(0.2, 1.35, 0.4, 1) both,
+    heroNoteFocus 0.4s ease-out both;
+    /* Disabled for now: , heroNoteSheen 1.1s var(--ease) 0.3s both */
+}
+@starting-style {
+  #compactDetailsHint .compact-note:popover-open { opacity: 0; }
+}
+#compactDetailsHint .compact-note:popover-open > p {
+  animation: heroNoteType 0.65s var(--ease) 0.18s both;
+}
+@keyframes heroNotePop {
+  from { transform: perspective(600px) translateY(var(--note-pop-y)) rotateX(var(--note-pop-tilt)) scale(0.35); }
+  to   { transform: perspective(600px) translateY(0) rotateX(0deg) scale(1); }
+}
+@keyframes heroNoteFocus {
+  from { filter: blur(8px); }
+  to   { filter: blur(0); }
+}
+/* Disabled for now (see the sheen background above).
+@keyframes heroNoteSheen {
+  from { background-position: 110% 0; }
+  to   { background-position: -10% 0; }
+}
+*/
+@keyframes heroNoteType {
+  from { clip-path: inset(-4px 100% -4px -4px); }
+  to   { clip-path: inset(-4px -4px -4px -4px); }
+}
+
+/* Scroll cue: a drop of light runs down a hairline track. */
+.hero-scroll-label { padding-left: 0.18em; }
 .scroll-line {
-  width: 1px; height: 42px;
-  background: linear-gradient(to bottom, var(--text-muted), transparent);
-  animation: scrollPulse 2.2s ease-in-out infinite;
+  position: relative;
+  width: 1px; height: 52px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--text-muted) 45%, transparent), transparent);
 }
-@keyframes scrollPulse {
-  0%,100% { opacity: 0.3; transform: scaleY(1);   }
-  50%      { opacity: 1;   transform: scaleY(1.1); }
+.scroll-line::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 45%;
+  background: linear-gradient(to bottom, transparent, var(--accent));
+  box-shadow: 0 0 6px var(--accent);
+  animation: scrollDrop 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes scrollDrop {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(230%); opacity: 0; }
 }
 
 /* =========================================================
@@ -1193,7 +1376,7 @@ button { font-family: inherit; }
   .hero-cta { flex-direction: column; }
   .btn { width: 100%; justify-content: center; }
   .hero-scroll-hint { bottom: 1.5rem; }
-  .scroll-line { height: 28px; }
+  .scroll-line { height: 34px; }
 }
 
 /* =========================================================

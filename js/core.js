@@ -76,6 +76,14 @@ function applyViewSettings(pageSection) {
   const detailsHint = document.getElementById("compactDetailsHint");
   if (detailsHint) detailsHint.hidden = !supportsCompactNotes;
   applyCompactNotes();
+  const demo = detailsHint?.querySelector(".compact-note");
+  if (demo && !demo.dataset.demo) {
+    demo.dataset.demo = "true";
+    // The hero invitation stops pulsing once the visitor has opened the demo.
+    demo.addEventListener("toggle", event => {
+      if (event.newState === "open") detailsHint.dataset.tried = "true";
+    });
+  }
   applyCardDisclosures();
   document.querySelectorAll("a[href]").forEach(link => {
     const href = link.getAttribute("href");
@@ -112,15 +120,24 @@ function positionCompactNote(panel, button) {
   }
   if (anchorVisible) panel.dataset.anchorSeen = "true";
   const gutter = 12;
-  const gap = 4;
+  const gap = parseFloat(getComputedStyle(panel).getPropertyValue("--note-gap")) || 4;
   const anchorTop = Math.max(gutter, Math.min(anchor.top, viewport.clientHeight - gutter));
   const anchorBottom = Math.max(gutter, Math.min(anchor.bottom, viewport.clientHeight - gutter));
   const below = viewport.clientHeight - anchorBottom - gap - gutter;
   const above = anchorTop - gap - gutter;
   const openBelow = below >= 160 || below >= above;
   const width = Math.min(400, viewport.clientWidth - gutter * 2);
+  const origin = button.getBoundingClientRect();
+  const buttonX = origin.left + origin.width / 2;
+  const tailInset = 18;
+  // Shift long labels' notes right so the bubble's tail can still reach the button.
+  const preferredLeft = Math.max(anchor.left, buttonX + tailInset - width);
+  const left = Math.max(gutter, Math.min(preferredLeft, viewport.clientWidth - width - gutter));
   panel.style.width = `${width}px`;
-  panel.style.left = `${Math.max(gutter, Math.min(anchor.left, viewport.clientWidth - width - gutter))}px`;
+  panel.style.left = `${left}px`;
+  const tailX = Math.max(tailInset, Math.min(buttonX - left, width - tailInset));
+  panel.style.setProperty("--note-anchor-x", `${Math.round(tailX)}px`);
+  panel.dataset.side = openBelow ? "below" : "above";
   panel.style.maxHeight = `${Math.max(0, openBelow ? below : above)}px`;
   panel.style.top = openBelow ? `${anchorBottom + gap}px` : "auto";
   panel.style.bottom = openBelow ? "auto" : `${viewport.clientHeight - anchorTop + gap}px`;
