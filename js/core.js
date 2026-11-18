@@ -39,6 +39,10 @@ function initView() {
     const { overrides } = profiles[requested];
     const viewOverrides = typeof overrides === "function" ? overrides(DATA) : overrides;
     mergeViewOverrides(DATA, viewOverrides || {});
+    if (profiles[requested].compactDescriptions && "showPopover" in HTMLElement.prototype) {
+      window.addEventListener("scroll", scheduleCompactNotePosition, { passive: true });
+      window.addEventListener("resize", scheduleCompactNotePosition);
+    }
   }
   document.documentElement.dataset.view = currentView || "default";
 }
@@ -56,7 +60,8 @@ function withCurrentView(href) {
 }
 
 function applyViewSettings(pageSection) {
-  const hidden = new Set(DATA.views?.[currentView]?.hiddenSections || []);
+  const view = DATA.views?.[currentView];
+  const hidden = new Set(view?.hiddenSections || []);
   document.querySelectorAll("section[id]").forEach(section => {
     section.hidden = hidden.has(section.id);
   });
@@ -67,10 +72,149 @@ function applyViewSettings(pageSection) {
   if (subpage && pageSection) subpage.hidden = hidden.has(pageSection);
   const newsFab = document.getElementById("newsFab");
   if (newsFab) newsFab.hidden = hidden.has("news");
+  const simplifiedLink = document.getElementById("heroSimplifiedLink");
+  if (simplifiedLink) simplifiedLink.hidden = Boolean(currentView);
+  const detailsHint = document.getElementById("compactDetailsHint");
+  if (detailsHint) detailsHint.hidden = !(view?.compactDescriptions && "showPopover" in HTMLElement.prototype);
+  applyCompactDescriptions();
   document.querySelectorAll("a[href]").forEach(link => {
     const href = link.getAttribute("href");
     const next = withCurrentView(href);
     if (next !== href) link.setAttribute("href", next);
+  });
+}
+
+/* =========================================================
+   Simplified view — hover notes and expandable card descriptions
+   ========================================================= */
+const compactNoteSources = [
+  ["#aboutIntro", "#about", ".section-title"],
+  [".about-fact-value", ".about-fact", ".about-fact-label"],
+  [".about-fact-item-desc", ".about-fact-item", ".about-fact-item-title"],
+  [".timeline-desc", ".timeline-content", ".timeline-title"],
+  [".experience-desc", ".experience-body", ".experience-title"],
+  [".skill-group-note", ".skill-group", ".skill-group-title"],
+  [".skill-detail", ".skill-item", ".skill-label"],
+  ["#researchLead", ".container", ".section-title"],
+  ["#contactText", "#contact", ".section-title"],
+];
+let nextCompactNoteId = 0;
+
+function positionCompactNote(panel, button) {
+  const anchor = button.parentElement.getBoundingClientRect();
+  const viewport = document.documentElement;
+  if (panel.matches(":popover-open") && (anchor.bottom <= 0 || anchor.top >= viewport.clientHeight)) {
+    panel.hidePopover();
+    return;
+  }
+  const gutter = 12;
+  const gap = 4;
+  const below = viewport.clientHeight - anchor.bottom - gap - gutter;
+  const above = anchor.top - gap - gutter;
+  const openBelow = below >= 160 || below >= above;
+  const width = Math.min(400, viewport.clientWidth - gutter * 2);
+  panel.style.width = `${width}px`;
+  panel.style.left = `${Math.max(gutter, Math.min(anchor.left, viewport.clientWidth - width - gutter))}px`;
+  panel.style.maxHeight = `${Math.max(0, openBelow ? below : above)}px`;
+  panel.style.top = openBelow ? `${anchor.bottom + gap}px` : "auto";
+  panel.style.bottom = openBelow ? "auto" : `${viewport.clientHeight - anchor.top + gap}px`;
+}
+
+function attachCompactNote(description, label) {
+  const existing = description.closest(".compact-note");
+  let button = existing && document.querySelector(`[popovertarget="${existing.id}"]`);
+  if (!button) {
+    const trigger = document.createElement("div");
+    trigger.className = "compact-note-label";
+    label.before(trigger);
+
+    const panel = document.createElement("div");
+    panel.id = `compact-note-${++nextCompactNoteId}`;
+    panel.className = "compact-note";
+    panel.setAttribute("popover", "auto");
+    description.before(panel);
+    description.classList.remove("reveal", "visible");
+    panel.append(description);
+
+    button = document.createElement("button");
+    button.type = "button";
+    button.className = "compact-note-button";
+    button.setAttribute("popovertarget", panel.id);
+    trigger.append(label, button);
+
+    let hoverOpened = false;
+    let closeTimer;
+    panel.addEventListener("beforetoggle", event => {
+      if (event.newState === "open") positionCompactNote(panel, button);
+      else {
+        hoverOpened = false;
+        clearTimeout(closeTimer);
+      }
+    });
+    trigger.addEventListener("pointerenter", event => {
+      if (event.pointerType !== "mouse" || button.hidden) return;
+      clearTimeout(closeTimer);
+      if (panel.matches(":popover-open")) return;
+      hoverOpened = true;
+      panel.showPopover({ source: button });
+    });
+    const closeOnLeave = event => {
+      if (event.pointerType !== "mouse" || !hoverOpened) return;
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (hoverOpened && panel.matches(":popover-open") && !panel.matches(":hover") && !trigger.matches(":hover")) {
+          panel.hidePopover();
+        }
+      }, 180);
+    };
+    trigger.addEventListener("pointerleave", closeOnLeave);
+    panel.addEventListener("pointerenter", () => clearTimeout(closeTimer));
+    panel.addEventListener("pointerleave", closeOnLeave);
+    panel.addEventListener("focusin", () => { hoverOpened = false; });
+    button.addEventListener("click", event => {
+      if (!hoverOpened) return;
+      // A click holds a hovered note open. A second click or Escape closes it.
+      event.preventDefault();
+      hoverOpened = false;
+    });
+  }
+  const title = label.dataset.i18n ? t(label.dataset.i18n) : label.textContent.trim();
+  button.setAttribute("aria-label", d(`Description for ${title}`, `${title}の説明`));
+  button.hidden = !description.textContent.trim();
+}
+
+function applyCompactDescriptions(root = document) {
+  if (!DATA.views?.[currentView]?.compactDescriptions) return;
+
+  if ("showPopover" in HTMLElement.prototype) {
+    for (const [selector, scope, labelSelector] of compactNoteSources) {
+      root.querySelectorAll(selector).forEach(description => {
+        if (!description.textContent.trim() && !description.closest(".compact-note")) return;
+        const label = description.closest(scope)?.querySelector(labelSelector);
+        if (label) attachCompactNote(description, label);
+      });
+    }
+  }
+
+  root.querySelectorAll(".research-description, .project-desc").forEach(description => {
+    if (!description.textContent.trim() || description.closest(".compact-card-description")) return;
+    const details = document.createElement("details");
+    details.className = "compact-card-description";
+    const summary = document.createElement("summary");
+    summary.textContent = d("Description", "説明");
+    description.before(details);
+    details.append(summary, description);
+  });
+}
+
+let compactNoteFrame;
+function scheduleCompactNotePosition() {
+  if (compactNoteFrame != null || !document.querySelector(".compact-note:popover-open")) return;
+  compactNoteFrame = requestAnimationFrame(() => {
+    compactNoteFrame = undefined;
+    const panel = document.querySelector(".compact-note:popover-open");
+    const button = panel && document.querySelector(`[popovertarget="${panel.id}"]`);
+    if (button) positionCompactNote(panel, button);
   });
 }
 
@@ -345,7 +489,7 @@ function renderResearch(limit) {
       ${r.imageHref ? `</a>` : `</div>`}` : ""}
       ${(r.period || r.periodJP) ? `<p class="research-period">${d(r.period || "", r.periodJP || r.period || "")}</p>` : ""}
       <h3>${d(r.title, r.titleJP)}</h3>
-      <p>${d(r.desc, r.descJP)}</p>
+      <p class="research-description">${d(r.desc, r.descJP)}</p>
       ${Array.isArray(r.tags) && r.tags.length ? `<div class="research-tags">${r.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>` : ""}
       ${Array.isArray(r.links) && r.links.length ? `<div class="research-links">${r.links.map(link => `<a href="${resolveUrl(link.href)}" class="pub-link">${d(link.label, link.labelJP ?? link.label)}</a>`).join("")}</div>` : ""}
     </article>
@@ -743,8 +887,10 @@ function hydrateCompetitiveProfiles(payload) {
 
   const updated = updates.some(Boolean);
 
-  if (updated && document.getElementById("skillsGrid")) {
+  const skillsGrid = document.getElementById("skillsGrid");
+  if (updated && skillsGrid) {
     renderSkills();
+    applyCompactDescriptions(skillsGrid);
     reobserve();
   }
 }

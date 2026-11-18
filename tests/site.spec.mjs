@@ -55,23 +55,48 @@ for (const entry of pages) {
   });
 }
 
-test("simpified trims hobbies and education, hides news, and leaves the default intact", async ({ page }) => {
+test("simpified shows a compact profile, trims education, and hides news", async ({ page }) => {
   await page.route("**/database/atcoder.json", route => route.abort());
   const sectionContent = () => page.locator("section[id]").evaluateAll(sections =>
     sections.map(section => ({ id: section.id, text: section.textContent, hidden: section.hidden })));
   await page.goto("/");
   const original = await sectionContent();
   await expect(page.locator("html")).toHaveAttribute("data-view", "default");
+  await expect(page.locator("#compactDetailsHint")).toBeHidden();
+  await expect(page.locator("#skill-cert-other .skill-label")).toContainText("CGエンジニア検定");
+  await expect(page.locator("#skill-activities-other .skill-label")).toContainText("投資 / CTF");
   await page.goto("/?view=simpified");
   await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
   const hobbies = page.locator(".about-fact").filter({
     has: page.locator(".about-fact-label").filter({ hasText: /^(趣味|Hobbies)$/ }),
   });
+  const favorite = page.locator(".about-fact").filter({ has: page.locator(".about-fact-label").filter({ hasText: /^(好きな言葉|Favorite Phrase)$/ }) });
+  const recent = page.locator(".about-fact").filter({ has: page.locator(".about-fact-label").filter({ hasText: /^(最近のひとこと|Recent Thoughts)$/ }) });
   const timeline = page.locator("#timeline");
   for (const lang of ["ja", "en"]) {
     await page.locator(`[data-lang="${lang}"]`).click();
+    const hint = page.locator("#about #compactDetailsHint");
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText(lang === "ja" ? "詳細が読めます" : "to see details");
+    await expect(page.locator("#heroBio")).toBeVisible();
+    await expect(page.locator(".hero-content .compact-note-button")).toHaveCount(0);
     await expect(hobbies).toContainText(lang === "ja" ? "競技プログラミング" : "Competitive Programming");
-    await expect(hobbies.locator(".about-fact-item-desc")).toHaveCount(0);
+    const hobbyNote = hobbies.locator(".compact-note").first();
+    await expect(hobbyNote).toContainText(lang === "ja" ? "数年間にわたって" : "for several years");
+    await expect(hobbyNote).toBeHidden();
+    await expect(favorite.locator(".compact-note")).toHaveText(lang === "ja" ? "設計思想" : "Design Principle");
+    await expect(favorite.locator(".compact-note")).toBeHidden();
+    await expect(recent.locator(".compact-note")).toBeHidden();
+    expect((await favorite.boundingBox()).y).toBe((await recent.boundingBox()).y);
+    for (const [id, ja, en] of [
+      ["skill-cert-other", "CGエンジニア検定 エキスパート / G検定", "CG Engineer Expert / JDLA G Certification"],
+      ["skill-activities-other", "投資 / CTF（セキュリティの勉強）", "Investing / CTF (security)"],
+    ]) {
+      const item = page.locator(`#${id}`);
+      await expect(item.locator(".skill-label")).toHaveText(lang === "ja" ? "その他" : "Other");
+      await expect(item.locator(".compact-note")).toContainText(lang === "ja" ? ja : en);
+      await expect(item.locator(".compact-note")).toBeHidden();
+    }
     await expect(timeline).toContainText("GPA: 3.84/4.30");
     await expect(timeline).toContainText(lang === "ja" ? "開成中学校・高等学校" : "Kaisei Junior and Senior High School");
     await expect(timeline).not.toContainText(/Entrance Exam|391\.6|2014|遊んでばかり|I spent much of my time/);
@@ -80,6 +105,8 @@ test("simpified trims hobbies and education, hides news, and leaves the default 
     }
     await expect(page.locator(".news-item")).toHaveCount(0);
   }
+  await hobbies.getByRole("button", { name: "Description for Competitive Programming" }).hover();
+  await expect(hobbies.locator(".compact-note").first()).toBeVisible();
   for (const path of ["/", "/?view=unknown", "/?view=__proto__", "/?view=constructor"]) {
     await page.goto(path);
     await expect(page.locator("html")).toHaveAttribute("data-view", "default");
@@ -120,6 +147,79 @@ test("view survives all detail-page round trips and keeps existing publication f
   }
 });
 
+test("simplified notes stay usable on hover and can be opened and dismissed by keyboard", async ({ page }) => {
+  await page.goto("/?view=simplified");
+  const skill = page.locator(".skill-item").filter({ hasText: "C++" }).first();
+  const note = skill.locator(".compact-note");
+  const trigger = skill.locator(".compact-note-label");
+  await expect(note).toBeHidden();
+  await trigger.hover();
+  await expect(note).toBeVisible();
+  await expect(note).toContainText("競技プログラミング");
+  await note.hover();
+  await expect(note).toBeVisible();
+  await page.mouse.move(0, 0);
+  await expect(note).toBeHidden();
+
+  const button = skill.getByRole("button", { name: "C++の説明" });
+  await button.focus();
+  await page.keyboard.press("Enter");
+  await expect(note).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(note).toBeHidden();
+  await expect(button).toBeFocused();
+
+  const education = page.locator(".timeline-item").first();
+  await education.locator(".compact-note-label").hover();
+  const gapfill = education.locator(".compact-note").getByRole("link", { name: "GapFill" });
+  await gapfill.hover();
+  await expect(gapfill).toBeVisible();
+  await gapfill.click();
+  await expect(page).toHaveURL(/#research-gapfill$/);
+});
+
+test("simplified research and project descriptions expand through their own controls", async ({ page }) => {
+  for (const [url, descriptionSelector] of [
+    ["/", ".research-description"],
+    ["/", ".project-desc"],
+    ["/pages/research.html", ".research-description"],
+    ["/pages/projects.html", ".project-desc"],
+  ]) {
+    await page.goto(`${url}?view=simpified`);
+    const disclosure = page.locator(".compact-card-description").filter({ has: page.locator(descriptionSelector) }).first();
+    const description = disclosure.locator(descriptionSelector);
+    const summary = disclosure.locator("summary");
+    await summary.hover();
+    await expect(description).toBeHidden();
+    await summary.click();
+    await expect(description).toBeVisible();
+    await summary.press("Space");
+    await expect(description).toBeHidden();
+  }
+  await page.goto("/");
+  await expect(page.locator(".research-description").first()).toBeVisible();
+  await expect(page.locator(".project-desc").first()).toBeVisible();
+  await expect(page.locator(".compact-note-button, .compact-card-description")).toHaveCount(0);
+});
+
+test.describe("simplified descriptions on touch screens", () => {
+  test.use({ hasTouch: true, viewport: { width: 390, height: 844 } });
+
+  test("tap opens a note inside the viewport and tap again closes it", async ({ page }) => {
+    await page.goto("/?view=simplified");
+    const favorite = page.locator(".about-fact").filter({ has: page.locator(".about-fact-label", { hasText: "好きな言葉" }) });
+    const note = favorite.locator(".compact-note");
+    const button = favorite.getByRole("button", { name: "好きな言葉の説明" });
+    await button.tap();
+    await expect(note).toBeVisible();
+    const bounds = await note.boundingBox();
+    expect(bounds.x).toBeGreaterThanOrEqual(0);
+    expect(bounds.x + bounds.width).toBeLessThanOrEqual(390);
+    await button.tap();
+    await expect(note).toBeHidden();
+  });
+});
+
 test("view propagation leaves assets, other projects, external URLs and fragment links intact", async ({ page }) => {
   await page.goto("/?view=simpified");
   const hrefs = ["assets/MasahiroKono_CV.pdf", "#research", "/GapFill/", "/ScrapReCover/",
@@ -141,7 +241,7 @@ test("view overrides and hidden sections stay scoped to the selected URL", async
     researchLimit: DATA.preview.research,
     skillGroups: DATA.skills.length,
   }));
-  await page.route("**/database/data.js", async route => {
+  await page.route("**/database/simplified.js", async route => {
     const response = await route.fetch();
     await route.fulfill({ response, body: `${await response.text()}\n
       DATA.views.simpified.hiddenSections = ["projects", "news"];

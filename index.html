@@ -87,6 +87,7 @@
         <!-- <a href="https://sketchfab.com/marc2825" class="btn btn-ghost" id="heroSketchfabLink">Sketchfab</a> -->
         <!-- <a href="#contact"  class="btn btn-ghost"   data-i18n="hero.cta2">連絡する</a> -->
       </div>
+      <!-- <a href="?view=simplified" class="hero-version-link reveal" id="heroSimplifiedLink" data-i18n="hero.simplified">簡易版を見る →</a> -->
     </div>
     <div class="hero-scroll-hint">
       <span data-i18n="hero.scroll">スクロール</span>
@@ -101,6 +102,7 @@
         <span class="section-number">01</span>
         <h2 class="section-title" data-i18n="about.title">自己紹介</h2>
       </div>
+      <p id="compactDetailsHint" class="compact-details-hint reveal" data-i18n="about.detailsHint" hidden>「i」にカーソルを合わせるか、押すと詳細が読めます。</p>
       <div class="about-grid">
         <div class="about-photo reveal">
           <div class="photo-frame">
@@ -286,6 +288,7 @@
 
   <!-- load order: data → core → script -->
   <script src="database/data.js"></script>
+  <script src="database/simplified.js"></script>
   <script src="js/core.js"></script>
   <script src="js/script.js"></script>
 </body>

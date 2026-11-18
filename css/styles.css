@@ -129,6 +129,79 @@ button { font-family: inherit; }
 [hidden] { display: none !important; }
 
 /* =========================================================
+   Simplified view descriptions
+   ========================================================= */
+.compact-details-hint {
+  margin: -2rem 0 1.5rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.compact-note-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  width: fit-content;
+  max-width: 100%;
+}
+.about-fact > .compact-note-label { align-items: center; }
+.about-fact > .compact-note-label > .about-fact-label { margin-bottom: 0; }
+.compact-note-button,
+.compact-card-description > summary {
+  background: var(--accent-dim);
+  border: 1px solid transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+.compact-note-button {
+  flex: 0 0 auto;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+.compact-note-button::before { content: "i"; }
+.compact-note-button:is(:hover, :focus-visible),
+.compact-card-description > summary:is(:hover, :focus-visible) {
+  border-color: var(--accent);
+}
+.compact-note {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+}
+.compact-note > :first-child {
+  margin: 0;
+  color: inherit;
+  text-align: start;
+}
+.compact-card-description { margin: 0.55rem 0 0.8rem; }
+.compact-card-description > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0.18rem 0.65rem;
+  border-radius: var(--radius);
+  list-style: none;
+  font-size: 0.76rem;
+}
+.compact-card-description > summary::-webkit-details-marker { display: none; }
+.compact-card-description > summary::before { content: "+" / ""; }
+.compact-card-description[open] > summary::before { content: "−" / ""; }
+.compact-card-description[open] > :not(summary) { margin-top: 0.55rem; }
+
+/* =========================================================
    Navigation
    ========================================================= */
 #nav {
@@ -304,6 +377,17 @@ button { font-family: inherit; }
   line-height: 1.8;
 }
 .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-version-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.hero-version-link:is(:hover, :focus-visible) { color: var(--accent); }
 .btn {
   display: inline-flex;
   align-items: center;

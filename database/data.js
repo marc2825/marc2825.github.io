@@ -1,6 +1,6 @@
 /* =========================================================
    data.js — All portfolio content & configuration
-   ★ Edit only this file to update the entire site. ★
+   Shared content lives here. See simplified.js for the simplified view.
    Ordering rule: chronological lists are arranged from top (newest)
    to bottom (oldest).
    ========================================================= */
@@ -15,43 +15,6 @@ const WIP_EMPTY = "";
 const DATA = {
   /* ── WIP flag ─────────────────────────────────── */
   wip: true,
-
-  /* ── URL-based views ──────────────────────────────────────
-     ?view=simpified selects the profile below.
-     No view (or an unknown name) uses the original content.
-     hiddenSections: section IDs to hide, including their navigation links.
-     overrides: DATA fields to override for this view only.
-       Use a function to derive overrides from the original data.
-       Nested objects merge; arrays replace the original list.
-  ─────────────────────────────────────────────────────────── */
-  views: {
-    simpified: {
-      hiddenSections: ["news"],
-      overrides(data) {
-        const profile = data.about.profile.map(group => {
-          if (group.id !== "hobbies") return group;
-          return {
-            ...group,
-            values: group.values.map(item => ({ ...item, desc: "", descJP: "" })),
-          };
-        });
-        const timeline = data.timeline.map(item => {
-          if (item.id === "kaisei") {
-            return { ...item, period: "", periodJP: "", desc: "", descJP: "" };
-          }
-          if (item.id === "utokyo-science-i") {
-            return {
-              ...item,
-              desc: item.desc.split(" / Entrance Exam:")[0],
-              descJP: item.descJP.split(" / Entrance Exam:")[0],
-            };
-          }
-          return item;
-        });
-        return { about: { profile }, timeline, news: [] };
-      },
-    },
-  },
 
   /* ── Homepage preview limits ──────────────────────────────
      Controls how many items are shown per section on index.html.
@@ -172,8 +135,8 @@ const DATA = {
             descJP: "Blenderでの人型アニメ調モデルのフルスクラッチ制作やアドオン開発などを行っております💻️ ",
           },
           {
-            title: "Traveling",
-            titleJP: "旅行",
+            title: "Traveling・Walking around",
+            titleJP: "旅行・散歩",
             desc: "I especially love traveling to places rich in nature and off the beaten path. Lately, I've been really into exploring remote islands!",
             descJP: "自然豊かな場所や、人里離れた場所に行くのが特に好きです✈️ 最近は離島巡りにハマってます🏝️",
           },
@@ -198,6 +161,7 @@ const DATA = {
         ],
       },
       {
+        id: "favorite-phrase",
         label: "Favorite Phrase",
         labelJP: "好きな言葉",
         values: [
@@ -208,6 +172,7 @@ const DATA = {
         ],
       },
       {
+        id: "recent-thoughts",
         label: "Recent Thoughts",
         labelJP: "最近のひとこと",
         full: true,  
@@ -334,7 +299,7 @@ const DATA = {
         },
         {
           name: "AI-Assisted Coding",
-          nameJP: "AIコーディング",
+          nameJP: "コーディングエージェント",
           detail: "I have primarily developed with Codex and Claude Code since summer 2025.",
           detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております。",
           level: 79,
@@ -510,6 +475,7 @@ const DATA = {
           level: 88,
         },
         {
+          anchorId: "skill-cert-other",
           name: "Others: CG Engineer Expert / JDLA G Certification",
           nameJP: "その他： CGエンジニア検定 エキスパート / G検定 など",
           detail: WIP_EMPTY,
@@ -567,6 +533,7 @@ const DATA = {
         },
         */
         {
+          anchorId: "skill-activities-other",
           name: "Others: Investing / CTF (security)",
           nameJP: "その他： 投資 / CTF（セキュリティの勉強） など",
           detail: WIP_EMPTY,
@@ -596,6 +563,7 @@ const DATA = {
       tags:    ["Anime Production", "Creativity Support Tools", "HCI", "Deep Learning"],
       links: [
         { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/GapFill/" },
+        { label: "Code",         labelJP: "コード",             href: "https://github.com/marc2825/GapFill" },
       ],
     },
     {
@@ -648,6 +616,8 @@ const DATA = {
       links: [
         { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/GapFill/" },
         { label: "PDF",          labelJP: "PDF",               href: "https://marc2825.github.io/GapFill/assets/GapFill_CHI.pdf" },
+        { label: "DOI",          labelJP: "DOI",               href: "https://doi.org/10.1145/3772318.3790968" },
+        { label: "Code",         labelJP: "コード",             href: "https://github.com/marc2825/GapFill" },
       ],
     },
     {
@@ -875,8 +845,10 @@ const I18N = {
     "language.label":          "Language",
     "hero.cta1":               "View Research Projects",
     "hero.cta2":               "Get in Touch",
+    "hero.simplified":         "Simplified view →",
     "hero.scroll":             "Scroll",
     "about.title":             "About",
+    "about.detailsHint":       "Hover over or press “i” to see details.",
     "about.affiliation.title": "Affiliation",
     "research.title":          "Research Projects",
     "pub.title":               "Papers, Publications & Presentations",
@@ -929,8 +901,10 @@ const I18N = {
     "language.label":          "言語",
     "hero.cta1":               "研究プロジェクトを見る",
     "hero.cta2":               "連絡する",
+    "hero.simplified":         "簡易版を見る →",
     "hero.scroll":             "スクロール",
     "about.title":             "自己紹介",
+    "about.detailsHint":       "「i」にカーソルを合わせるか、押すと詳細が読めます。",
     "about.affiliation.title": "所属",
     "research.title":          "研究プロジェクト",
     "pub.title":               "論文・出版・発表",
