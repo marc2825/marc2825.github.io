@@ -4,6 +4,7 @@
    ========================================================= */
 
 function initSubPage(section) {
+  initView();
   initAnalytics();
   initTheme();
   renderWipBanner();
@@ -89,4 +90,5 @@ function renderSubPage(section) {
       break;
   }
   renderSafely(renderFooter);
+  renderSafely(applyViewSettings, section);
 }

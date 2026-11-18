@@ -16,6 +16,43 @@ const DATA = {
   /* ── WIP flag ─────────────────────────────────── */
   wip: true,
 
+  /* ── URL-based views ──────────────────────────────────────
+     ?view=simpified selects the profile below.
+     No view (or an unknown name) uses the original content.
+     hiddenSections: section IDs to hide, including their navigation links.
+     overrides: DATA fields to override for this view only.
+       Use a function to derive overrides from the original data.
+       Nested objects merge; arrays replace the original list.
+  ─────────────────────────────────────────────────────────── */
+  views: {
+    simpified: {
+      hiddenSections: ["news"],
+      overrides(data) {
+        const profile = data.about.profile.map(group => {
+          if (group.id !== "hobbies") return group;
+          return {
+            ...group,
+            values: group.values.map(item => ({ ...item, desc: "", descJP: "" })),
+          };
+        });
+        const timeline = data.timeline.map(item => {
+          if (item.id === "kaisei") {
+            return { ...item, period: "", periodJP: "", desc: "", descJP: "" };
+          }
+          if (item.id === "utokyo-science-i") {
+            return {
+              ...item,
+              desc: item.desc.split(" / Entrance Exam:")[0],
+              descJP: item.descJP.split(" / Entrance Exam:")[0],
+            };
+          }
+          return item;
+        });
+        return { about: { profile }, timeline, news: [] };
+      },
+    },
+  },
+
   /* ── Homepage preview limits ──────────────────────────────
      Controls how many items are shown per section on index.html.
      Sub-pages (pages/*.html) always display all items regardless.
@@ -117,6 +154,7 @@ const DATA = {
     affiliationJP:  "東京大学 大学院 情報理工学系研究科 コンピュータ科学専攻 修士課程",
     profile: [
       {
+        id: "hobbies",
         label: "Hobbies",
         labelJP: "趣味",
         wide: true,
@@ -205,6 +243,7 @@ const DATA = {
       descJP:   "学業と並行して、競技プログラミング、Blenderによる3DCG制作などを楽しみました。半年間の卒業研究では、五十嵐研究室にて <a href=\"#research-scraprecover\">ScrapReCover</a> を実施しました。",
     },
     {
+      id:       "utokyo-science-i",
       period:   "2021 – 2022",
       periodJP: "2021年 – 2022年",
       title:    "Science I, The University of Tokyo",
@@ -215,6 +254,7 @@ const DATA = {
       descJP:   "GPA: 3.84/4.30（基本平均点 86.68点） / Entrance Exam: 391.6/550",
     },
     {
+      id:       "kaisei",
       period:   "2014 – 2020",
       periodJP: "2014年 – 2020年",
       title:    "Kaisei Junior and Senior High School",
@@ -252,8 +292,8 @@ const DATA = {
   /* ── Skills ───────────────────────────────────── */
   skills: [
     {
-      category:   "Programming Languages",
-      categoryJP: "プログラミング言語",
+      category:   "Programming",
+      categoryJP: "プログラミング",
       items: [
         {
           name: "C++",
@@ -293,8 +333,8 @@ const DATA = {
           level: 27,
         },
         {
-          name: "Coding Agent",
-          nameJP: "コーディングエージェント",
+          name: "AI-Assisted Coding",
+          nameJP: "AIコーディング",
           detail: "I have primarily developed with Codex and Claude Code since summer 2025.",
           detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております。",
           level: 79,
@@ -493,8 +533,15 @@ const DATA = {
           name: "AI Image Generation",
           nameJP: "画像生成AI",
           detail: "I experiment with NovelAI and ComfyUI to improve control over image generation.",
-          detailJP: "NovelAI や ComfyUI で画像生成の制御性を高めるために試行錯誤中です。",
+          detailJP: "NovelAI や ComfyUI で絵柄や構図の制御性を高めるために試行錯誤中です。",
           level: 74,
+        },
+        {
+          name: "AI Agent Operations",
+          nameJP: "AIエージェント運用",
+          detail: "I have used muse and Grok bot to automate various tasks since around fall 2026.",
+          detailJP: "2026年秋頃から、muse や Grok bot を使ってさまざまな作業を自動化しています。（副業含む）",
+          level: 70,
         },
         /*
         {
@@ -520,8 +567,8 @@ const DATA = {
         },
         */
         {
-          name: "Others: Investing / AI Utilization / CTF (security)",
-          nameJP: "その他： 投資 / AI運用 / CTF（セキュリティの勉強） など",
+          name: "Others: Investing / CTF (security)",
+          nameJP: "その他： 投資 / CTF（セキュリティの勉強） など",
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 45,

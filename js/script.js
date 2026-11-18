@@ -22,6 +22,7 @@ function renderAll() {
   renderSafely(renderNewsSection, p.news || undefined);   /* in-page section */
   renderSafely(renderContact);
   renderSafely(renderFooter);
+  renderSafely(applyViewSettings);
   renderSafely(applyI18n);
   renderSafely(reobserve);
 }
@@ -56,7 +57,7 @@ function updateNavigation() {
   const scrollY = window.scrollY;
   let current = "";
   navSections.forEach(sec => {
-    if (scrollY >= sec.offsetTop - 100) current = sec.id;
+    if (!sec.hidden && scrollY >= sec.offsetTop - 100) current = sec.id;
   });
   // Finish layout reads before writing classes, once per animation frame.
   nav?.classList.toggle("scrolled", scrollY > 20);
@@ -172,6 +173,7 @@ newsModalBackdrop?.addEventListener("click", closeNewsModal);
 /* =========================================================
    Init
    ========================================================= */
+initView();
 initAnalytics();
 initTheme();
 renderWipBanner();

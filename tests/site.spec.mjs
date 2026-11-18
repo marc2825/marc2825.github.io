@@ -55,6 +55,122 @@ for (const entry of pages) {
   });
 }
 
+test("simpified trims hobbies and education, hides news, and leaves the default intact", async ({ page }) => {
+  await page.route("**/database/atcoder.json", route => route.abort());
+  const sectionContent = () => page.locator("section[id]").evaluateAll(sections =>
+    sections.map(section => ({ id: section.id, text: section.textContent, hidden: section.hidden })));
+  await page.goto("/");
+  const original = await sectionContent();
+  await expect(page.locator("html")).toHaveAttribute("data-view", "default");
+  await page.goto("/?view=simpified");
+  await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
+  const hobbies = page.locator(".about-fact").filter({
+    has: page.locator(".about-fact-label").filter({ hasText: /^(趣味|Hobbies)$/ }),
+  });
+  const timeline = page.locator("#timeline");
+  for (const lang of ["ja", "en"]) {
+    await page.locator(`[data-lang="${lang}"]`).click();
+    await expect(hobbies).toContainText(lang === "ja" ? "競技プログラミング" : "Competitive Programming");
+    await expect(hobbies.locator(".about-fact-item-desc")).toHaveCount(0);
+    await expect(timeline).toContainText("GPA: 3.84/4.30");
+    await expect(timeline).toContainText(lang === "ja" ? "開成中学校・高等学校" : "Kaisei Junior and Senior High School");
+    await expect(timeline).not.toContainText(/Entrance Exam|391\.6|2014|遊んでばかり|I spent much of my time/);
+    for (const selector of ["#news", '#navLinks a[href="#news"]', "#newsFab", "#newsModal"]) {
+      await expect(page.locator(selector)).toBeHidden();
+    }
+    await expect(page.locator(".news-item")).toHaveCount(0);
+  }
+  for (const path of ["/", "/?view=unknown", "/?view=__proto__", "/?view=constructor"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("data-view", "default");
+    expect(await sectionContent()).toEqual(original);
+    await expect(page.locator('#research .section-more-link')).toHaveAttribute("href", "pages/research.html");
+  }
+});
+
+test("view survives all detail-page round trips and keeps existing publication filters", async ({ page }) => {
+  await page.goto("/?view=simpified");
+  const publicationHref = await page.locator("#publications .section-more-link").getAttribute("href");
+  const publicationUrl = new URL(publicationHref, page.url());
+  expect(publicationUrl.searchParams.get("view")).toBe("simpified");
+  expect(publicationUrl.searchParams.get("filter")).toBe("all");
+  expect(publicationUrl.searchParams.get("firstAuthor")).toBe("0");
+  for (const section of ["research", "publications", "projects", "news"]) {
+    const link = page.locator(`#${section} .section-more-link`);
+    expect(new URL(await link.getAttribute("href"), page.url()).searchParams.get("view")).toBe("simpified");
+  }
+  for (const entry of pages.slice(1)) {
+    await page.goto(`${entry.path}?view=simpified${entry.path.includes("publications") ? "&filter=all&firstAuthor=0" : ""}`);
+    await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
+    await page.locator('[data-lang="en"]').click();
+    await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    if (entry.path.includes("publications")) {
+      await expect(page.locator('[data-filter="all"]')).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator("#firstAuthorToggle")).toHaveAttribute("aria-pressed", "false");
+    }
+    if (entry.path.includes("news")) {
+      await expect(page.locator(".subpage-section")).toBeHidden();
+      await expect(page.locator(".news-item")).toHaveCount(0);
+    }
+    await page.locator(".nav-back").click();
+    expect(new URL(page.url()).searchParams.get("view")).toBe("simpified");
+    await expect(page.locator("html")).toHaveAttribute("data-view", "simpified");
+    await expect(page.locator("#heroName")).not.toBeEmpty();
+  }
+});
+
+test("view propagation leaves assets, other projects, external URLs and fragment links intact", async ({ page }) => {
+  await page.goto("/?view=simpified");
+  const hrefs = ["assets/MasahiroKono_CV.pdf", "#research", "/GapFill/", "/ScrapReCover/",
+    "https://github.com/marc2825", "mailto:me@example.org", "/?view=default"];
+  expect(await page.evaluate(hrefs => hrefs.map(withCurrentView), hrefs)).toEqual(hrefs);
+  const preserved = await page.evaluate(() => withCurrentView("pages/projects.html?filter=all#project"));
+  const url = new URL(preserved, page.url());
+  expect(url.pathname).toBe("/pages/projects.html");
+  expect(url.searchParams.get("filter")).toBe("all");
+  expect(url.searchParams.get("view")).toBe("simpified");
+  expect(url.hash).toBe("#project");
+});
+
+test("view overrides and hidden sections stay scoped to the selected URL", async ({ page }) => {
+  await page.route("**/database/atcoder.json", route => route.abort());
+  await page.goto("/");
+  const original = await page.evaluate(() => ({
+    bio: DATA.bioJP,
+    researchLimit: DATA.preview.research,
+    skillGroups: DATA.skills.length,
+  }));
+  await page.route("**/database/data.js", async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: `${await response.text()}\n
+      DATA.views.simpified.hiddenSections = ["projects", "news"];
+      DATA.views.simpified.overrides = {
+        bio: "View-only introduction", bioJP: "表示モード専用の紹介文",
+        preview: { papers: 1 }, skills: [],
+      };` });
+  });
+  await page.goto("/?view=simpified");
+  await expect(page.locator("#heroBio")).toHaveText("表示モード専用の紹介文");
+  await expect(page.locator(".pub-item")).toHaveCount(1);
+  expect(await page.evaluate(() => DATA.preview.research)).toBe(original.researchLimit);
+  expect(await page.evaluate(() => DATA.skills.length)).toBe(0);
+  for (const selector of ["#projects", "#news", '#navLinks a[href="#projects"]', '#navLinks a[href="#news"]', "#newsFab"]) {
+    await expect(page.locator(selector)).toBeHidden();
+  }
+  await page.locator('[data-lang="en"]').click();
+  await expect(page.locator("#heroBio")).toHaveText("View-only introduction");
+  await expect(page.locator("#projects")).toBeHidden();
+  await page.goto("/pages/projects.html?view=simpified");
+  await expect(page.locator(".subpage-section")).toBeHidden();
+  await expect(page.locator(".nav-back")).toBeVisible();
+  await page.goto("/");
+  expect(await page.evaluate(() => DATA.bioJP)).toBe(original.bio);
+  expect(await page.evaluate(() => DATA.skills.length)).toBe(original.skillGroups);
+  await expect(page.locator("#projects")).toBeVisible();
+  await expect(page.locator("#newsFab")).toBeVisible();
+});
+
 test("hidden links, empty profile facts, and unpublished paper controls stay hidden", async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => {

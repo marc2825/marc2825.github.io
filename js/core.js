@@ -12,6 +12,67 @@ let activePubFilter = "fullpaper";
 let firstAuthorOnly = true;
 let currentPapersLimit;
 let analyticsInitialized = false;
+let currentView = "";
+let viewInitialized = false;
+
+/* =========================================================
+   URL-based views — selected per document, never persisted
+   ========================================================= */
+function mergeViewOverrides(target, overrides) {
+  Object.entries(overrides).forEach(([key, value]) => {
+    if (value && typeof value === "object" && !Array.isArray(value) &&
+        target[key] && typeof target[key] === "object" && !Array.isArray(target[key])) {
+      mergeViewOverrides(target[key], value);
+    } else {
+      target[key] = structuredClone(value);
+    }
+  });
+}
+
+function initView() {
+  if (viewInitialized) return;
+  viewInitialized = true;
+  const requested = new URLSearchParams(window.location.search).get("view");
+  const profiles = DATA.views || {};
+  if (requested && Object.hasOwn(profiles, requested)) {
+    currentView = requested;
+    const { overrides } = profiles[requested];
+    const viewOverrides = typeof overrides === "function" ? overrides(DATA) : overrides;
+    mergeViewOverrides(DATA, viewOverrides || {});
+  }
+  document.documentElement.dataset.view = currentView || "default";
+}
+
+function withCurrentView(href) {
+  if (!currentView || !href || href.startsWith("#")) return href;
+  const url = new URL(href, window.location.href);
+  const root = new URL(window.location.pathname.includes("/pages/") ? "../" : "./", window.location.href);
+  const pagePaths = ["", "index.html", "pages/research.html", "pages/publications.html",
+    "pages/projects.html", "pages/articles.html", "pages/news.html"];
+  if (url.origin !== root.origin || !pagePaths.some(path => new URL(path, root).pathname === url.pathname) ||
+      url.searchParams.has("view")) return href;
+  url.searchParams.set("view", currentView);
+  return url.pathname + url.search + url.hash;
+}
+
+function applyViewSettings(pageSection) {
+  const hidden = new Set(DATA.views?.[currentView]?.hiddenSections || []);
+  document.querySelectorAll("section[id]").forEach(section => {
+    section.hidden = hidden.has(section.id);
+  });
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
+    (link.closest("li") || link).hidden = hidden.has(link.hash.slice(1));
+  });
+  const subpage = document.querySelector(".subpage-section");
+  if (subpage && pageSection) subpage.hidden = hidden.has(pageSection);
+  const newsFab = document.getElementById("newsFab");
+  if (newsFab) newsFab.hidden = hidden.has("news");
+  document.querySelectorAll("a[href]").forEach(link => {
+    const href = link.getAttribute("href");
+    const next = withCurrentView(href);
+    if (next !== href) link.setAttribute("href", next);
+  });
+}
 
 /* =========================================================
    WIP Banner
@@ -99,9 +160,9 @@ function d(enVal, jpVal) {
 
 function resolveUrl(href) {
   if (!href) return "";
-  if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/i.test(href)) return href;
+  if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\/)/i.test(href)) return withCurrentView(href);
   const prefix = window.location.pathname.includes("/pages/") ? "../" : "";
-  return prefix + href.replace(/^\.\//, "");
+  return withCurrentView(prefix + href.replace(/^\.\//, ""));
 }
 
 function getConfiguredProfileLink(type) {
