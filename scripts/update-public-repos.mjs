@@ -6,7 +6,8 @@ const owner = "marc2825";
 const begin = "<!-- BEGIN AUTO:PUBLIC_REPOSITORIES -->";
 const end = "<!-- END AUTO:PUBLIC_REPOSITORIES -->";
 
-// Curate the short summaries here. New repositories use their GitHub metadata.
+// Curate the short Japanese summaries here. A repository without one is placed by its GitHub
+// topics (or under 未分類) and shows its GitHub description only when that is already Japanese.
 const categories = [
   {
     title: "研究",
@@ -42,18 +43,27 @@ const categories = [
     },
   },
 ];
-const other = { title: "その他" };
+// Repositories that fit no category yet; curated summaries may still be listed here.
+const uncategorized = {
+  title: "未分類",
+  summaries: {
+    aifude_novel_editor: "AIの提案を比較・取捨選択できる小説推敲エディタ",
+  },
+};
+const curatedGroups = [...categories, uncategorized];
+const missingSummary = "要約未登録";
+const japaneseText = /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u;
 
-export async function fetchPublicRepos(request = fetch) {
+// Authenticating avoids the 60 requests/hour limit shared by unauthenticated runners.
+export async function fetchPublicRepos(request = fetch, token = process.env.GITHUB_TOKEN) {
   const repos = [];
   const perPage = 100;
+  const headers = { Accept: "application/vnd.github+json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
   for (let page = 1; ; page++) {
     const url = new URL(`https://api.github.com/users/${owner}/repos`);
     url.search = new URLSearchParams({ type: "owner", sort: "full_name", per_page: perPage, page });
-    const response = await request(url, {
-      headers: { Accept: "application/vnd.github+json" },
-      signal: AbortSignal.timeout(15000),
-    });
+    const response = await request(url, { headers, signal: AbortSignal.timeout(15000) });
     if (!response.ok) throw new Error(`GitHub repository list returned HTTP ${response.status}`);
     const batch = await response.json();
     if (!Array.isArray(batch)) throw new Error("GitHub repository list was not an array");
@@ -68,20 +78,34 @@ function markdownText(value) {
     .replace(/[\\`*_\[\]~]/g, "\\$&");
 }
 
-function renderRepos(repos) {
-  const groups = new Map([...categories, other].map(category => [category, []]));
-  const publicRepos = repos.filter(repo =>
+function ownedPublicRepos(repos) {
+  return repos.filter(repo =>
     repo.visibility === "public" && repo.private === false && repo.owner?.login?.toLowerCase() === owner
-  );
-  publicRepos.sort((a, b) => a.name.localeCompare(b.name, "en"));
-  for (const repo of publicRepos) {
-    const name = repo.name.toLowerCase();
-    const curated = categories.find(category => Object.hasOwn(category.summaries, name));
-    const group = curated ?? categories.find(category => category.topics.some(topic => repo.topics?.includes(topic))) ?? other;
-    const description = curated?.summaries[name] ?? (repo.description?.trim() || "概要未設定");
+  ).sort((a, b) => a.name.localeCompare(b.name, "en"));
+}
+
+function classify(repo) {
+  const name = repo.name.toLowerCase();
+  const curated = curatedGroups.find(group => Object.hasOwn(group.summaries, name));
+  const description = repo.description?.trim() ?? "";
+  return {
+    group: curated ?? categories.find(category => category.topics.some(topic => repo.topics?.includes(topic))) ?? uncategorized,
+    // The README is Japanese, so an English GitHub description waits for a curated summary.
+    summary: curated?.summaries[name] ?? (japaneseText.test(description) ? description : undefined),
+  };
+}
+
+export function findMissingSummaries(repos) {
+  return ownedPublicRepos(repos).filter(repo => !classify(repo).summary).map(repo => repo.name);
+}
+
+function renderRepos(repos) {
+  const groups = new Map(curatedGroups.map(group => [group, []]));
+  for (const repo of ownedPublicRepos(repos)) {
+    const { group, summary } = classify(repo);
     const badges = [repo.fork && "フォーク", repo.archived && "アーカイブ"].filter(Boolean);
     const status = badges.length ? `（${badges.join("・")}）` : "";
-    groups.get(group).push(`- [${markdownText(repo.name)}](https://github.com/${owner}/${encodeURIComponent(repo.name)})${status} — ${markdownText(description)}`);
+    groups.get(group).push(`- [${markdownText(repo.name)}](https://github.com/${owner}/${encodeURIComponent(repo.name)})${status} — ${markdownText(summary ?? missingSummary)}`);
   }
   return [...groups].filter(([, lines]) => lines.length)
     .map(([group, lines]) => [`### ${group.title}`, "", ...lines].join("\n"))
@@ -117,6 +141,10 @@ async function main() {
   const next = updateReadme(readme, repos);
   if (next !== readme) await writeFile(file, next);
   console.log(next === readme ? "Public repositories list is up to date." : "Updated the public repositories list.");
+  const prefix = process.env.GITHUB_ACTIONS ? "::warning::" : "Warning: ";
+  for (const name of findMissingSummaries(repos)) {
+    console.log(`${prefix}${name} has no Japanese summary; add one in scripts/update-public-repos.mjs.`);
+  }
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

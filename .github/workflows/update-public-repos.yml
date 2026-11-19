@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: "24"
       - run: node scripts/update-public-repos.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Commit README changes
         run: |
           if git diff --quiet -- README.md; then
