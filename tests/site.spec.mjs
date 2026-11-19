@@ -28,6 +28,19 @@ const pages = [
   { path: "/pages/news.html", item: ".news-item", ja: "お知らせ", en: "News" },
 ];
 
+// Revealed sections slide into place only once scrolled into view. Hovering mid-slide moves the
+// trigger out from under a still mouse, which rightly closes a hover-opened note.
+async function hoverSettled(locator) {
+  await locator.scrollIntoViewIfNeeded();
+  await expect.poll(() => locator.evaluate(el => {
+    for (let node = el; node; node = node.parentElement) {
+      if (node.classList.contains("reveal") && (!node.classList.contains("visible") || node.getAnimations().length)) return false;
+    }
+    return true;
+  })).toBe(true);
+  await locator.hover();
+}
+
 async function beforeMainScript(page, setup) {
   await page.route("**/js/script.js", async route => {
     const response = await route.fetch();
@@ -132,7 +145,7 @@ test("simpified shows a compact profile, trims education, and hides news", async
     }
     await expect(page.locator(".news-item")).toHaveCount(0);
   }
-  await hobbies.getByRole("button", { name: "Description for Competitive Programming" }).hover();
+  await hoverSettled(hobbies.getByRole("button", { name: "Description for Competitive Programming" }));
   await expect(hobbies.locator(".compact-note").first()).toBeVisible();
   for (const path of ["/", "/?view=unknown", "/?view=__proto__", "/?view=constructor"]) {
     await page.goto(path);
@@ -181,7 +194,7 @@ test("simplified notes stay usable on hover and can be opened and dismissed by k
   const note = skill.locator(".compact-note");
   const trigger = skill.locator(".compact-note-label");
   await expect(note).toBeHidden();
-  await trigger.hover();
+  await hoverSettled(trigger);
   await expect(note).toBeVisible();
   await expect(note).toContainText("競技プログラミング");
   await note.hover();
@@ -198,7 +211,7 @@ test("simplified notes stay usable on hover and can be opened and dismissed by k
   await expect(button).toBeFocused();
 
   const education = page.locator(".timeline-item").first();
-  await education.locator(".compact-note-label").hover();
+  await hoverSettled(education.locator(".compact-note-label"));
   const gapfill = education.locator(".compact-note").getByRole("link", { name: "GapFill" });
   await gapfill.hover();
   await expect(gapfill).toBeVisible();

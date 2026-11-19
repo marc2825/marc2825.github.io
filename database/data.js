@@ -185,7 +185,7 @@ const DATA = {
       sub:      "M.S. Student in Computer Science",
       subJP:    "修士課程（情報理工学）",
       desc:     "Researching creativity support tools, optimization in CG, and NPR-related topics in the Igarashi Lab (e.g., <a href=\"#research-gapfill\">GapFill</a>).",
-      descJP:   "五十嵐研究室にて、クリエイター向け制作支援ツール、CG分野の最適化、NPR関連技術などを研究中です。（研究例：<a href=\"#research-gapfill\">GapFill</a>）",
+      descJP:   "五十嵐研究室にて、クリエイター向け制作支援ツール、CG分野の最適化、NPR関連技術などを研究中です。M1 の一年間で、二本のフル論文が国際会議に採択されました。（研究例：<a href=\"#research-gapfill\">GapFill</a>）",
       link:     "https://www-ui.is.s.u-tokyo.ac.jp/",
       linkLabel:   "Igarashi Lab",
       linkLabelJP: "五十嵐研究室",
