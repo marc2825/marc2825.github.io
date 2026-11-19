@@ -8,7 +8,7 @@
 ## 公開リポジトリ
 
 <!-- BEGIN AUTO:PUBLIC_REPOSITORIES -->
-最終更新（自動）：2026-11-18 13:08 JST
+最終更新（自動）：2026-11-19 16:34 JST
 
 ### 研究
 
@@ -30,4 +30,8 @@
 
 - [EmailAddressChecker](https://github.com/marc2825/EmailAddressChecker) — メールアドレスの形式・DNS検査CLI
 - [marc2825.github.io](https://github.com/marc2825/marc2825.github.io) — 研究・制作のポートフォリオサイト
+
+### その他
+
+- [AIfude\_novel\_editor](https://github.com/marc2825/AIfude_novel_editor) — An AI-assisted novel editor for refining your writing with suggestions, side-by-side comparisons, and selective edits.
 <!-- END AUTO:PUBLIC_REPOSITORIES -->
