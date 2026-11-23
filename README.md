@@ -8,7 +8,7 @@
 ## 公開リポジトリ
 
 <!-- BEGIN AUTO:PUBLIC_REPOSITORIES -->
-最終更新（自動）：2026-11-19 16:46 JST
+最終更新（自動）：2026-11-23 16:49 JST
 
 ### 研究
 
@@ -34,4 +34,8 @@
 ### 未分類
 
 - [AIfude\_novel\_editor](https://github.com/marc2825/AIfude_novel_editor) — AIの提案を比較・取捨選択できる小説推敲エディタ
+- [AnimeAirtimeTracker](https://github.com/marc2825/AnimeAirtimeTracker) — 要約未登録
+- [Kakudoll](https://github.com/marc2825/Kakudoll) — 要約未登録
+- [Pixiv-Metatan](https://github.com/marc2825/Pixiv-Metatan) — 要約未登録
+- [spellbinder-for-novelai](https://github.com/marc2825/spellbinder-for-novelai) — 要約未登録
 <!-- END AUTO:PUBLIC_REPOSITORIES -->
