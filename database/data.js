@@ -590,11 +590,15 @@ const DATA = {
       authors: "Yinfei Qian, Quentin Becker, I-Chao Shen, Masahiro Kono, Hennes Rave, Maria Larsson, Takeo Igarashi",
       venue:   "SCF '26: ACM Symposium on Computational Fabrication",
       venueJP: "SCF '26: ACM Symposium on Computational Fabrication",
-      venueHref: "https://scf.acm.org/2026/papers.html",   /* 論文リンク未公開のため採択論文一覧へ */
+      venueHref: "https://scf.acm.org/2026/",
       year:    2026,
       type:    "fullpaper",
+      peerReviewed: true,
       firstAuthor: false,
-      links: [],
+      links: [
+        { label: "Project Page", labelJP: "プロジェクトページ", href: "https://271806.github.io/scrapcuts/" },
+        { label: "DOI",          labelJP: "DOI",               href: "https://dl.acm.org/doi/10.1145/3828611.3845647" },
+      ],
     },
     {
       title:   "No Pixel Left Behind: Filling Gaps in Anime Colorization",
@@ -606,6 +610,7 @@ const DATA = {
       year:    2026,
       type:    "fullpaper",
       topConference: true,
+      peerReviewed: true,
       firstAuthor: true,
       links: [
         { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/GapFill/" },
@@ -653,6 +658,7 @@ const DATA = {
       venueHref: "https://scf.acm.org/2025/",
       year:    2025,
       type:    "fullpaper",
+      peerReviewed: true,
       firstAuthor: true,
       links: [
         { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/ScrapReCover/" },
@@ -670,6 +676,7 @@ const DATA = {
       venueHref: "https://s2025.siggraph.org/",
       year:    2025,
       type:    "poster",
+      peerReviewed: true,
       firstAuthor: true,
       links: [
         { label: "Project Page", labelJP: "プロジェクトページ", href: "https://marc2825.github.io/GapFill/" },
