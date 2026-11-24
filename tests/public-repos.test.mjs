@@ -24,7 +24,7 @@ test("generates only the public catalog and advances the date only when the list
   assert.ok(first.endsWith("\n\nOther README content\n"));
   assert.match(first, /最終更新：2026-11-18 01:05 JST/);
   assert.match(first, /### 研究\n\n- \[GapFill\]\(https:\/\/github\.com\/marc2825\/GapFill\) — アニメ彩色/);
-  assert.match(first, /### Blender・画像制作\n\n- \[new-blender-addon\].* — 要約未登録$/m);
+  assert.match(first, /### Blenderアドオン\n\n- \[new-blender-addon\].* — 要約未登録$/m);
   assert.doesNotMatch(first, /private|not-mine|Viewport tool/);
 
   const later = new Date("2026-11-25T00:23:00Z");
@@ -47,12 +47,26 @@ test("keeps README summaries Japanese and files hard-to-place repositories as un
     repo("japanese-desc", { description: "日本語の説明" }),
   ];
   const list = updateReadme(readme, repositories, new Date("2026-11-19T00:00:00Z"));
-  assert.match(list, /### 未分類\n\n- \[AIfude\\_novel\\_editor\].* — AIの提案を比較・取捨選択できる小説推敲エディタ\n/);
+  assert.match(list, /### Webアプリ・サイト\n\n- \[AIfude\\_novel\\_editor\].* — AIの提案を比較・取捨選択できる小説推敲エディタ\n/);
+  assert.match(list, /### 未分類\n\n- \[english-only\]/);
   assert.match(list, /- \[english-only\].* — 要約未登録\n/);
   assert.match(list, /- \[no-description\].* — 要約未登録\n/);
   assert.match(list, /- \[japanese-desc\].* — 日本語の説明\n/);
   assert.doesNotMatch(list, /AI-assisted|written up in English|その他/);
   assert.deepEqual(findMissingSummaries(repositories), ["english-only", "no-description"]);
+});
+
+test("lists categories and curated repositories in their defined order", () => {
+  const list = updateReadme(readme, [
+    repo("marc2825.github.io"), repo("AIfude_novel_editor"), repo("AnimeAirtimeTracker"), repo("a-web-tool", { topics: ["nextjs"] }),
+    repo("cp_library"), repo("Snaxis"), repo("EmailAddressChecker"), repo("Sumire-image-editor"),
+  ], new Date("2026-11-25T00:00:00Z"));
+  const order = [...list.matchAll(/^(?:### (.+)|- \[([^\]]+)\])/gm)].map(match => match[1] ?? match[2]);
+  assert.deepEqual(order, [
+    "Blenderアドオン", "Snaxis", "競技プログラミング", "cp\\_library",
+    "Webアプリ・サイト", "AnimeAirtimeTracker", "AIfude\\_novel\\_editor", "marc2825.github.io", "a-web-tool",
+    "デスクトップアプリ", "Sumire-image-editor", "CLIツール", "EmailAddressChecker",
+  ]);
 });
 
 test("authenticates API requests only when a token is available", async () => {

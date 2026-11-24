@@ -6,7 +6,8 @@ const owner = "marc2825";
 const begin = "<!-- BEGIN AUTO:PUBLIC_REPOSITORIES -->";
 const end = "<!-- END AUTO:PUBLIC_REPOSITORIES -->";
 
-// Curate the short Japanese summaries here. A repository without one is placed by its GitHub
+// Curate the short Japanese summaries here; categories and their summaries appear in this order,
+// followed by other repositories alphabetically. A repository without a summary is placed by its GitHub
 // topics (or under 未分類) and shows its GitHub description only when that is already Japanese.
 const categories = [
   {
@@ -18,12 +19,11 @@ const categories = [
     },
   },
   {
-    title: "Blender・画像制作",
-    topics: ["blender", "blender-addon", "image-editor", "image-processing"],
+    title: "Blenderアドオン",
+    topics: ["blender", "blender-addon", "blender-extension"],
     summaries: {
-      blender_smartclip: "Blenderの移動・スナップ操作支援",
       bodyocclusionculler: "衣装に隠れた身体メッシュの検出・除去",
-      "sumire-image-editor": "画像のモザイク・ぼかし・一括整理",
+      snaxis: "スマートガイドによるBlenderの整列・スナップ支援",
     },
   },
   {
@@ -35,20 +35,48 @@ const categories = [
     },
   },
   {
-    title: "Web・ユーティリティ",
-    topics: ["github-pages", "portfolio", "utility"],
+    title: "Unityエディタ拡張",
+    topics: ["unity", "unity-editor"],
+    summaries: {
+      kakudoll: "見る角度ごとにVRMアバターの形を描き分けるツール（開発中）",
+    },
+  },
+  {
+    title: "ブラウザ拡張機能",
+    topics: ["chrome-extension", "edge-extension", "firefox-extension", "browser-extension"],
+    summaries: {
+      "pixiv-metatan": "pixivのプレビューとAI生成情報の読み取り（非公式）",
+      "spellbinder-for-novelai": "NovelAIのプロンプトを部品化・比較するサイドパネル（非公式）",
+    },
+  },
+  {
+    title: "Webアプリ・サイト",
+    topics: ["nextjs", "web-app", "github-pages", "personal-website"],
+    summaries: {
+      animeairtimetracker: "日本のテレビアニメの放送枠・編成データベース",
+      aifude_novel_editor: "AIの提案を比較・取捨選択できる小説推敲エディタ",
+      "marc2825.github.io": "研究・制作のポートフォリオサイト",
+    },
+  },
+  {
+    title: "デスクトップアプリ",
+    topics: ["desktop-app", "pyside6", "windows"],
+    summaries: {
+      "sumire-image-editor": "画像のモザイク・ぼかし・一括整理",
+    },
+  },
+  {
+    title: "CLIツール",
+    topics: ["cli"],
     summaries: {
       emailaddresschecker: "メールアドレスの形式・DNS検査CLI",
-      "marc2825.github.io": "研究・制作のポートフォリオサイト",
     },
   },
 ];
 // Repositories that fit no category yet; curated summaries may still be listed here.
 const uncategorized = {
   title: "未分類",
-  summaries: {
-    aifude_novel_editor: "AIの提案を比較・取捨選択できる小説推敲エディタ",
-  },
+  summaries: {},
 };
 const curatedGroups = [...categories, uncategorized];
 const missingSummary = "要約未登録";
@@ -105,10 +133,15 @@ function renderRepos(repos) {
     const { group, summary } = classify(repo);
     const badges = [repo.fork && "フォーク", repo.archived && "アーカイブ"].filter(Boolean);
     const status = badges.length ? `（${badges.join("・")}）` : "";
-    groups.get(group).push(`- [${markdownText(repo.name)}](https://github.com/${owner}/${encodeURIComponent(repo.name)})${status} — ${markdownText(summary ?? missingSummary)}`);
+    const order = Object.keys(group.summaries).indexOf(repo.name.toLowerCase());
+    groups.get(group).push({
+      // Repositories are already alphabetical, so the stable sort keeps that order after curated ones.
+      rank: order < 0 ? Infinity : order,
+      text: `- [${markdownText(repo.name)}](https://github.com/${owner}/${encodeURIComponent(repo.name)})${status} — ${markdownText(summary ?? missingSummary)}`,
+    });
   }
   return [...groups].filter(([, lines]) => lines.length)
-    .map(([group, lines]) => [`### ${group.title}`, "", ...lines].join("\n"))
+    .map(([group, lines]) => [`### ${group.title}`, "", ...lines.sort((a, b) => a.rank - b.rank).map(line => line.text)].join("\n"))
     .join("\n\n") || "公開リポジトリはありません。";
 }
 
