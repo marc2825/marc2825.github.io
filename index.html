@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="dark">
+<html lang="ja" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -37,7 +37,7 @@
   <!-- Navigation -->
   <nav id="nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo" id="navLogo">Portfolio</a>
+      <a href="#hero" class="nav-logo" id="navLogo" data-i18n="nav.logo">河野 将大 のポートフォリオ</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#about"        data-i18n="nav.about">自己紹介</a></li>
         <li><a href="#education"    data-i18n="nav.education">経歴</a></li>
@@ -75,26 +75,30 @@
 
   <!-- Hero -->
   <section id="hero">
-    <div class="hero-content">
-      <p class="hero-label reveal" id="heroLabel"></p>
-      <h1 class="hero-name reveal" id="heroName"></h1>
-      <a href="#education" class="hero-affiliation reveal" id="heroAffiliation"></a>
-      <p class="hero-bio reveal" id="heroBio"></p>
-      <div class="hero-cta reveal">
-        <a href="#research" class="btn btn-primary" data-i18n="hero.cta1">研究プロジェクトを見る</a>
-        <a href="https://github.com/marc2825" class="btn btn-ghost" id="heroGithubLink">GitHub</a>
-        <a href="https://atcoder.jp/users/marc2825" class="btn btn-ghost" id="heroAtcoderLink">AtCoder</a>
-        <!-- <a href="https://sketchfab.com/marc2825" class="btn btn-ghost" id="heroSketchfabLink">Sketchfab</a> -->
-        <!-- <a href="#contact"  class="btn btn-ghost"   data-i18n="hero.cta2">連絡する</a> -->
+    <div class="hero-inner">
+      <div class="hero-content">
+        <p class="hero-label" id="heroLabel"></p>
+        <h1 class="hero-name" id="heroName"></h1>
+        <a href="#education" class="hero-affiliation" id="heroAffiliation"></a>
+        <p class="hero-bio" id="heroBio"></p>
+        <div class="hero-cta">
+          <a href="https://scholar.google.co.jp/citations?user=D-nvVksAAAAJ&amp;hl=ja&amp;oi=sra" class="btn btn-primary" id="heroScholarLink" data-i18n="hero.scholar">Google Scholar</a>
+          <a href="https://github.com/marc2825" class="btn btn-ghost" id="heroGithubLink">GitHub</a>
+          <a href="https://atcoder.jp/users/marc2825" class="btn btn-ghost" id="heroAtcoderLink">AtCoder</a>
+          <!-- <a href="https://sketchfab.com/marc2825" class="btn btn-ghost" id="heroSketchfabLink">Sketchfab</a> -->
+          <!-- <a href="#contact"  class="btn btn-ghost"   data-i18n="hero.cta2">連絡する</a> -->
+        </div>
       </div>
+      <aside class="hero-highlights" id="heroHighlights" aria-labelledby="heroHighlightsTitle" hidden>
+        <h2 class="hero-highlights-title" id="heroHighlightsTitle" data-i18n="hero.highlights">実績</h2>
+        <ul class="hero-highlights-list" id="heroHighlightsList"></ul>
+      </aside>
     </div>
-    <div class="hero-scroll-hint">
+    <div class="hero-hint">
       <div id="compactDetailsHint" class="hero-details-hint" hidden>
         <span class="hero-details-hint-text" data-i18n="hero.detailsHint">カーソルを合わせると、詳細が読めます！</span>
         <p id="compactDetailsExample" data-i18n="hero.detailsExample">このように、項目ごとの詳細が表示されます。</p>
       </div>
-      <span class="hero-scroll-label" data-i18n="hero.scroll">スクロール</span>
-      <div class="scroll-line" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -102,20 +106,11 @@
   <section id="about" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">01</span>
         <h2 class="section-title" data-i18n="about.title">自己紹介</h2>
       </div>
       <div class="about-grid">
-        <div class="about-photo reveal">
-          <div class="photo-frame">
-            <div class="photo-placeholder">
-              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="38" r="22" fill="currentColor" opacity="0.3"/>
-                <ellipse cx="50" cy="90" rx="36" ry="24" fill="currentColor" opacity="0.3"/>
-              </svg>
-            </div>
-          </div>
-          <div class="about-links reveal" id="aboutLinks"></div>
+        <div class="about-side reveal">
+          <div class="about-links" id="aboutLinks"></div>
         </div>
         <div class="about-text">
           <div class="about-block reveal">
@@ -135,12 +130,11 @@
   <section id="education" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">02</span>
         <h2 class="section-title" data-i18n="edu.title">学歴・職歴</h2>
       </div>
       <p class="edu-subtitle reveal" data-i18n="edu.section.education">学歴</p>
       <div class="timeline" id="timeline"></div>
-      <p class="edu-subtitle reveal" data-i18n="edu.section.experience">職歴（インターン等含む・抜粋）</p>
+      <p class="edu-subtitle reveal" data-i18n="edu.section.experience">職務経験（抜粋）</p>
       <div class="experience-list" id="experienceList"></div>
     </div>
   </section>
@@ -149,7 +143,6 @@
   <section id="skills" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">03</span>
         <h2 class="section-title" data-i18n="skills.title">スキル</h2>
       </div>
       <div class="skills-grid" id="skillsGrid"></div>
@@ -160,7 +153,6 @@
   <section id="research" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">04</span>
         <h2 class="section-title" data-i18n="research.title">研究プロジェクト</h2>
       </div>
       <p class="section-lead reveal" id="researchLead"></p>
@@ -175,7 +167,6 @@
   <section id="publications" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">05</span>
         <h2 class="section-title" data-i18n="pub.title">論文・出版・発表</h2>
       </div>
       <div class="pub-filters reveal" id="pubFilters">
@@ -206,7 +197,6 @@
   <section id="projects" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">06</span>
         <h2 class="section-title" data-i18n="projects.title">プロジェクト（その他・抜粋）</h2>
       </div>
       <div class="projects-grid" id="projectsGrid"></div>
@@ -221,7 +211,6 @@
   <section id="articles" class="section">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">07</span>
         <h2 class="section-title" data-i18n="articles.title">記事</h2>
       </div>
       <ul class="articles-list" id="articlesList"></ul>
@@ -238,7 +227,6 @@
       <details class="news-disclosure" id="newsDisclosure">
         <summary class="reveal">
           <h2 class="section-header news-disclosure-heading">
-            <span class="section-number" aria-hidden="true">08</span>
             <span class="section-title" data-i18n="news.title">お知らせ</span>
             <span class="news-disclosure-chevron" aria-hidden="true"></span>
           </h2>
@@ -255,7 +243,6 @@
   <section id="contact" class="section section-alt">
     <div class="container contact-container">
       <div class="section-header reveal">
-        <span class="section-number">09</span>
         <h2 class="section-title" data-i18n="contact.title">連絡先</h2>
       </div>
       <p class="section-lead reveal" id="contactText"></p>

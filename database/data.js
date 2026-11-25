@@ -61,6 +61,46 @@ const DATA = {
   bio:           "My research lies in the design of <strong>creativity support tools</strong> and <strong>optimization methods for 2D and 3D computer graphics</strong>, with a particular interest in <strong>non-photorealistic rendering (NPR), discrete mathematics, DCC tools</strong>.",
   bioJP:         "<strong>2D・3DCG</strong>分野における情報科学技術を通じた<strong>制作支援や最適化</strong>、ならびに<strong>NPR（Non-Photorealistic Rendering）</strong>表現に特に関心があります。<strong>離散数学</strong>や<strong>DCCツール</strong>も好きです。",
 
+  /* ── Highlights (hero panel) ───────────────────────
+     tone: research | competitive | creation | qualification
+     {atcoder_algorithm} / {atcoder_heuristic} / {codeforces} are replaced by
+     the peak ratings shown in the skills section, so they stay current.
+  ───────────────────────────────────────────────── */
+  highlights: [
+    {
+      tone: "research",
+      label: "Research",
+      labelJP: "研究",
+      text: "CHI '26 full paper accepted (first author)",
+      textJP: "CHI '26 フルペーパー採択（筆頭著者）",
+      href: "#research-gapfill",
+    },
+    {
+      tone: "competitive",
+      label: "Competitive Programming",
+      labelJP: "競技プログラミング",
+      text: "AtCoder peak {atcoder_algorithm}, Codeforces peak {codeforces}",
+      textJP: "AtCoder 最高 {atcoder_algorithm}、Codeforces 最高 {codeforces}",
+      href: "#skills-competitive",
+    },
+    {
+      tone: "creation",
+      label: "Creative Work",
+      labelJP: "制作",
+      text: "Anime-style 3D models and add-ons in Blender",
+      textJP: "Blenderでのアニメ調3Dモデル制作、アドオン開発",
+      href: "#projects",
+    },
+    {
+      tone: "qualification",
+      label: "Certifications",
+      labelJP: "資格",
+      text: "Eiken Grade 1, Math Grade 1, Applied Information Technology Engineer",
+      textJP: "英検1級、数検1級、応用情報技術者",
+      href: "#skills-certifications",
+    },
+  ],
+
   /* ── Links ────────────────────────────────────── */
   links: {
     emails:   [
@@ -206,6 +246,8 @@ const DATA = {
       periodJP: "2021年 – 2022年",
       title:    "Science I, The University of Tokyo",
       titleJP:  "東京大学 理科一類",
+      badge:    "GPA 3.84 / 4.30", /* shown beside the title, outside the "i" note */
+      badgeJP:  "GPA 3.84 / 4.30",
       sub:      "College of Arts and Sciences, The University of Tokyo",
       subJP:    "東京大学 教養学部 前期課程",
       desc:     "GPA: 3.84/4.30 (basic average score: 86.68/100; top 5%) / Entrance Exam: 391.6/550",
@@ -252,6 +294,7 @@ const DATA = {
     {
       category:   "Programming",
       categoryJP: "プログラミング",
+      minorBelow: 50, /* items below this level (or with minor: true) are listed together as "経験あり" */
       items: [
         {
           name: "C++",
@@ -282,6 +325,7 @@ const DATA = {
           detail: WIP_EMPTY,
           detailJP: WIP_EMPTY,
           level: 51,
+          minor: true, /* list under "経験あり" regardless of level */
         },
         {
           name: "Verilog HDL",
@@ -294,7 +338,7 @@ const DATA = {
           name: "AI-Assisted Coding",
           nameJP: "コーディングエージェント",
           detail: "I have primarily developed with Codex and Claude Code since summer 2025.",
-          detailJP: "25年夏頃から、専ら codex や claude code を用いて開発しております。",
+          detailJP: "2025年夏頃から、専ら codex や claude code を用いて開発しております。",
           level: 79,
         },
       ],
@@ -302,6 +346,7 @@ const DATA = {
     {
       category:   "Competitive Programming",
       categoryJP: "競技プログラミング",
+      anchorId:   "skills-competitive",
       items: [
         {
           name: "AtCoder Algorithm Peak Rating 2215",
@@ -353,6 +398,7 @@ const DATA = {
     {
       category:   "CG & DCC Tools",
       categoryJP: "CG・DCCツール",
+      minorBelow: 50,
       note:       "Lately, I've also been exploring ways to make use of AI 🔎",
       noteJP:     "最近はAIの活用法も模索中です🔎",
       items: [
@@ -485,7 +531,7 @@ const DATA = {
           name: "Novel Writing",
           nameJP: "小説執筆",
           detail: "I regularly publish short stories on pixiv, consistently receiving over 100 likes.",
-          detailJP: "pixivで短編小説を定期的に公開しており、安定して3桁のいいねを獲得しております！",
+          detailJP: "趣味のジャンルで pixiv にて短編小説を定期的に公開しており、安定して3桁のいいねを獲得しております！",
           level: 84,
         },
         {
@@ -498,8 +544,8 @@ const DATA = {
         {
           name: "AI Agent Operations",
           nameJP: "AIエージェント運用",
-          detail: "I have used muse and Grok bot to automate various tasks since around fall 2026.",
-          detailJP: "2026年秋頃から、muse や Grok bot を使ってさまざまな作業を自動化しています。（副業含む）",
+          detail: "I have used Muse and Grok bot to automate various tasks since around fall 2026.",
+          detailJP: "2026年秋頃から、Muse や Grok bot を使ってさまざまな作業の効率化を試みております。",
           level: 70,
         },
         /*
@@ -547,6 +593,8 @@ const DATA = {
       periodJP: 2025,
       title:   "GapFill",
       titleJP: "GapFill",
+      badge:   "CHI '26",
+      badgeJP: "CHI '26 採択",
       desc:    "Based on a formative study, designed and implemented a support tool for anime colorization that detects tiny unpainted regions, proposes fill colors, and reduces repetitive inspection and correction work; a user study demonstrated its usability and provided insights for the design of future support tools.",
       descJP:  "アニメ彩色における小さな塗り残しを対象とした制作支援ツールです。塗り残しの検出、拡大確認、色選択といった反復作業を減らすことを主目的として、現場調査に基づくUI設計と、アニメ塗りに特化した深層学習による色提案手法を組み合わせました。13名のプロ彩色者によるユーザスタディで有用性を検証し、社会実装へ向けた知見も提供しています。（HCI 分野の国際トップカンファレンスにも採択されました）",
       image:   "assets/research/gapfill/GapFill_teaser.webp",
@@ -565,6 +613,8 @@ const DATA = {
       periodJP: 2025,
       title:   "ScrapReCover",
       titleJP: "ScrapReCover",
+      badge:   "SCF '25",
+      badgeJP: "SCF '25 採択",
       desc:    "An interactive optimization system for designing freeform patchwork layouts from fabric scraps. It combines manual editing with simulated-annealing-based automatic suggestions, enabling iterative exploration of layouts that balance material reuse and visual intent. The system was evaluated through a fabrication workshop with 21 participants.",
       descJP:  "不要な布切れを用いた自由形パッチワークのレイアウト制作を支援するインタラクティブ最適化システムです。直感的なパラメータ操作を含む手動調整や、焼きなまし法に基づく自動提案を組み合わせることで、材料の有効活用と見た目の意図を両立する反復的な試行錯誤を可能にしました。ワークショップでの実制作を通じて実用性を評価済みです。",
       image:   "assets/research/scraprecover/ScrapReCover_teaser.webp",
@@ -829,6 +879,7 @@ const I18N = {
     "meta.articles.description": "Articles and writing by Masahiro Kono.",
     "meta.news.title":         "News — Masahiro Kono | Portfolio",
     "meta.news.description":   "News about Masahiro Kono's research, presentations, and activities.",
+    "nav.logo":                "Masahiro Kono's Portfolio",
     "nav.about":               "About",
     "nav.research":            "Research",
     "nav.publications":        "Publications",
@@ -844,9 +895,9 @@ const I18N = {
     "theme.dark":              "Switch to dark mode",
     "dialog.close":            "Close",
     "language.label":          "Language",
-    "hero.cta1":               "View Research Projects",
+    "hero.scholar":            "Google Scholar",
     "hero.cta2":               "Get in Touch",
-    "hero.scroll":             "Scroll",
+    "hero.highlights":         "Selected Highlights",
     "hero.detailsHint":        "Hover or press to see details.",
     "hero.detailsDemo":        "Try a detail pop-up",
     "hero.detailsExample":     "This is how item details appear.",
@@ -865,6 +916,7 @@ const I18N = {
     "projects.title":          "Projects (Other, Selected)",
     "articles.title":          "Articles",
     "skills.title":            "Skills",
+    "skills.minor":            "Also used",
     "edu.title":               "Education & Experience",
     "edu.section.education":   "Education",
     "edu.section.experience":  "Experience (Selected)",
@@ -888,6 +940,7 @@ const I18N = {
     "meta.articles.description": "河野将大による記事・執筆活動を紹介します。",
     "meta.news.title":         "お知らせ — 河野将大 | ポートフォリオ",
     "meta.news.description":   "河野将大の研究・発表・活動に関するお知らせです。",
+    "nav.logo":                "河野 将大 のポートフォリオ",
     "nav.about":               "自己紹介",
     "nav.research":            "研究",
     "nav.publications":        "出版・発表",
@@ -903,9 +956,9 @@ const I18N = {
     "theme.dark":              "ダークモードに切り替え",
     "dialog.close":            "閉じる",
     "language.label":          "言語",
-    "hero.cta1":               "研究プロジェクトを見る",
+    "hero.scholar":            "Google Scholar",
     "hero.cta2":               "連絡する",
-    "hero.scroll":             "スクロール",
+    "hero.highlights":         "実績（抜粋）",
     "hero.detailsHint":        "カーソルを合わせると、詳細が読めます！",
     "hero.detailsDemo":        "詳細ポップアップを試す",
     "hero.detailsExample":     "このように、項目ごとの詳細が表示されます。",
@@ -924,9 +977,10 @@ const I18N = {
     "projects.title":          "プロジェクト（その他・抜粋）",
     "articles.title":          "記事",
     "skills.title":            "スキル",
+    "skills.minor":            "経験あり",
     "edu.title":               "学歴・職歴",
     "edu.section.education":   "学歴",
-    "edu.section.experience":  "職歴（アルバイト等含む・抜粋）",
+    "edu.section.experience":  "職務経験（抜粋）",
     "news.title":              "お知らせ",
     "news.fab":                "お知らせ",
     "contact.title":           "連絡先",

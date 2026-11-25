@@ -9,6 +9,7 @@
 function renderAll() {
   const p = DATA.preview || {};
   renderSafely(renderHero);
+  renderSafely(renderHighlights);
   renderSafely(renderAbout);
   renderSafely(renderResearch, p.research || undefined);
   renderSafely(renderPapers, p.papers || undefined);

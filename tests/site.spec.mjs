@@ -115,7 +115,7 @@ test("simpified shows a compact profile, trims education, and hides news", async
   const timeline = page.locator("#timeline");
   for (const lang of ["ja", "en"]) {
     await page.locator(`[data-lang="${lang}"]`).click();
-    const hint = page.locator(".hero-scroll-hint #compactDetailsHint");
+    const hint = page.locator(".hero-hint #compactDetailsHint");
     await expect(hint).toBeVisible();
     await expect(hint).toContainText(lang === "ja" ? "詳細が読めます" : "to see details");
     await expect(page.locator("#heroBio")).toBeVisible();
@@ -220,30 +220,31 @@ test("simplified notes stay usable on hover and can be opened and dismissed by k
 });
 
 for (const view of ["", "?view=simpified"]) {
-  test(`research and project descriptions expand on demand ${view || "in the full view"}`, async ({ page }) => {
-    for (const [url, descriptionSelector] of [
-      ["/", ".research-description"],
-      ["/", ".project-desc"],
-      ["/pages/research.html", ".research-description"],
-      ["/pages/projects.html", ".project-desc"],
+  test(`research and project cards show their lead and open the rest from an "i" note ${view || "in the full view"}`, async ({ page }) => {
+    for (const [url, card, name, lead, rest] of [
+      ["/", ".research-card", "GapFillの説明", "アニメ彩色における小さな塗り残し", "13名のプロ彩色者"],
+      ["/", ".project-card", "VRChat向けオリジナル3Dキャラクターモデルの説明", "VRChatなどでの利用を想定", "NPR表現の試行錯誤"],
+      ["/pages/research.html", ".research-card", "ScrapReCoverの説明", "不要な布切れを用いた", "ワークショップでの実制作"],
+      ["/pages/projects.html", ".project-card", "東大アニメ研 会報企画・編集の説明", "前年度まで形骸化していた", "コミックマーケット101"],
     ]) {
       await page.goto(`${url}${view}`);
-      const disclosure = page.locator(".compact-card-description").filter({ has: page.locator(descriptionSelector) }).first();
-      const description = disclosure.locator(descriptionSelector);
-      const summary = disclosure.locator("summary");
-      await summary.hover();
-      await expect(description).toBeHidden();
-      await summary.click();
-      await expect(description).toBeVisible();
-      await summary.press("Space");
-      await expect(description).toBeHidden();
+      const item = page.locator(card).filter({ has: page.getByRole("button", { name }) });
+      const note = item.locator(".compact-note");
+      await expect(item.locator(".card-desc")).toContainText(lead);
+      await expect(item.locator(".card-desc")).not.toContainText(rest);
+      await expect(note).toBeHidden();
+      await item.getByRole("button", { name }).click();
+      await expect(note).toBeVisible();
+      await expect(note).toContainText(rest);
+      await page.keyboard.press("Escape");
+      await expect(note).toBeHidden();
     }
   });
 }
 
 test("the hero hint demonstrates the same popover in both languages", async ({ page }) => {
   await page.goto("/");
-  const hint = page.locator(".hero-scroll-hint #compactDetailsHint");
+  const hint = page.locator(".hero-hint #compactDetailsHint");
   const example = hint.locator("#compactDetailsExample");
   for (const [lang, name, content] of [
     ["ja", "詳細ポップアップを試す", "このように、項目ごとの詳細が表示されます。"],
@@ -350,12 +351,12 @@ test("view overrides and hidden sections stay scoped to the selected URL", async
 test("hidden links, empty profile facts, and unpublished paper controls stay hidden", async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => {
-    DATA.links.items = DATA.links.items.filter(item => item.type !== "github" && item.type !== "atcoder");
+    DATA.links.items = DATA.links.items.filter(item => !["scholar", "github", "atcoder"].includes(item.type));
     DATA.about.profile = [];
     DATA.preview.papers = -1;
     renderAll();
   });
-  for (const selector of ["#heroGithubLink", "#heroAtcoderLink", "#aboutFacts", "#pubFilters"]) {
+  for (const selector of ["#heroScholarLink", "#heroGithubLink", "#heroAtcoderLink", "#aboutFacts", "#pubFilters"]) {
     await expect(page.locator(selector)).toBeHidden();
     await expect(page.locator(selector)).toHaveCSS("display", "none");
   }
@@ -623,8 +624,9 @@ test("blocked browser storage does not break the page or theme toggle", async ({
   });
   await page.goto("/");
   await expect(page.locator("#heroName")).not.toBeEmpty();
-  await page.locator("#themeToggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.locator("#themeToggle").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
 test("Codeforces keeps its red fallback and peak rating if rating data cannot load", async ({ page }) => {

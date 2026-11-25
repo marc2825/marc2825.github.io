@@ -7,7 +7,7 @@
    State
    ========================================================= */
 let currentLang     = "ja";
-let currentTheme    = document.documentElement.getAttribute("data-theme") || "dark";
+let currentTheme    = document.documentElement.getAttribute("data-theme") || "light";
 let activePubFilter = "fullpaper";
 let firstAuthorOnly = true;
 let currentPapersLimit;
@@ -84,7 +84,6 @@ function applyViewSettings(pageSection) {
       if (event.newState === "open") detailsHint.dataset.tried = "true";
     });
   }
-  applyCardDisclosures();
   document.querySelectorAll("a[href]").forEach(link => {
     const href = link.getAttribute("href");
     const next = withCurrentView(href);
@@ -93,7 +92,7 @@ function applyViewSettings(pageSection) {
 }
 
 /* =========================================================
-   Hover notes and expandable card descriptions
+   Hover notes
    ========================================================= */
 const compactNoteSources = [
   ["#compactDetailsExample", "#compactDetailsHint", ".hero-details-hint-text", "hero.detailsDemo"],
@@ -105,6 +104,8 @@ const compactNoteSources = [
   [".skill-group-note", ".skill-group", ".skill-group-title"],
   [".skill-detail", ".skill-item", ".skill-label"],
   ["#researchLead", ".container", ".section-title"],
+  [".research-more", ".research-card", ".card-more-anchor"],
+  [".project-more", ".project-card", ".card-more-anchor"],
   ["#contactText", "#contact", ".section-title"],
 ];
 let nextCompactNoteId = 0;
@@ -202,7 +203,7 @@ function attachCompactNote(description, label, actionLabel) {
       hoverOpened = false;
     });
   }
-  const title = label.dataset.i18n ? t(label.dataset.i18n) : label.textContent.trim();
+  const title = label.dataset.i18n ? t(label.dataset.i18n) : (label.dataset.noteTitle || label.textContent.trim());
   button.setAttribute("aria-label", actionLabel ? t(actionLabel) : d(`Description for ${title}`, `${title}の説明`));
   button.hidden = !description.textContent.trim();
 }
@@ -216,18 +217,6 @@ function applyCompactNotes(root = document) {
       if (label) attachCompactNote(description, label, actionLabel);
     });
   }
-}
-
-function applyCardDisclosures() {
-  document.querySelectorAll(".research-description, .project-desc").forEach(description => {
-    if (!description.textContent.trim() || description.closest(".compact-card-description")) return;
-    const details = document.createElement("details");
-    details.className = "compact-card-description";
-    const summary = document.createElement("summary");
-    summary.textContent = d("Description", "説明");
-    description.before(details);
-    details.append(summary, description);
-  });
 }
 
 let compactNoteFrame;
@@ -418,9 +407,11 @@ function renderHero() {
   const name          = document.getElementById("heroName");
   const affiliation   = document.getElementById("heroAffiliation");
   const bio           = document.getElementById("heroBio");
+  const scholarLink   = document.getElementById("heroScholarLink");
   const githubLink    = document.getElementById("heroGithubLink");
   const atcoderLink   = document.getElementById("heroAtcoderLink");
   const sketchfabLink = document.getElementById("heroSketchfabLink");
+  const scholarHref   = getConfiguredProfileLink("scholar");
   const githubHref    = getConfiguredProfileLink("github");
   const atcoderHref   = getConfiguredProfileLink("atcoder");
   const sketchfabHref = getConfiguredProfileLink("sketchfab");
@@ -428,6 +419,10 @@ function renderHero() {
   if (name)        name.textContent        = d(DATA.name, DATA.nameJP);
   if (affiliation) affiliation.textContent = d(DATA.affiliation, DATA.affiliationJP);
   if (bio)         bio.innerHTML           = d(DATA.bio, DATA.bioJP);
+  if (scholarLink) {
+    scholarLink.hidden = !scholarHref;
+    if (scholarHref) scholarLink.href = resolveUrl(scholarHref);
+  }
   if (githubLink) {
     githubLink.hidden = !githubHref;
     if (githubHref) githubLink.href = resolveUrl(githubHref);
@@ -440,6 +435,53 @@ function renderHero() {
     sketchfabLink.hidden = !sketchfabHref;
     if (sketchfabHref) sketchfabLink.href = resolveUrl(sketchfabHref);
   }
+}
+
+/* Peak rating shown in the skills section, also used by the highlights panel. */
+function getPeakRating(dynamicKey) {
+  const skill = DATA.skills.flatMap(group => group.items).find(item => item.dynamicKey === dynamicKey);
+  if (!skill) return "";
+  if (Number.isFinite(skill.rating)) return String(skill.rating);
+  return (String(skill.name || "").match(/(\d+)\s*$/) || [])[1] || "";
+}
+
+function renderHighlights() {
+  const panel = document.getElementById("heroHighlights");
+  const list = document.getElementById("heroHighlightsList");
+  if (!panel || !list) return;
+  const items = Array.isArray(DATA.highlights) ? DATA.highlights : [];
+  panel.hidden = !items.length;
+  list.innerHTML = items.map(item => {
+    const text = d(item.text, item.textJP ?? item.text).replace(/\{(\w+)\}/g, (_, key) => getPeakRating(key));
+    const tag = item.href ? "a" : "div";
+    return `
+      <li>
+        <${tag}${item.href ? ` href="${resolveUrl(item.href)}"` : ""} class="highlight" data-tone="${item.tone || ""}">
+          <span class="highlight-swatch" aria-hidden="true"></span>
+          <span class="highlight-body">
+            <span class="highlight-label">${d(item.label, item.labelJP ?? item.label)}</span>
+            <span class="highlight-text">${text}</span>
+          </span>
+        </${tag}>
+      </li>
+    `;
+  }).join("");
+}
+
+/* Cards show their first two sentences; the rest opens from an "i" note beside them. */
+function splitDescription(text) {
+  const sentences = String(text || "").split(/(?<=[。！？])|(?<=[.!?])\s+(?=[A-Z(（])/).map(part => part.trim()).filter(Boolean);
+  // Japanese sentences join without a space; English ones keep it.
+  const join = parts => parts.reduce((html, part) => html + (html && !/[。！？]$/.test(html) ? " " : "") + part, "");
+  return { lead: join(sentences.slice(0, 2)), rest: join(sentences.slice(2)) };
+}
+
+function cardDescriptionHtml(text, title, kind) {
+  const { lead, rest } = splitDescription(text);
+  return `
+    <div class="${kind}-desc card-desc">${lead}${rest ? `<span class="card-more-anchor" data-note-title="${title}"></span>` : ""}</div>
+    ${rest ? `<p class="${kind}-more">${rest}</p>` : ""}
+  `;
 }
 
 /* `wide` cards span the full row and split their list into two columns; `full` cards
@@ -505,18 +547,27 @@ function renderResearch(limit) {
   if (limit === -1) { grid.innerHTML = comingSoonHtml(); return; }
   const items = limit != null ? DATA.research.slice(0, limit) : DATA.research;
   if (!items.length) { grid.innerHTML = comingSoonHtml(); return; }
-  grid.innerHTML = items.map(r => `
+  grid.innerHTML = items.map(r => {
+    const title = d(r.title, r.titleJP);
+    const badge = d(r.badge || "", r.badgeJP || r.badge || "");
+    return `
     <article class="research-card reveal"${r.anchorId ? ` id="${r.anchorId}"` : ""}>
       ${r.image ? `${r.imageHref ? `<a href="${resolveUrl(r.imageHref)}" class="research-media">` : `<div class="research-media">`}
         <img src="${resolveUrl(r.image)}" alt="${d(r.imageAlt || r.title, r.imageAltJP || r.imageAlt || r.titleJP)}" loading="lazy" />
       ${r.imageHref ? `</a>` : `</div>`}` : ""}
-      ${(r.period || r.periodJP) ? `<p class="research-period">${d(r.period || "", r.periodJP || r.period || "")}</p>` : ""}
-      <h3>${d(r.title, r.titleJP)}</h3>
-      <p class="research-description">${d(r.desc, r.descJP)}</p>
-      ${Array.isArray(r.tags) && r.tags.length ? `<div class="research-tags">${r.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>` : ""}
-      ${Array.isArray(r.links) && r.links.length ? `<div class="research-links">${r.links.map(link => `<a href="${resolveUrl(link.href)}" class="pub-link">${d(link.label, link.labelJP ?? link.label)}</a>`).join("")}</div>` : ""}
+      <div class="research-body">
+        <div class="research-heading">
+          <h3 class="research-title">${title}</h3>
+          ${badge ? `<span class="research-badge">${badge}</span>` : ""}
+          ${(r.period || r.periodJP) ? `<span class="research-period">${d(r.period || "", r.periodJP || r.period || "")}</span>` : ""}
+        </div>
+        ${cardDescriptionHtml(d(r.desc, r.descJP), title, "research")}
+        ${Array.isArray(r.tags) && r.tags.length ? `<p class="research-tags">${r.tags.join(d(", ", "、"))}</p>` : ""}
+        ${Array.isArray(r.links) && r.links.length ? `<div class="research-links">${r.links.map((link, index) => `<a href="${resolveUrl(link.href)}" class="btn ${index === 0 ? "btn-primary" : "btn-ghost"} btn-small">${d(link.label, link.labelJP ?? link.label)}</a>`).join("")}</div>` : ""}
+      </div>
     </article>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function getFilteredPapers() {
@@ -703,7 +754,7 @@ function renderProjects(limit) {
         </a>` : ""}
       </div>
       <div class="project-body">
-        <p class="project-desc">${d(p.desc, p.descJP)}</p>
+        ${cardDescriptionHtml(d(p.desc, p.descJP), d(p.title, p.titleJP), "project")}
         ${Array.isArray(p.stack) && p.stack.length ? `<div class="project-stack">${p.stack.map(s => `<span class="stack-tag">${s}</span>`).join("")}</div>` : ""}
         ${(p.detailHref || (Array.isArray(p.links) && p.links.length)) ? `<div class="project-actions">
           ${p.detailHref ? `<a href="${resolveUrl(p.detailHref)}" class="project-detail-link">${d(p.detailLabel || "Details", p.detailLabelJP || p.detailLabel || "詳細")}</a>` : ""}
@@ -732,26 +783,38 @@ function renderArticles(limit) {
   `).join("");
 }
 
+function skillItemHtml(item) {
+  const name = d(item.name, item.nameJP ?? item.name);
+  // Keep the label's text intact ("… 最高レート 2215") and style the rating as a badge.
+  const rating = item.dynamicKey ? name.match(/^(.*?)(\d+)\s*$/) : null;
+  const labelHtml = rating ? `${rating[1]}<span class="skill-rating">${rating[2]}</span>` : name;
+  return `
+    <li class="skill-item"${item.anchorId ? ` id="${item.anchorId}"` : ""}${item.dynamicKey ? ` data-dynamic-skill="${item.dynamicKey}"` : ""}${item.tone ? ` data-skill-tone="${item.tone}"` : ""}>
+      <span class="skill-label">${item.href ? `<a href="${resolveUrl(item.href)}" class="skill-link">${labelHtml}</a>` : labelHtml}</span>
+      ${(item.detail || item.detailJP) ? `<span class="skill-detail">${d(item.detail ?? "", item.detailJP ?? item.detail ?? "")}</span>` : ""}
+    </li>
+  `;
+}
+
 function renderSkills() {
   const el = document.getElementById("skillsGrid");
   if (!el) return;
-  el.innerHTML = DATA.skills.map(group => `
+  el.innerHTML = DATA.skills.map(group => {
+    const isMinor = item => item.minor === true || (Number.isFinite(group.minorBelow) && item.level < group.minorBelow);
+    const main = group.items.filter(item => !isMinor(item));
+    const minor = group.items.filter(isMinor);
+    return `
     <div class="skill-group reveal"${group.anchorId ? ` id="${group.anchorId}"` : ""}>
-      <p class="skill-group-title">${d(group.category, group.categoryJP)}</p>
+      <h3 class="skill-group-title">${d(group.category, group.categoryJP)}</h3>
       ${(group.note || group.noteJP) ? `<p class="skill-group-note">${d(group.note ?? "", group.noteJP ?? group.note ?? "")}</p>` : ""}
-      <div class="skill-items">
-        ${group.items.map(item => `
-          <div class="skill-item"${item.anchorId ? ` id="${item.anchorId}"` : ""}${item.dynamicKey ? ` data-dynamic-skill="${item.dynamicKey}"` : ""}${item.tone ? ` data-skill-tone="${item.tone}"` : ""}>
-            <span class="skill-label">${item.href ? `<a href="${resolveUrl(item.href)}" class="skill-link">${d(item.name, item.nameJP ?? item.name)}</a>` : d(item.name, item.nameJP ?? item.name)}</span>
-            ${(item.detail || item.detailJP) ? `<span class="skill-detail">${d(item.detail ?? "", item.detailJP ?? item.detail ?? "")}</span>` : ""}
-            <div class="skill-bar">
-              <div class="skill-fill" data-level="${item.level}"></div>
-            </div>
-          </div>
-        `).join("")}
-      </div>
+      <ul class="skill-items">${main.map(skillItemHtml).join("")}</ul>
+      ${minor.length ? `<div class="skill-minor">
+        <p class="skill-minor-label">${t("skills.minor")}</p>
+        <ul class="skill-items skill-items-minor">${minor.map(skillItemHtml).join("")}</ul>
+      </div>` : ""}
     </div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function renderTimeline() {
@@ -762,7 +825,7 @@ function renderTimeline() {
       <div class="timeline-dot"></div>
       <div class="timeline-content">
         <p class="timeline-period">${d(item.period, item.periodJP)}</p>
-        <p class="timeline-title">${d(item.title, item.titleJP)}</p>
+        <p class="timeline-title" data-note-title="${d(item.title, item.titleJP)}">${d(item.title, item.titleJP)}${(item.badge || item.badgeJP) ? `<span class="timeline-badge">${d(item.badge || "", item.badgeJP || item.badge || "")}</span>` : ""}</p>
         <p class="timeline-sub">${d(item.sub, item.subJP)}</p>
         <p class="timeline-desc">${d(item.desc, item.descJP)}</p>
         ${item.link ? `<a href="${resolveUrl(item.link)}" class="timeline-link">${d(item.linkLabel || item.link, item.linkLabelJP || item.linkLabel || item.link)}</a>` : ""}
@@ -895,6 +958,7 @@ function updateCompetitiveSkill(dynamicKey, config) {
   if (!Number.isFinite(referenceRating)) return false;
 
   skill.level    = competitiveLevelFromRating(dynamicKey, referenceRating);
+  skill.rating   = referenceRating;
   skill.name     = `${config.labelEn} Peak Rating ${referenceRating}`;
   skill.nameJP   = `${config.labelJP} 最高レート ${referenceRating}`;
   skill.detail   = "";
@@ -937,6 +1001,7 @@ function hydrateCompetitiveProfiles(payload) {
     applyCompactNotes(skillsGrid);
     reobserve();
   }
+  if (updated) renderSafely(renderHighlights);
 }
 
 async function loadDynamicData() {
@@ -960,7 +1025,7 @@ function applyPubFilter() {
 }
 
 /* =========================================================
-   Intersection Observer — reveal & skill bar animation
+   Intersection Observer — marks sections as they come into view
    ========================================================= */
 let io;
 
@@ -969,12 +1034,7 @@ function reobserve() {
 
   const elements = document.querySelectorAll(".reveal");
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-    elements.forEach(el => {
-      el.classList.add("visible");
-      el.querySelectorAll(".skill-fill").forEach(bar => {
-        bar.style.width = bar.dataset.level + "%";
-      });
-    });
+    elements.forEach(el => el.classList.add("visible"));
     return;
   }
 
@@ -982,9 +1042,6 @@ function reobserve() {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       entry.target.classList.add("visible");
-      entry.target.querySelectorAll(".skill-fill").forEach(bar => {
-        bar.style.width = bar.dataset.level + "%";
-      });
       io.unobserve(entry.target);
     });
   }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
